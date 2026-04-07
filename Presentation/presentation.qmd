@@ -1,0 +1,118 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    theme: [default, ../theme/presentation_theme.scss]
+    embed-resources: true
+    preview-links: false
+    output-file: "presentation"
+    output-ext: "html"
+    highlight-style: github-light
+    include-in-header: "../theme/fonts-include.html"
+---
+
+```{r}
+#| label: setup
+#| include: false
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center",
+  out.width = "100%"
+)
+
+if (!require("here")) install.packages("here")
+
+library(here)
+
+here::i_am("Presentation/presentation.qmd")
+
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("ggbeeswarm")) install.packages("ggbeeswarm")
+if (!require("ggview")) install.packages("ggview")
+if (!require("magick")) install.packages("magick")
+if (!require("cowplot")) install.packages("cowplot")
+if (!require("remotes")) install.packages("remotes")
+if (!require("waffle")) remotes::install_github("hrbrmstr/waffle")
+
+library(tidyverse)
+library(ggbeeswarm)
+library(ggview)
+library(magick)
+library(cowplot)
+library(waffle)
+
+path_materials <-
+  "Presentation/Materials"
+
+include_local_figure <- function(data_source) {
+  knitr::include_graphics(
+    path = here::here(
+      path_materials,
+      data_source
+    ),
+    error = TRUE
+  )
+}
+```
+
+```{r}
+#| label: dynamic link generation
+#| include: false
+project_name <-
+  basename(here::here())
+
+display_name <-
+  paste("Biostatistika", "-", project_name)
+
+github_url <-
+  paste0(
+    "https://github.com/CUNI-NATUR-Biostatistics/",
+    project_name
+  )
+
+slides_url <-
+  paste0(
+    "https://CUNI-NATUR-Biostatistics.github.io/",
+    project_name, "/"
+  )
+```
+
+## Název přednášky
+
+<br>
+
+::: {.text-color-white .text-font-heading .text-size-heading1 .text-bold}
+`r display_name`
+:::
+
+<br>
+
+[👤](https://ondrejmottl.github.io/) Ondřej Mottl
+
+[Moodle](https://dl2.cuni.cz/course/view.php?id=106)
+
+## Výsledky učení
+
+Po absolvování této přednášky budete schopni:
+
+- TODO: výsledek učení 1
+- TODO: výsledek učení 2
+- TODO: výsledek učení 3
+
+# Obsah přednášky
+
+## Snímek 1
+
+TODO: obsah snímku
+
+```{r}
+#| label: demo-plot
+#| echo: true
+# TODO: ukázka kódu v R
+```
+
+## Shrnutí
+
+- TODO: klíčové body přednášky
