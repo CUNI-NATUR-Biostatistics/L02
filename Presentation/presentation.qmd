@@ -79,7 +79,7 @@ slides_url <-
   )
 ```
 
-## Název přednášky
+## Vztahy dvou proměnných, vizualizace, pravděpodobnost
 
 <br>
 
