@@ -68,7 +68,6 @@ Pro první verzi materiálů volíme `palmerpenguins::penguins`.
 - Dataset je dost jednoduchý pro začátečníky a zároveň dobře připravuje půdu pro L03, kde bude možné navázat lineárním modelem.
 
 ---
-
 ## Struktura repozitáře
 
 ```text
