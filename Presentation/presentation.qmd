@@ -97,9 +97,8 @@ slides_url <-
 
 Po absolvování této přednášky budete schopni:
 
-- TODO: výsledek učení 1
-- TODO: výsledek učení 2
-- TODO: výsledek učení 3
+- navrhnout vhodný graf pro vztah dvou proměnných
+- vysvětlit variabilitu dat a proč „vidím vzor“ neznamená „je to efekt“
 
 # Obsah přednášky
 
