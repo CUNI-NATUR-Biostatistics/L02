@@ -1,5 +1,5 @@
 ---
-title: "TODO: Název přednášky"
+title: "Vztahy dvou proměnných, vizualizace, pravděpodobnost"
 subtitle: "Podkladové čtenářské materiály k přednášce"
 lang: cs
 format:
