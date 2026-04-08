@@ -13,6 +13,33 @@ Repozitář je výchozí kostra pro tři propojené výstupy:
 
 ---
 
+## Rámec lekce
+
+L02 je přechod od popisu jedné proměnné ke zkoumání vztahů mezi dvěma
+proměnnými. Lekce má studentům ukázat, že graf může naznačit zajímavý
+vzor, ale sám o sobě ještě nestačí k inferenčnímu závěru.
+
+### Kanonické výstupy z učení
+
+- Navrhnout vhodný graf pro vztah dvou proměnných.
+- Vysvětlit variabilitu dat a proč „vidím vzor“ neznamená „je to efekt“.
+
+### Konkrétní studentské cíle pro přípravu materiálů
+
+- Vybrat vhodný graf pro dvojici proměnných podle jejich typu.
+- Popsat, co v grafu vypadá jako vztah, a oddělit to od jistého závěru.
+- Vysvětlit biologický význam variability kolem pozorovaného vzoru.
+- Připravit most k dalším lekcím, kde přijde model a nejistota.
+
+### Co do této lekce vědomě nepatří
+
+- fitování `lm(y ~ x)` jako hlavní téma lekce
+- formální testování hypotéz
+- p-hodnoty a intervaly spolehlivosti
+- detailní matematický výklad pravděpodobnosti
+
+---
+
 ## Struktura repozitáře
 
 ```text
