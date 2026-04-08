@@ -1,9 +1,6 @@
 # L02 – Vztahy dvou proměnných, vizualizace, pravděpodobnost
 
-Týdenní repozitář kurzu **Biostatistika (MB120P163)** pro lekci `L02`.
-Repozitář vznikl ze šablony `_L-template` a slouží jako pracovní kostra
-pro přípravu materiálů k tématu vztahů dvou proměnných, vizualizace a
-pravděpodobnosti.
+Týdenní repozitář kurzu **Biostatistika (MB120P163)** pro lekci `L02`. Repozitář vznikl ze šablony `_L-template` a slouží jako pracovní kostra pro přípravu materiálů k tématu vztahů dvou proměnných, vizualizace a pravděpodobnosti.
 
 Repozitář je výchozí kostra pro tři propojené výstupy:
 
@@ -15,9 +12,7 @@ Repozitář je výchozí kostra pro tři propojené výstupy:
 
 ## Rámec lekce
 
-L02 je přechod od popisu jedné proměnné ke zkoumání vztahů mezi dvěma
-proměnnými. Lekce má studentům ukázat, že graf může naznačit zajímavý
-vzor, ale sám o sobě ještě nestačí k inferenčnímu závěru.
+L02 je přechod od popisu jedné proměnné ke zkoumání vztahů mezi dvěma proměnnými. Lekce má studentům ukázat, že graf může naznačit zajímavý vzor, ale sám o sobě ještě nestačí k inferenčnímu závěru.
 
 ### Kanonické výstupy z učení
 
@@ -40,6 +35,39 @@ vzor, ale sám o sobě ještě nestačí k inferenčnímu závěru.
 
 ---
 
+## Volba datasetu pro první verzi
+
+Pro L02 je cílem najít data, na kterých jde ukázat vztah dvou proměnných, ale zároveň i to, že rozptyl kolem viditelného vzoru je biologicky smysluplný a že samotný graf ještě není důkaz efektu.
+
+### Zvažované kandidáty
+
+1. `palmerpenguins::penguins`
+   - Silná stránka: dobře čitelný vztah mezi spojitými proměnnými, zároveň jasná biologická interpretace a možnost rozlišit druhy.
+   - Slabá stránka: v kurzech práce s daty jde o známý dataset, takže je potřeba pohlídat, aby nepůsobil jako mechanická volba.
+2. `datasets::trees`
+   - Silná stránka: extrémně jednoduchý a přehledný dataset pro vztah dvou spojitých proměnných.
+   - Slabá stránka: chybí přirozená kategoriální proměnná a biologický příběh je pro tuto lekci poměrně chudý.
+3. `datasets::ChickWeight`
+   - Silná stránka: biologicky srozumitelný růst a variabilita mezi skupinami.
+   - Slabá stránka: časová struktura a opakovaná měření by zbytečně komplikovaly lekci, která má zatím zůstat u jednoduchého vztahu dvou proměnných.
+
+### Zvolený dataset
+
+Pro první verzi materiálů volíme `palmerpenguins::penguins`.
+
+- Hlavní otázka: Jak souvisí délka ploutve a tělesná hmotnost u tučňáků a co do tohoto vztahu vnáší rozdíly mezi druhy?
+- Odezva: `body_mass_g`
+- Hlavní prediktor: `flipper_length_mm`
+- Doplňkový prediktor pro vizualizaci: `species`
+
+### Proč je tento dataset pro L02 nejlepší volba
+
+- Umožňuje hned na prvním grafu ukázat vztah dvou spojitých proměnných.
+- Body nejsou naskládané na jedné přímce, takže je přirozeně vidět variabilita dat.
+- Druhy tučňáků dávají smysluplnou biologickou vrstvu navíc bez nutnosti složitého čištění dat.
+- Dataset je dost jednoduchý pro začátečníky a zároveň dobře připravuje půdu pro L03, kde bude možné navázat lineárním modelem.
+
+---
 ## Struktura repozitáře
 
 ```text
@@ -86,38 +114,22 @@ L02/
 └── README.md
 ```
 
-Poznámka: `presentation.qmd` i `skripta.qmd` načítají aktivní theme soubory
-ze složky `theme/` přes cesty `../theme/...`. Generované soubory proto
-neupravujte ručně.
+Poznámka: `presentation.qmd` i `skripta.qmd` načítají aktivní theme soubory ze složky `theme/` přes cesty `../theme/...`. Generované soubory proto neupravujte ručně.
 
 ---
 
 ## Jak začít pracovat s tímto repozitářem
 
-1. Otevřete projekt v RStudiu nebo VS Code a obnovte závislosti příkazem
-   `renv::restore()`.
-  Lokální pracovní soubory RStudia, Quarto cache a dočasné debug soubory se
-  necommitují díky `.gitignore`.
-2. Doplňte obsah do `Presentation/presentation.qmd`,
-   `Learning_materials/skripta.qmd` a případně `Exercises/cviceni.R`.
-  Při návrhu nové lekce postupujte podle workflow v
-  `.github/instructions/lesson-authoring.instructions.md`:
-  nejdřív výstupy z učení a dataset, potom podrobná skripta, teprve pak
-  prezentace.
-3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do
-   `Learning_materials/images/`.
-  Krátké reprodukční debug skripty ukládejte do `Temp/` podle
-  `.github/instructions/debugging.instructions.md`.
+1. Otevřete projekt v RStudiu nebo VS Code a obnovte závislosti příkazem `renv::restore()`. Lokální pracovní soubory RStudia, Quarto cache a dočasné debug soubory se necommitují díky `.gitignore`.
+2. Doplňte obsah do `Presentation/presentation.qmd`, `Learning_materials/skripta.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `.github/instructions/lesson-authoring.instructions.md`: nejdřív výstupy z učení a dataset, potom podrobná skripta, teprve pak prezentace.
+3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do `Learning_materials/images/`. Krátké reprodukční debug skripty ukládejte do `Temp/` podle `.github/instructions/debugging.instructions.md`.
 4. Spusťte renderovací pipeline a commitněte aktualizované výstupy.
 
 ---
 
 ## Systém vizuálního tématu
 
-Barvy, písma a další stylové volby se udržují v jediném místě: v JSON
-souborech ve složce `theme/`. Kanonický zdroj je veřejný repozitář
-[`_brand`](https://github.com/CUNI-NATUR-Biostatistics/_brand). Script
-`R/generate_theme.R` při renderu:
+Barvy, písma a další stylové volby se udržují v jediném místě: v JSON souborech ve složce `theme/`. Kanonický zdroj je veřejný repozitář [`_brand`](https://github.com/CUNI-NATUR-Biostatistics/_brand). Script `R/generate_theme.R` při renderu:
 
 - stáhne aktuální JSON konfiguraci z repozitáře `_brand`,
 - při výpadku internetu ponechá lokální cache,
@@ -143,35 +155,29 @@ souborech ve složce `theme/`. Kanonický zdroj je veřejný repozitář
 | `Learning_materials/skripta_theme.typ` | Typst styl pro PDF |
 | `R/set_r_theme.R` | ggplot2 paleta a funkce `theme_biostat()` |
 
-Pokud změníte JSON konfiguraci a nechcete spouštět celý render, lze theme
-artefakty regenerovat samostatně:
+Pokud změníte JSON konfiguraci a nechcete spouštět celý render, lze theme artefakty regenerovat samostatně:
 
 ```r
 source("R/generate_theme.R")
 ```
 
-`render_all.R` tento krok provádí automaticky před renderem prezentace i
-skript.
+`render_all.R` tento krok provádí automaticky před renderem prezentace i skript.
 
 ### Písma v PDF
 
-HTML výstupy mohou používat Google Fonts, ale Typst pracuje jen s lokálně
-nainstalovanými písmy. Pokud má PDF používat konkrétní písmo, musí být
-dostupné v systému a správně nastavené v `theme/fonts.json`.
+HTML výstupy mohou používat Google Fonts, ale Typst pracuje jen s lokálně nainstalovanými písmy. Pokud má PDF používat konkrétní písmo, musí být dostupné v systému a správně nastavené v `theme/fonts.json`.
 
 ---
 
 ## Slovníček pojmů ve skriptech
 
-`Learning_materials/skripta.qmd` je připravené pro napojení na centrální
-slovník v repozitáři [`slovnik`](https://github.com/CUNI-NATUR-Biostatistics/slovnik).
+`Learning_materials/skripta.qmd` je připravené pro napojení na centrální slovník v repozitáři [`slovnik`](https://github.com/CUNI-NATUR-Biostatistics/slovnik).
 
 Renderovací setup dělá tři věci:
 
 - stáhne aktuální `pojmy.yaml` z `slovnik` do dočasného lokálního souboru,
 - nastaví `glossary::glossary_path()` na tuto lokální kopii,
-- pokusí se načíst `render_glossary_term.R` z GitHubu a při neúspěchu
-  použije lokální fallback v `R/Functions/render_glossary_term.R`.
+- pokusí se načíst `render_glossary_term.R` z GitHubu a při neúspěchu použije lokální fallback v `R/Functions/render_glossary_term.R`.
 
 V textu skript používejte pro první výskyt pojmu v dané sekci tuto podobu:
 
@@ -179,12 +185,9 @@ V textu skript používejte pro první výskyt pojmu v dané sekci tuto podobu:
 `r render_glossary_term("median", display = "medián")`
 ```
 
-Tento wrapper vrací v HTML tooltip s definicí a v typst/PDF pouze čistý
-text. Díky tomu stejné `.qmd` funguje pro oba výstupy bez ručních úprav.
+Tento wrapper vrací v HTML tooltip s definicí a v typst/PDF pouze čistý text. Díky tomu stejné `.qmd` funguje pro oba výstupy bez ručních úprav.
 
-HTML tooltip styly a potlačení klikání na odkazy jsou řešeny v samostatném
-chunku `nastaveni-slovnik`, aby se CSS a JavaScript vložily jen do HTML
-výstupu.
+HTML tooltip styly a potlačení klikání na odkazy jsou řešeny v samostatném chunku `nastaveni-slovnik`, aby se CSS a JavaScript vložily jen do HTML výstupu.
 
 ---
 
@@ -218,15 +221,13 @@ source("R/render_skripta.R")
 
 `render_skripta.R` provede:
 
-1. Quarto render `Learning_materials/skripta.qmd` →
-   `Learning_materials/skripta.html` a `Learning_materials/skripta_raw.pdf`,
+1. Quarto render `Learning_materials/skripta.qmd` → `Learning_materials/skripta.html` a `Learning_materials/skripta_raw.pdf`,
 2. kompresi PDF → `Learning_materials/skripta.pdf`.
 
 ### Předpoklady
 
 - Quarto musí být nainstalované a dostupné v systému.
-- PDF export prezentace vyžaduje samostatně nainstalovaný
-  [decktape](https://github.com/astefanutti/decktape).
+- PDF export prezentace vyžaduje samostatně nainstalovaný [decktape](https://github.com/astefanutti/decktape).
 - Komprese PDF používá balíček `qpdf` v R.
 - Doporučené spuštění je uvnitř projektu s aktivním `renv`.
 
@@ -234,8 +235,7 @@ source("R/render_skripta.R")
 
 ## Distribuce materiálů studentům
 
-Studenti k repozitáři přímo nepřistupují. Distribuují se jen vyrenderované
-výstupy, typicky přes Moodle.
+Studenti k repozitáři přímo nepřistupují. Distribuují se jen vyrenderované výstupy, typicky přes Moodle.
 
 Interní release používá tag bez přípony `-moodle`, například:
 
@@ -273,10 +273,7 @@ Podrobnosti viz `_internal/obecne/nove/strategie_releases.md`.
 
 ### Typst a cesty k obrázkům
 
-Typst při renderování PDF sandboxuje přístup k souborům. Obrázky používané
-ve `skripta.qmd` proto musí být uložené uvnitř `Learning_materials/` nebo
-jeho podsložek. Cesty typu `../Presentation/Materials/...` mohou při
-renderu selhat.
+Typst při renderování PDF sandboxuje přístup k souborům. Obrázky používané ve `skripta.qmd` proto musí být uložené uvnitř `Learning_materials/` nebo jeho podsložek. Cesty typu `../Presentation/Materials/...` mohou při renderu selhat.
 
 ```r
 # Správně:
@@ -292,6 +289,4 @@ knitr::include_graphics(
 
 ### UTF-8 a editace souborů
 
-Při editaci `.qmd` souborů používejte pouze běžné file-edit nástroje
-(VS Code, RStudio). PowerShell 5.1 může tiše poškodit diakritiku nebo
-přidat UTF-8 BOM, který znemožní parsování YAML.
+Při editaci `.qmd` souborů používejte pouze běžné file-edit nástroje (VS Code, RStudio). PowerShell 5.1 může tiše poškodit diakritiku nebo přidat UTF-8 BOM, který znemožní parsování YAML.
