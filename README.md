@@ -68,6 +68,29 @@ Pro první verzi materiálů volíme `palmerpenguins::penguins`.
 - Dataset je dost jednoduchý pro začátečníky a zároveň dobře připravuje půdu pro L03, kde bude možné navázat lineárním modelem.
 
 ---
+
+## Aktuální workflow tvorby obsahu pro L02
+
+Pro L02 používáme stejnou logiku jako v aktualizovaném `lesson-authoring.instructions.md`: skripta nevznikají jedním skokem, ale ve více průchodech.
+
+### Fázové pojmenování pro tuto lekci
+
+- **Phase 0 - Scope**: zamknutí výstupů z učení, konkrétních studentských cílů a toho, co do L02 ještě nepatří
+- **Phase 1 - Dataset**: volba jednoho hlavního datového příběhu a jeho obhajoba
+- **Phase 2A - Structural draft of Learning materials**: první koherentní kostra `Learning_materials/skripta.qmd`
+- **Phase 2B - Development pass of Learning materials**: doplnění vizuálních kotev, interpretačních promptů, srovnání a vysvětlující prózy tak, aby byla skripta skutečně review-ready
+- **Phase 3 - Human review of Learning materials**: lidská revize review-ready verze skript
+- **Phase 4 - Presentation derived from revised Learning materials**: teprve po revizi skript vzniká `Presentation/presentation.qmd`
+
+### Jak tuto logiku číst v aktuálním stavu repozitáře
+
+- rámec lekce a dataset jsou už zamčené
+- první koherentní kostra skript už existuje
+- současná práce na `Learning_materials/skripta.qmd` odpovídá hlavně **Phase 2B**, nikoli už nové lekci nebo prezentaci
+- další přirozený krok je lidská revize review-ready skript, ne paralelní rozjíždění prezentace
+
+---
+
 ## Struktura repozitáře
 
 ```text
@@ -121,7 +144,7 @@ Poznámka: `presentation.qmd` i `skripta.qmd` načítají aktivní theme soubory
 ## Jak začít pracovat s tímto repozitářem
 
 1. Otevřete projekt v RStudiu nebo VS Code a obnovte závislosti příkazem `renv::restore()`. Lokální pracovní soubory RStudia, Quarto cache a dočasné debug soubory se necommitují díky `.gitignore`.
-2. Doplňte obsah do `Presentation/presentation.qmd`, `Learning_materials/skripta.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `.github/instructions/lesson-authoring.instructions.md`: nejdřív výstupy z učení a dataset, potom podrobná skripta, teprve pak prezentace.
+2. Doplňte obsah do `Learning_materials/skripta.qmd`, `Presentation/presentation.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `.github/instructions/lesson-authoring.instructions.md`: nejdřív výstupy z učení a dataset, potom strukturální draft skript, potom development pass skript, teprve pak lidská revize a prezentace.
 3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do `Learning_materials/images/`. Krátké reprodukční debug skripty ukládejte do `Temp/` podle `.github/instructions/debugging.instructions.md`.
 4. Spusťte renderovací pipeline a commitněte aktualizované výstupy.
 

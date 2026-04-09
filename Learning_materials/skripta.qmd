@@ -112,31 +112,331 @@ if (knitr::is_html_output()) {
 }
 ```
 
+```{r}
+#| label: pripravit-data-tucnaci
+#| echo: false
+#| message: false
+#| warning: false
+data_tucnaci <-
+  palmerpenguins::penguins |>
+  tidyr::drop_na(
+    flipper_length_mm,
+    body_mass_g,
+    species
+  ) |>
+  dplyr::transmute(
+    druh_tucnaka = factor(
+      x = species,
+      levels = c("Adelie", "Chinstrap", "Gentoo")
+    ),
+    delka_ploutve_mm = flipper_length_mm,
+    hmotnost_g = body_mass_g
+  )
+
+barvy_druhu <-
+  c(
+    "Adelie" = "darkorange",
+    "Chinstrap" = "mediumpurple",
+    "Gentoo" = "cyan4"
+  )
+```
+
 ## Úvod
 
-TODO: Stručný úvod do tématu přednášky. Vysvětlete biologický kontext a motivaci.
+U živočichů často čekáme, že větší tělo bude souviset s většími orgány nebo končetinami. U tučňáků si proto můžeme položit jednoduchou otázku: mají jedinci s delší ploutví také větší tělesnou hmotnost? Tato otázka je vhodná pro první krok do světa vztahů dvou proměnných, protože nás nutí přemýšlet nejen o tvaru vzoru, ale i o `r render_glossary_term("variabilita", display = "variabilitě")` dat.
 
-## TODO: Hlavní část
+::: {.callout-tip}
+## Otázka před prvním grafem
 
-TODO: Obsah hlavní části skripta. Používejte podnadpisy (###) pro strukturování textu.
+Co byste čekali ještě před tím, než se podíváme na data?
 
-### TODO: Podkapitola
+- Delší ploutev téměř vždy znamená vyšší hmotnost.
+- Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
+- Délka ploutve a hmotnost spolu souviset nebudou.
 
-TODO: Text podkapitoly s biologickými příklady a R kódem.
+Než budete číst dál, zkuste si vybrat, která odpověď vám připadá nejpravděpodobnější, a proč.
+:::
+
+## Co si z této lekce odnést
+
+- vybrat vhodný graf pro vztah dvou proměnných
+- popsat, jaký vzor v datech vidíme a co zatím říct nemůžeme
+- vysvětlit, proč jsou reálná biologická data rozptýlená i tehdy, když v nich pozorujeme zřetelný směr
+- stručně popsat vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` pomocí korelace a vysvětlit, proč se Pearson a Spearman mohou lišit
+- připravit si půdu pro další lekce, kde budeme vztah dvou proměnných popisovat modelem
+
+## Jaká data budeme používat
+
+Budeme pracovat s datasety Palmer Penguins, které shrnují měření tučňáků z oblasti Palmer Station v Antarktidě. Pro tuto lekci jsme ponechali `r nrow(data_tucnaci)` pozorování, u nichž známe délku ploutve, tělesnou hmotnost a druh. V datech se objevují tři druhy: `r paste(sort(unique(data_tucnaci$druh_tucnaka)), collapse = ", ")`.
+
+Na tomto datasetu je užitečné to, že biologický příběh dává smysl i bez složité statistiky. Delší ploutev může souviset s větší tělesnou velikostí, ale zároveň víme, že do výsledku vstupují i další zdroje rozdílů mezi jedinci.
 
 ```{r}
-#| label: demo
-#| echo: true
-# TODO: ukázka kódu v R
+#| label: ilustrace-druhy-tucnaku
+#| echo: false
+#| out.width: "85%"
+#| fig-cap: "Tři druhy tučňáků v datasetu Palmer Penguins. Ilustrace: Allison Horst."
+knitr::include_graphics(
+  here::here(
+    "Learning_materials",
+    "images",
+    "lter_penguins.png"
+  )
+)
+```
+
+Na obrázku výše jsou tři druhy, se kterými budeme pracovat. Už z ilustrace je vidět, že se mezi nimi mohou lišit tělesné proporce. To je dobrá připomínka, že část `r render_glossary_term("rozptyl", display = "rozptylu")` v bodovém grafu může souviset i s tím, že nesledujeme jediný homogenní typ jedince.
+
+Jako první krok se ale na data podíváme co nejjednodušším způsobem: bez rozlišování druhů, jen jako na vztah mezi délkou ploutve a tělesnou hmotností.
+
+
+## První graf: délka ploutve a tělesná hmotnost
+
+Nejprve si zobrazíme co nejjednodušší bodový graf. V tuto chvíli nechceme nic testovat ani odhadovat pomocí modelu. Chceme si všimnout, jak data vypadají.
+
+```{r}
+#| label: prvni-bodovy-graf
+#| echo: false
+data_graf <-
+  na.omit(
+    palmerpenguins::penguins[
+      , c("flipper_length_mm", "body_mass_g")
+    ]
+  )
+
+vec_delka_ploutve_mm <-
+  data_graf$flipper_length_mm
+
+vec_hmotnost_g <-
+  data_graf$body_mass_g
+
+plot(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = "gray30"
+)
+```
+
+## Co v grafu vidíme
+
+Na první pohled je vidět rostoucí mrak bodů: tučňáci s delší ploutví bývají častěji těžší. To je důležitý první poznatek. Zároveň ale body neleží na jedné přímce. I při podobné délce ploutve se může tělesná hmotnost lišit o stovky gramů.
+
+Před dalším čtením se zkuste zastavit u tří krátkých otázek:
+
+- Kde je vztah mezi proměnnými nejsnadněji viditelný?
+- Jak velký je `r render_glossary_term("rozptyl", display = "rozptyl")` kolem hlavního směru?
+- Vidíte body, které se od většiny ostatních odlišují?
+
+Základní odpověď je tato: celkový směr vztahu je zřetelně rostoucí, ale kolem něj zůstává dost široký oblak bodů. Už teď tedy víme dvě důležité věci zároveň: vztah v datech opravdu vidíme, ale není natolik jednoduchý, aby se dal popsat jedinou „čistou“ čarou bez dalších otázek.
+
+## Stejný graf, ale s viditelnými druhy
+
+Když do stejného grafu přidáme informaci o druhu, začne být část struktury mnohem čitelnější. Původní šedý oblak bodů se rozpadne na několik podskupin, které se částečně překrývají, ale zároveň mají vlastní polohu a vlastní `r render_glossary_term("rozptyl", display = "rozptyl")`.
+
+To je důležité didakticky i biologicky. V původním bodovém grafu jsme viděli „jeden“ vztah, ale část tohoto vztahu je tvořena tím, že různé druhy mají různé typické kombinace délky ploutve a hmotnosti. Jinými slovy: část rozptylu není jen náhodný šum, ale odráží i skutečnou strukturu dat.
+
+
+```{r}
+#| label: bodovy-graf-podle-druhu
+#| echo: false
+plot(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = barvy_druhu[data_tucnaci$druh_tucnaka]
+)
+
+legend(
+  "topleft",
+  legend = names(barvy_druhu),
+  col = barvy_druhu,
+  pch = 16,
+  bty = "n",
+  title = "Druh"
+)
+```
+
+
+## Jaké proměnné budeme sledovat
+
+Po prvním pohledu na graf se teď vyplatí pojmenovat, co jsme vlastně zobrazili a proč tento typ grafu dával smysl.
+
+V této lekci budeme rozlišovat tři role proměnných:
+
+- `r render_glossary_term("prediktor", display = "Prediktor")`: délka ploutve v milimetrech (`flipper_length_mm`)
+- `r render_glossary_term("odezva", display = "Odezva")`: tělesná hmotnost v gramech (`body_mass_g`)
+- doplňkově také `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnnou")` druh tučňáka (`species`)
+
+V našem dosavadním příkladu jsou obě hlavní proměnné `r render_glossary_term("numericka-promenna", display = "numerické proměnné")`, proto byl první volbou právě bodový graf. Ten nám umožňuje podívat se současně na směr vztahu i na to, jak moc jsou hodnoty rozptýlené kolem hlavního vzoru.
+
+Když ale sledujeme vztah dvou proměnných obecněji, typ grafu vybíráme podle toho, jaké proměnné máme k dispozici:
+
+| Dvojice proměnných | Co chceme na první pohled vidět | Dobrá první volba |
+| --- | --- | --- |
+| dvě numerické proměnné | směr vztahu a rozptyl bodů | bodový graf |
+| `r render_glossary_term("kategoricka-promenna", display = "kategoriální")` + `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` | rozdíly mezi skupinami a překryv rozdělení | `r render_glossary_term("boxplot", display = "boxplot")`, případně body ve skupinách |
+| dvě kategoriální proměnné | kolik pozorování spadá do jednotlivých kombinací | tabulka `r render_glossary_term("cetnost", display = "četností")` nebo sloupcový graf |
+
+Obecné pravidlo tedy nezní jen „je v datech nějaký vztah?“, ale také „jaký graf vůbec dává pro tuto dvojici proměnných smysl?“
+
+## Ne každý vztah začíná bodovým grafem
+
+Dosud jsme sledovali vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")`. Vztah dvou proměnných ale nemusí vždy znamenat, že na obou osách budou čísla. Když místo délky ploutve použijeme druh tučňáka, pořád sledujeme vztah dvou proměnných, jen jiného typu: `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` určuje skupiny a `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` se mezi nimi porovnává.
+
+```{r}
+#| label: hmotnost-podle-druhu
+#| echo: false
+boxplot(
+  hmotnost_g ~ druh_tucnaka,
+  data = data_tucnaci,
+  xlab = "Druh tučňáka",
+  ylab = "Tělesná hmotnost (g)",
+  col = unname(barvy_druhu[levels(data_tucnaci$druh_tucnaka)]),
+  border = "gray30"
+)
+
+stripchart(
+  hmotnost_g ~ druh_tucnaka,
+  data = data_tucnaci,
+  method = "jitter",
+  vertical = TRUE,
+  pch = 16,
+  cex = 0.6,
+  col = adjustcolor("gray20", alpha.f = 0.55),
+  add = TRUE
+)
+```
+
+Než si přečtete vysvětlení, zkuste si v grafu najít tři věci:
+
+- Který druh leží typicky nejvýš?
+- Kde se `r render_glossary_term("rozdeleni", display = "rozdělení")` hmotnosti mezi druhy překrývá a kde už méně?
+- Je `r render_glossary_term("rozptyl", display = "rozptyl")` uvnitř jednotlivých druhů malý, nebo i v rámci jednoho druhu zůstává docela velký?
+
+Na tomto grafu nečteme směr vztahu jako v bodovém grafu. Místo toho sledujeme, zda se rozdělení tělesné hmotnosti mezi druhy překrývá, nebo zda některé skupiny leží typicky výš či níž. I to je vztah dvou proměnných: hodnota jedné proměnné se mění podle úrovně druhé.
+
+Na první pohled se zdá, že tučňáci druhu Gentoo leží typicky výš než Adelie a Chinstrap. Zároveň ale skupiny nejsou úplně oddělené a i uvnitř každého druhu zůstává viditelný rozptyl. To je přesně typ informace, kterou potřebujeme mít v hlavě, až se vrátíme k bodovému grafu.
+
+Je užitečné vrátit se s touto variantou zpět k předchozímu bodovému grafu. Část rozptylu, kterou jsme v něm viděli mezi body, totiž může být vysvětlena právě tím, že v jednom obrázku mícháme více druhů.
+
+
+## `r render_glossary_term("rozptyl", display = "Rozptyl")` ve dvou směrech
+
+U jednorozměrných dat sledujeme rozptyl jen v jednom směru, například jak moc se hodnoty hmotnosti liší kolem `r render_glossary_term("prumer", display = "průměru")`. V bodovém grafu ale kolísají obě osy současně. Jeden tučňák může mít o něco delší ploutev než jiný a zároveň se může lišit i hmotností. Výsledkem je mrak bodů, který má šířku i výšku.
+
+To je důležité pro interpretaci. Když vidíme podlouhlý oblak bodů směřující zleva dole doprava nahoru, znamená to, že vedle celkového trendu stále existuje velký lokální rozptyl. Dva jedinci s téměř stejnou délkou ploutve nemusí mít stejnou hmotnost a dva podobně těžcí jedinci nemusí mít stejně dlouhou ploutev.
+
+Část tohoto dvourozměrného rozptylu může být biologická, část může souviset s tím, že do jednoho grafu spojujeme více druhů, a část je prostě běžná nepřesnost a proměnlivost reálných dat. Viditelný trend a velká variabilita se proto navzájem nevylučují.
+
+## Proč jsou data rozptýlená
+
+`r render_glossary_term("variabilita", display = "Variabilita")` v biologických datech není chyba, kterou bychom měli odstranit. Je to vlastnost reálného světa. Dva tučňáci mohou mít podobně dlouhou ploutev, ale lišit se druhem, pohlavím, věkem nebo celkovou tělesnou stavbou. K rozptylu přispívá i běžná nepřesnost měření a to, že žádný biologický vztah nebývá dokonale přesný.
+
+Na tomto místě je užitečné rozlišit několik zdrojů rozptylu, které se v grafu míchají dohromady:
+
+- **biologické rozdíly mezi jedinci**: dva podobní jedinci nemusí být stejně těžcí ani stejně stavění
+- **rozdíly mezi skupinami**: část variability vzniká tím, že v jednom grafu spojujeme více druhů
+- **nepřesnost a omezení měření**: reálná data nikdy nejsou úplně bez chyby
+- **další nevysvětlené vlivy**: sledujeme jen malou část toho, co hmotnost organismu ovlivňuje
+
+V našem datasetu se délka ploutve pohybuje přibližně od `r min(data_tucnaci$delka_ploutve_mm)` do `r max(data_tucnaci$delka_ploutve_mm)` mm a tělesná hmotnost od `r min(data_tucnaci$hmotnost_g)` do `r max(data_tucnaci$hmotnost_g)` g. Už z tohoto rozsahu je vidět, že nejde o několik téměř stejných jedinců, ale o biologicky pestrý soubor měření.
+
+```{r}
+#| label: korelace-delka-hmotnost
+#| echo: false
+pearson_korelace <- cor(
+  data_tucnaci$delka_ploutve_mm,
+  data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+
+spearman_korelace <- cor(
+  data_tucnaci$delka_ploutve_mm,
+  data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+
+pearson_korelace_txt <- formatC(
+  pearson_korelace,
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+
+spearman_korelace_txt <- formatC(
+  spearman_korelace,
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+```
+
+## Korelace jako stručný číselný popis
+
+Graf je vždy první krok, ale někdy chceme vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` shrnout i číslem. K tomu slouží korelace. V našich datech vychází Pearsonova korelace přibližně `r pearson_korelace_txt` a Spearmanova korelace přibližně `r spearman_korelace_txt`.
+
+| Pearson | Spearman |
+| --- | --- |
+| pracuje s původními hodnotami | pracuje s pořadím hodnot |
+| shrnuje hlavně lineární vztah | shrnuje monotónní vztah |
+| bývá citlivější na odlehlé body | bývá vůči odlehlým bodům odolnější |
+
+Pearsonova korelace shrnuje, jak silně spolu souvisejí hodnoty na obou osách v lineárním smyslu. Spearmanova korelace pracuje s pořadím hodnot, takže je vhodná jako neparametrická alternativa tam, kde nás zajímá spíš monotónní vztah než přesně lineární průběh. Bývá také méně citlivá na odlehlé body.
+
+Když body tvoří přibližně rostoucí oblak bez výrazně zvláštních bodů, bývají obě korelace podobné. Pokud by byl vztah zakřivený nebo by několik bodů silně vyčnívalo, mohl by být rozdíl mezi Pearsonem a Spearmanem už informativní sám o sobě.
+
+V této lekci je důležité hlavně to, že obě čísla mají podpůrnou roli. Nenahrazují graf ani biologickou interpretaci. Pomáhají jen stručně vyjádřit, že delší ploutve bývají spojeny s vyšší hmotností a že tento vztah je v datech zřetelný i po převodu do číselné podoby.
+
+## Co zatím ještě nemůžeme tvrdit
+
+::: {.callout-important}
+## Která formulace je v této chvíli správně?
+
+- **A:** V grafu je vidět vztah, takže jsme prokázali `r render_glossary_term("efekt", display = "efekt")`.
+- **B:** V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
+- **C:** Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+
+Nejlepší odpověď je **B**.
+:::
+
+Častý omyl zní: v grafu je vidět vztah, takže jsme prokázali efekt. To je předčasný závěr. Z grafu zatím víme, že data vypadají zajímavě a že stojí za další analýzu. Nevíme ještě, jak přesně vztah popsat, jak je silný a jak velká je `r render_glossary_term("nejistota", display = "nejistota")` kolem našeho odhadu.
+
+Správná formulace pro tuto chvíli je skromnější: v datech vidíme vzor, který je biologicky smysluplný a který chceme v dalších lekcích popsat přesněji.
+
+## Co bude následovat dál
+
+V další lekci navážeme lineárním modelem, který nám pomůže převést viditelný vzor do číselné podoby. Teprve potom bude dávat smysl mluvit o tom, jak velký vztah mezi proměnnými je a jak moc mu věříme.
+
+Palmer Penguins ale nabízí i další proměnné, které se budou hodit pro pozdější příklady, například délku a hloubku zobáku. Stejná logika výběru grafu a interpretace vztahu se pak bude dát použít i na jiné biologické otázky než jen na délku ploutve a hmotnost.
+
+```{r}
+#| label: ilustrace-zobak
+#| echo: false
+#| out.width: "85%"
+#| fig-cap: "Schéma měření délky a hloubky zobáku v datech Palmer Penguins. Ilustrace: Allison Horst."
+knitr::include_graphics(
+  here::here(
+    "Learning_materials",
+    "images",
+    "culmen_depth.png"
+  )
+)
 ```
 
 ## Shrnutí
 
-TODO: Klíčové body k zapamatování.
-
-- TODO: bod 1
-- TODO: bod 2
-- TODO: bod 3
+- Typ grafu vybíráme podle dvojice proměnných: numerická × numerická, kategoriální × numerická, kategoriální × kategoriální.
+- Pro dvě numerické proměnné je přirozenou první volbou bodový graf, pro skupiny často `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do kategorií.
+- I jeden „obyčejný“ bodový graf může skrývat více podskupin, které se ukážou až po doplnění další informace.
+- V bodovém grafu sledujeme `r render_glossary_term("rozptyl", display = "rozptyl")` ve dvou směrech současně, ne jen odchylku kolem jediné hodnoty.
+- Korelace je stručný číselný popis vztahu dvou numerických proměnných, ale sama o sobě nenahrazuje graf ani interpretaci.
+- V grafu můžeme rozpoznat směr vztahu, ale ještě tím neprokazujeme `r render_glossary_term("efekt", display = "efekt")`.
+- L02 připravuje půdu pro další krok: přesnější popis vztahu a `r render_glossary_term("nejistota", display = "nejistoty")` pomocí modelu.
 
 ## Slovníček pojmů {.unnumbered}
 
