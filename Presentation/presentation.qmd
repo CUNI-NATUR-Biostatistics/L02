@@ -72,6 +72,103 @@ slides_url <-
   )
 ```
 
+<style>
+.reveal .slide-card {
+  border-radius: 18px;
+  padding: 0.75rem 1rem 0.95rem 1rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  min-height: 10rem;
+  margin-bottom: 0.7rem;
+}
+
+.reveal .slide-card + .slide-card {
+  margin-top: 0.9rem;
+}
+
+.reveal .compact-card {
+  min-height: 8rem;
+}
+
+.reveal .slide-card h3 {
+  margin: 0 0 0.35rem 0;
+  color: #2E2E2E;
+}
+
+.reveal .slide-card p,
+.reveal .slide-card ul {
+  font-size: 0.82em;
+  line-height: 1.35;
+}
+
+.reveal .slide-card ul {
+  margin-top: 0.35rem;
+}
+
+.reveal .kicker {
+  margin: 0 0 0.35rem 0;
+  font-size: 0.48em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: #6F6F6F;
+}
+
+.reveal .vote-card {
+  background: #FFFAF1;
+  border-top: 7px solid #F3A712;
+}
+
+.reveal .checkpoint-known {
+  background: #F7F1FF;
+  border-top: 7px solid #5D2890;
+}
+
+.reveal .checkpoint-open {
+  background: #FFF5DB;
+  border-top: 7px solid #F3A712;
+}
+
+.reveal .warning-card {
+  background: #FFF1F1;
+  border-top: 7px solid #C94C4C;
+}
+
+.reveal .rule-card {
+  background: #EEF6FF;
+  border-top: 7px solid #3A77B7;
+}
+
+.reveal .takeaway-strip {
+  margin-top: 0.8rem;
+  border-radius: 16px;
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  font-size: 0.8em;
+  background: linear-gradient(90deg, rgba(93, 40, 144, 0.12), rgba(243, 167, 18, 0.16));
+  border-left: 6px solid #5D2890;
+}
+
+.reveal .takeaway-strip p {
+  margin: 0;
+}
+
+.reveal .answer-highlight {
+  color: #5D2890;
+  font-weight: 700;
+}
+
+.reveal .warning-highlight {
+  color: #C94C4C;
+  font-weight: 700;
+}
+
+.reveal .soft-note {
+  font-size: 0.72em;
+  color: #6F6F6F;
+}
+</style>
+
 ```{r}
 #| label: pripravit-data
 #| include: false
@@ -98,6 +195,12 @@ data_tucnaci <-
     ),
     delka_ploutve_mm = flipper_length_mm,
     hmotnost_g = body_mass_g
+  )
+
+data_maly_priklad_vztahu <-
+  tibble::tibble(
+    delka_ploutve_mm = c(186, 191, 197, 204),
+    hmotnost_g = c(3800, 3920, 4300, 4480)
   )
 
 barvy_druhu <-
@@ -147,26 +250,26 @@ prumer_hmotnost <-
   mean(data_tucnaci$hmotnost_g)
 
 kovariance_mm_g <-
-  stats::cov(
+  cov(
     x = data_tucnaci$delka_ploutve_mm,
     y = data_tucnaci$hmotnost_g
   )
 
 kovariance_cm_kg <-
-  stats::cov(
+  cov(
     x = data_tucnaci$delka_ploutve_mm / 10,
     y = data_tucnaci$hmotnost_g / 1000
   )
 
 pearson_korelace <-
-  stats::cor(
+  cor(
     x = data_tucnaci$delka_ploutve_mm,
     y = data_tucnaci$hmotnost_g,
     method = "pearson"
   )
 
 spearman_korelace <-
-  stats::cor(
+  cor(
     x = data_tucnaci$delka_ploutve_mm,
     y = data_tucnaci$hmotnost_g,
     method = "spearman"
@@ -231,7 +334,7 @@ y_curve <-
 
 pearson_linear_txt <-
   formatC(
-    stats::cor(x_linear, y_linear, method = "pearson"),
+    cor(x_linear, y_linear, method = "pearson"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -239,7 +342,7 @@ pearson_linear_txt <-
 
 spearman_linear_txt <-
   formatC(
-    stats::cor(x_linear, y_linear, method = "spearman"),
+    cor(x_linear, y_linear, method = "spearman"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -247,7 +350,7 @@ spearman_linear_txt <-
 
 pearson_none_txt <-
   formatC(
-    stats::cor(x_none, y_none, method = "pearson"),
+    cor(x_none, y_none, method = "pearson"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -255,7 +358,7 @@ pearson_none_txt <-
 
 spearman_none_txt <-
   formatC(
-    stats::cor(x_none, y_none, method = "spearman"),
+    cor(x_none, y_none, method = "spearman"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -263,7 +366,7 @@ spearman_none_txt <-
 
 pearson_neg_txt <-
   formatC(
-    stats::cor(x_neg, y_neg, method = "pearson"),
+    cor(x_neg, y_neg, method = "pearson"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -271,7 +374,7 @@ pearson_neg_txt <-
 
 spearman_neg_txt <-
   formatC(
-    stats::cor(x_neg, y_neg, method = "spearman"),
+    cor(x_neg, y_neg, method = "spearman"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -279,7 +382,7 @@ spearman_neg_txt <-
 
 pearson_curve_txt <-
   formatC(
-    stats::cor(x_curve, y_curve, method = "pearson"),
+    cor(x_curve, y_curve, method = "pearson"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -287,7 +390,7 @@ pearson_curve_txt <-
 
 spearman_curve_txt <-
   formatC(
-    stats::cor(x_curve, y_curve, method = "spearman"),
+    cor(x_curve, y_curve, method = "spearman"),
     format = "f",
     digits = 2,
     decimal.mark = ","
@@ -325,6 +428,39 @@ plot_prvni_bodovy <-
 ggview::save_ggplot(
   plot = plot_prvni_bodovy,
   file = here::here(path_materials, "prvni_bodovy_graf.png")
+)
+
+plot_maly_bodovy <-
+  ggplot2::ggplot(
+    data = data_maly_priklad_vztahu,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_highlight,
+    size = 3.4,
+    alpha = 0.9
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Čtyři konkrétní dvojice hodnot"
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(184, 206),
+    ylim = c(3700, 4600)
+  ) +
+  ggview::canvas(
+    width = 1000,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_maly_bodovy,
+  file = here::here(path_materials, "maly_bodovy_graf.png")
 )
 
 plot_s_primkou <-
@@ -998,11 +1134,43 @@ Ilustrace: Allison Horst
 
 Který popis čekáte nejspíš?
 
-- A: Delší ploutev téměř vždy znamená vyšší hmotnost.
-- B: Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
-- C: Délka ploutve a hmotnost spolu souviset nebudou.
+:::: {.columns}
 
-Fallback bez hlasování: zvedněte ruku pro možnost, která vám dává největší biologický smysl.
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost A</p>
+
+### Téměř jisté pravidlo
+
+Delší ploutev téměř vždy znamená vyšší hmotnost.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost B</p>
+
+### Trend, ale ne dokonale
+
+Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost C</p>
+
+### Bez vztahu
+
+Délka ploutve a hmotnost spolu souviset nebudou.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: zvedněte ruku pro možnost, která vám dává největší biologický smysl.
+:::
 
 ## První pohled na data
 
@@ -1016,11 +1184,39 @@ include_local_figure("prvni_bodovy_graf.png")
 
 *Nejdřív 20 sekund ticha: napište si jednu větu, co z grafu opravdu vidíte.*
 
-::: {.incremental}
-- Je hlavní směr spíš rostoucí, nebo ne?
-- Je oblak bodů úzký, nebo široký?
-- Vidíte místa, kde by stálo za to zpomalit a podívat se podrobněji?
+:::: {.columns}
+
+::: {.column width="33%"}
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Hledejte v grafu</p>
+
+### Směr
+
+Je hlavní směr spíš rostoucí, nebo ne?
 :::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Hledejte v grafu</p>
+
+### Šířku oblaku
+
+Je oblak bodů úzký, nebo široký?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Hledejte v grafu</p>
+
+### Místa ke zpomalení
+
+Vidíte body nebo části grafu, kde stojí za to ptát se dál?
+:::
+:::
+
+::::
 
 ## Stejná data, jiné osy
 
@@ -1030,63 +1226,288 @@ include_local_figure("prvni_bodovy_graf.png")
 include_local_figure("stejna_data_jine_osy.png")
 ```
 
-## Rozptyl v jednom směru
+## Rozptyl čteme ve dvou směrech
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 ```{r}
-#| label: zobrazit-rozptyl-delka
+#| label: zobrazit-rozptyl-delka-vedle
 #| echo: false
+#| out.width: "100%"
 include_local_figure("rozptyl_podle_delky.png")
 ```
 
-## A teď druhý směr
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Při podobné ploutvi</p>
+
+### Hmotnost se stále liší
+
+- I v úzkém svislém pruhu vidíme více různých hmotností.
+- Rozptyl tedy nečteme jen podle hlavního směru oblaku.
+:::
+
+:::
+
+::: {.column width="50%"}
 
 ```{r}
-#| label: zobrazit-rozptyl-hmotnost
+#| label: zobrazit-rozptyl-hmotnost-vedle
 #| echo: false
+#| out.width: "100%"
 include_local_figure("rozptyl_podle_hmotnosti.png")
 ```
+
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Při podobné hmotnosti</p>
+
+### Délka ploutve se stále liší
+
+- Stejně můžeme číst i vodorovný směr.
+- Rozptyl je vlastnost vztahu, ne jen jedna odchylka od čáry.
+:::
+
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když čteme bodový graf, díváme se současně na <span class="answer-highlight">směr vztahu</span> i na to, jak široký oblak zůstává v obou směrech.
+:::
 
 ## Vracíme se k biologické otázce
 
 Co už po těchto třech pohledech umíme říct?
 
-::: {.incremental}
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-known}
+<p class="kicker">Co už vidíme</p>
+
+### Signál
+
 - Delší ploutve bývají spojeny s vyšší hmotností.
-- Vztah je zřetelný, ale není dokonale těsný.
+- Celkový směr je zřetelně rostoucí.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-open}
+<p class="kicker">Co ještě zůstává otevřené</p>
+
+### Rozptyl
+
+- Vztah není dokonale těsný.
 - Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Už máme <span class="answer-highlight">biologicky smysluplný vzor</span>, ale ještě ne model, odhad efektu ani nejistotu.
 :::
 
 ## Co už můžeme tvrdit?
 
 Která formulace je v této chvíli nejlepší?
 
-- A: V grafu je vidět vztah, takže jsme prokázali efekt.
-- B: V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
-- C: Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+:::: {.columns}
 
-Fallback bez hlasování: napište si písmeno, které byste obhajovali před spolužákem.
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost A</p>
+
+### Příliš silné tvrzení
+
+V grafu je vidět vztah, takže jsme prokázali efekt.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost B</p>
+
+### Přiměřený závěr
+
+V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost C</p>
+
+### Příliš slabé tvrzení
+
+Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: napište si písmeno, které byste obhajovali před spolužákem.
+:::
 
 ## Správně je B
 
-Viditelný vzor v grafu je důležitý začátek.
+:::: {.columns}
 
-Ještě ale nemáme:
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-known}
+<p class="kicker">Co už víme</p>
 
-::: {.incremental}
+### Viditelný vzor je důležitý začátek
+
+- Vidíme směr vztahu.
+- Vidíme rozptyl kolem hlavního směru.
+- Vidíme, že otázka stojí za přesnější popis.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-open}
+<p class="kicker">Co ještě nemáme</p>
+
+### Zatím chybí další krok
+
 - model, který vztah popíše přesněji
 - odhad velikosti vztahu
-- kvantifikaci nejistoty kolem odhadu
+- kvantifikace nejistoty kolem odhadu
 :::
+:::
+
+::::
+
+## Nejdřív malý příklad v R
+
+Toto je záměrně malý didaktický příklad se čtyřmi dvojicemi hodnot, jen abychom viděli logiku příkazu.
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+<br>
+
+```{r}
+#| label: kod-maleho-bodoveho-grafu-v-r
+#| echo: true
+#| eval: false
+vec_delka_ploutve_mm <-
+  c(186, 191, 197, 204)
+
+vec_hmotnost_g <-
+  c(3800, 3920, 4300, 4480)
+
+plot(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = rgb(red = 0.95, green = 0.65, blue = 0.07, alpha = 0.85)
+)
+```
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| label: zobrazit-maly-bodovy-graf
+#| echo: false
+#| out.width: "100%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+:::
+
+::::
+
+::: {.takeaway-strip}
+Nejdřív si stejný nápad zkusíme na pár konkrétních dvojicích hodnot. Pak úplně stejnou logiku použijeme na všechny tučňáky najednou.
+:::
+
+## A teď stejné pro všechny tučňáky
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+<br>
+
+```{r}
+#| label: kod-prvniho-grafu-v-r
+#| echo: true
+#| eval: false
+plot(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = rgb(red = 0.54, green = 0.54, blue = 0.54, alpha = 0.6)
+)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: ukazat-prvni-graf-vedle-kodu
+#| echo: false
+include_local_figure("prvni_bodovy_graf.png")
+```
+
+:::
+
+::::
 
 ## Co když je v oblaku skrytá struktura?
 
 Než přidáme další vrstvu, odhadněte:
 
-- A: Barvy nic důležitého nezmění.
-- B: Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
-- C: Po rozdělení podle druhu zmizí veškerý vztah.
+:::: {.columns}
 
-Fallback bez hlasování: zvedněte ruku pro možnost, kterou byste chtěli ověřit jako první.
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost A</p>
+
+### Barvy nic nepřidají
+
+Barvy nic důležitého nezmění.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost B</p>
+
+### Skupiny mohou něco vysvětlit
+
+Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost C</p>
+
+### Vztah by se měl ztratit
+
+Po rozdělení podle druhu zmizí veškerý vztah.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: zvedněte ruku pro možnost, kterou byste chtěli ověřit jako první.
+:::
 
 ## Stejná data, ale s druhem
 
@@ -1098,11 +1519,31 @@ include_local_figure("graf_podle_druhu.png")
 
 ## Co se po obarvení změnilo?
 
-::: {.incremental}
-- Celkový vztah nezmizel.
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-known}
+<p class="kicker">Co zůstalo stejné</p>
+
+### Celkový vztah nezmizel
+
+- Delší ploutve jsou stále spojeny s vyšší hmotností.
+- Hlavní směr oblaku pořád dává biologický smysl.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-open}
+<p class="kicker">Co se zpřesnilo</p>
+
+### Rozptyl už není jen „šum“
+
 - Část variability souvisí s tím, že mícháme více druhů dohromady.
 - Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
 :::
+:::
+
+::::
 
 ## Jak převést směr oblaku do čísla?
 
@@ -1124,11 +1565,43 @@ include_local_figure("kovariance_stred.png")
 
 Než něco vybarvíme, odhadněte:
 
-- A: vpravo nahoře a vlevo dole
-- B: vlevo nahoře a vpravo dole
-- C: všechny stejně
+:::: {.columns}
 
-Fallback bez hlasování: ukažte prstem do dvojice kvadrantů, které byste vybrali.
+::: {.column width="33%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost A</p>
+
+### Vpravo nahoře a vlevo dole
+
+Obě proměnné jsou tam na stejné straně od svého průměru.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost B</p>
+
+### Vlevo nahoře a vpravo dole
+
+Jedna proměnná je nad průměrem a druhá pod ním.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost C</p>
+
+### Všechny stejně
+
+Na poloze bodů vůči středu by nezáleželo.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
+:::
 
 ## Takto vypadá kladná kovariance
 
@@ -1140,31 +1613,107 @@ include_local_figure("kovariance_kvadranty.png")
 
 ## Proč samotná kovariance nestačí
 
-::: {.incremental}
-- V milimetrech a gramech vyjde kovariance `r kovariance_mm_g_txt`.
-- V centimetrech a kilogramech vyjde `r kovariance_cm_kg_txt`.
-- Směr vztahu se nezměnil, ale velikost čísla ano.
-- Proto chceme bezrozměrný souhrn: korelaci.
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">V milimetrech a gramech</p>
+
+### Kovariance `r kovariance_mm_g_txt`
+
+Směr vztahu je kladný, ale číslo pořád závisí na použitých jednotkách.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">V centimetrech a kilogramech</p>
+
+### Kovariance `r kovariance_cm_kg_txt`
+
+Biologický vztah je stejný, ale velikost čísla se po změně jednotek změní.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="answer-highlight">bezrozměrný souhrn</span>: korelaci.
 :::
 
 ## Dvě čísla, která budeme používat
 
-::: {.incremental}
-- Pearsonova korelace shrnuje hlavně lineární vztah.
-- Spearmanova korelace sleduje pořadí a monotónní vztah.
-- V našich datech vycházejí velmi podobně: `r pearson_korelace_txt` a `r spearman_korelace_txt`.
-- Obě čísla jsou doplněk ke grafu, ne náhrada grafu.
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .rule-card}
+<p class="kicker">Pearson</p>
+
+### Lineární čtení vztahu
+
+- shrnuje hlavně lineární vztah
+- v našich datech vychází `r pearson_korelace_txt`
+:::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .rule-card}
+<p class="kicker">Spearman</p>
+
+### Pořadí a monotónní směr
+
+- sleduje pořadí hodnot a monotónní vztah
+- v našich datech vychází `r spearman_korelace_txt`
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Obě čísla jsou <span class="answer-highlight">doplněk ke grafu</span>, ne jeho náhrada.
 :::
 
 ## Odhad před odhalením
 
 Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
 
-- A: silný lineární vztah bez zvláštních bodů
-- B: žádná zřetelná souvislost
-- C: monotónní, ale zakřivený vztah
+:::: {.columns}
 
-Fallback bez hlasování: napište si A, B, nebo C a krátce proč.
+::: {.column width="33%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost A</p>
+
+### Silný lineární vztah
+
+Bez zvláštních bodů.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost B</p>
+
+### Žádná zřetelná souvislost
+
+Obě čísla by měla být nízká.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card .compact-card}
+<p class="kicker">Možnost C</p>
+
+### Monotónní, ale zakřivený vztah
+
+Pořadí sedí, linearita už ne úplně.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: napište si A, B, nebo C a krátce proč.
+:::
 
 ## Monotónní, ale zakřivený vztah
 
@@ -1184,55 +1733,264 @@ include_local_figure("ctyri_situace_korelace.png")
 
 ## Co nám to říká právě o tučňácích?
 
-::: {.incremental}
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-known}
+<p class="kicker">Dobrá zpráva</p>
+
+### Obě korelace si tu rozumějí
+
 - U tučňáků jsou Pearson i Spearman velmi podobné.
-- To je dobrá zpráva: celkový vztah je monotónní a zároveň docela blízký lineárnímu.
-- Zároveň jsme už viděli, že barva podle druhu ukazuje další biologickou strukturu, kterou jedno číslo samo nevysvětlí.
+- Celkový vztah je monotónní a zároveň docela blízký lineárnímu.
 :::
+:::
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-open}
+<p class="kicker">Co tím pořád nevysvětlíme</p>
+
+### Jedno číslo nestačí na celou biologii
+
+- Barva podle druhu ukazuje další strukturu.
+- Samotná korelace neřekne, odkud se vztah bere.
+:::
+:::
+
+::::
+
+## Nejdřív malý příklad korelace v R
+
+Použijeme stejný malý didaktický příklad, jen místo obrázku teď zkusíme spočítat číslo, které ten vztah shrne.
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+```{r}
+#| label: kod-male-korelace-v-r
+#| echo: true
+#| eval: false
+vec_delka_ploutve_mm <-
+  c(186, 191, 197, 204)
+
+vec_hmotnost_g <-
+  c(3800, 3920, 4300, 4480)
+
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "pearson"
+)
+
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "spearman"
+)
+```
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| label: zobrazit-maly-bodovy-graf-pro-korelaci
+#| echo: false
+#| out.width: "100%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+::: {.slide-card .rule-card .compact-card}
+<p class="kicker">Co ten příkaz shrnuje</p>
+
+### Pořadí i směr jdou stejně
+
+- Delší ploutev znamená v tomto malém příkladu vyšší hmotnost.
+- Číslo jen shrne to, co už z těchto čtyř bodů vidíme.
+:::
+
+:::
+
+::::
+
+## A stejné příkazy pro všechny tučňáky
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+<br>
+
+```{r}
+#| label: kod-korelace-v-r
+#| echo: true
+#| eval: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+```
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| label: vystup-korelace-v-r
+#| echo: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+```
+
+Krátký výstup stačí číst takto: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
+
+:::
+
+::::
 
 ## Co z korelace ještě neplyne?
 
 Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
 
-- A: Ano, protože korelace je vysoká.
-- B: Ne, vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
-- C: Ano, pokud jsou Pearson a Spearman podobné.
+:::: {.columns}
 
-Fallback bez hlasování: zkuste jednou větou obhájit možnost, kterou byste vybrali.
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost A</p>
+
+### Vysoká korelace už stačí
+
+Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost B</p>
+
+### Asociace ano, kauzalita ne
+
+Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .vote-card}
+<p class="kicker">Možnost C</p>
+
+### Shoda dvou koeficientů je důkaz
+
+Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: zkuste jednou větou obhájit možnost, kterou byste vybrali.
+:::
 
 ## Správně je B
 
-::: {.incremental}
-- Korelace popisuje společnou změnu dvou proměnných.
-- Sama neoddělí příčinu od dalších proměnných nebo společného mechanismu.
-- U tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla.
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.slide-card .checkpoint-known}
+<p class="kicker">Co korelace říká</p>
+
+### Společná změna dvou proměnných
+
+- Korelace popisuje, že se dvě proměnné mění společně.
+- Pomáhá shrnout směr a těsnost vztahu.
+:::
 :::
 
-## Jaký graf byste zvolili?
+::: {.column width="50%"}
+::: {.slide-card .warning-card}
+<p class="kicker">Co korelace neříká</p>
 
-Pro dvojici **délka ploutve × hmotnost**:
+### Sama neoddělí příčinu
 
-- A: bodový graf
-- B: boxplot
-- C: dlaždicový graf
+- neoddělí příčinu od dalších proměnných nebo společného mechanismu
+- u tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla
+:::
+:::
 
-Fallback bez hlasování: napište si první volbu na papír.
+::::
 
-## A pro dvojici druh × hmotnost?
+## Který první graf se hodí?
 
-- A: bodový graf
-- B: boxplot nebo body ve skupinách
-- C: dlaždicový graf
+:::: {.columns}
 
-Fallback bez hlasování: zkuste si říct, co přesně chcete v grafu vidět.
+::: {.column width="58%"}
 
-## A pro dvojici druh × ostrov?
+::: {.slide-card .compact-card}
+<p class="kicker">Dvojice 1</p>
 
-- A: bodový graf
-- B: boxplot
-- C: tabulka četností nebo dlaždicový graf
+### Délka ploutve × hmotnost
 
-Fallback bez hlasování: pokud váháte, nejdřív si řekněte, zda jsou proměnné numerické, nebo kategoriální.
+Obě proměnné jsou numerické.
+:::
+
+::: {.slide-card .compact-card}
+<p class="kicker">Dvojice 2</p>
+
+### Druh × hmotnost
+
+Jedna proměnná tvoří skupiny, druhá je numerická.
+:::
+
+::: {.slide-card .compact-card}
+<p class="kicker">Dvojice 3</p>
+
+### Druh × ostrov
+
+Obě proměnné jsou kategoriální.
+:::
+
+:::
+
+::: {.column width="42%"}
+
+::: {.blockquote}
+Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
+:::
+
+::: {.incremental}
+- bodový graf
+- boxplot nebo body ve skupinách
+- tabulka četností nebo dlaždicový graf
+:::
+
+::: {.slide-card .checkpoint-open .compact-card}
+<p class="kicker">Začněte vždy stejně</p>
+
+### Co si řeknu jako první?
+
+- Jsou proměnné numerické, nebo kategoriální?
+- Co z jejich vztahu chci v grafu přečíst?
+:::
+
+:::
+
+::::
 
 ## Tři rychlé příklady
 
@@ -1244,17 +2002,73 @@ include_local_figure("tri_rychle_priklady.png")
 
 ## Pravidlo pro první volbu grafu
 
-| Dvojice proměnných | Co chceme vidět | Dobrá první volba |
-|---|---|---|
-| dvě numerické proměnné | směr vztahu a rozptyl bodů | bodový graf |
-| kategoriální + numerická | rozdíly mezi skupinami | boxplot nebo body ve skupinách |
-| dvě kategoriální proměnné | četnosti kombinací | tabulka četností nebo dlaždicový graf |
+:::: {.columns}
+
+::: {.column width="33%"}
+::: {.slide-card .rule-card}
+<p class="kicker">Dvě numerické proměnné</p>
+
+### Bodový graf
+
+Chceme číst směr vztahu a rozptyl bodů.
+:::
+:::
+
+::: {.column width="34%"}
+::: {.slide-card .rule-card}
+<p class="kicker">Kategoriální + numerická</p>
+
+### Boxplot nebo body ve skupinách
+
+Chceme porovnat rozdíly mezi skupinami.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.slide-card .rule-card}
+<p class="kicker">Dvě kategoriální proměnné</p>
+
+### Tabulka četností nebo dlaždicový graf
+
+Chceme číst četnosti kombinací.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+První volbu grafu neurčuje to, co vypadá nejhezčí, ale <span class="answer-highlight">typ dvojice proměnných a otázka, kterou chceme číst</span>.
+:::
 
 ## Co nám přidá model?
 
-Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc oproti samotnému korelačnímu koeficientu?
+:::: {.columns}
 
-Fallback bez hlasování: zkuste si dopsat jednu větu začínající slovy „Přímka by nám mohla ukázat...“
+::: {.column width="58%"}
+
+::: {.blockquote}
+Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc oproti samotnému korelačnímu koeficientu?
+:::
+
+:::
+
+::: {.column width="42%"}
+::: {.slide-card .checkpoint-open .compact-card}
+<p class="kicker">Začněte touto větou</p>
+
+### Přímka by nám mohla ukázat...
+
+- směr a velikost změny
+- typický sklon vztahu
+- most od grafu k modelu
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: zkuste si dopsat jednu větu začínající slovy „Přímka by nám mohla ukázat...“
+:::
 
 ## Příště přidáme model
 
@@ -1266,11 +2080,12 @@ include_local_figure("bodovy_graf_s_primkou.png")
 
 ## Shrnutí
 
-::: {.incremental}
-- Jeden bodový graf už umí ukázat směr vztahu i šířku rozptylu.
-- Viditelný vzor je silný začátek, ale ještě to není formální důkaz efektu.
-- Korelace pomáhá shrnout vztah číslem, ale bez grafu může být zavádějící.
-- První graf vybíráme podle typu proměnných a podle otázky, kterou chceme zodpovědět.
+::: {.blockquote}
+- Pro dvě numerické proměnné je první volbou bodový graf.
+- Z grafu čteme současně směr vztahu i šířku rozptylu.
+- Korelace vztah shrne číslem, ale nenahradí samotný graf.
+- Viditelný vzor ještě není důkaz efektu ani kauzality.
+- Další krok je model, který přidá odhad efektu a nejistotu.
 :::
 
 ## Závěrečná otázka
