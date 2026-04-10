@@ -36,11 +36,15 @@ if (!require("tidyverse")) install.packages("tidyverse")
 if (!require("ggbeeswarm")) install.packages("ggbeeswarm")
 if (!require("palmerpenguins")) install.packages("palmerpenguins")
 if (!require("glossary")) install.packages("glossary")
+if (!require("cowplot")) install.packages("cowplot")
+if (!require("kableExtra")) install.packages("kableExtra")
 
 library(tidyverse)
 library(ggbeeswarm)
 library(palmerpenguins)
 library(glossary)
+library(cowplot)
+library(kableExtra)
 
 # Glossary: point to the canonical slovnik pojmy.yaml hosted on GitHub.
 # Terms are looked up by slug ID (e.g. "histogram", "median", "boxplot").
@@ -91,14 +95,29 @@ if (knitr::is_html_output()) {
   # Override: show tooltip on hover (not :active) and suppress the arrow on active.
   cat(
     "<style>",
+    "span.glossary { position: relative; cursor: help; color: #5D2890; text-decoration: underline; }",
+    "span.glossary .def {",
+    "  display: none; position: absolute; z-index: 1000; max-width: 22rem; min-width: 16rem;",
+    "  left: 50%; transform: translateX(-50%); top: calc(100% + 6px);",
+    "  background: #FFFFFF; color: #2E2E2E; padding: 0.55rem 0.7rem;",
+    "  border: 1px solid rgba(93, 40, 144, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); border-radius: 4px;",
+    "  text-decoration: none; line-height: 1.35; white-space: normal;",
+    "}",
     "a.glossary:hover .def { display: inline-block; }",
+    "span.glossary:hover .def { display: inline-block; }",
     "a.glossary:hover .def::after {",
     "  content: ' '; position: absolute; top: 100%; left: 50%;",
     "  margin-left: -5px; border-width: 5px; border-style: solid;",
     "  border-color: #FFFFFF transparent transparent transparent;",
     "}",
+    "span.glossary:hover .def::after {",
+    "  content: ' '; position: absolute; top: -10px; left: 50%;",
+    "  margin-left: -5px; border-width: 5px; border-style: solid;",
+    "  border-color: transparent transparent #FFFFFF transparent;",
+    "}",
     "a.glossary:active .def { display: none; }",
     "a.glossary:active .def::after { display: none; }",
+    ".table td svg, .table th svg { display: block; width: 100% !important; height: auto !important; margin: 0 auto; }",
     "</style>",
     "<script>",
     "document.addEventListener('DOMContentLoaded', function() {",
@@ -141,6 +160,31 @@ barvy_druhu <-
   )
 ```
 
+```{r}
+#| label: nastaveni-vizualizace
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::theme_set(
+  ggplot2::theme_bw() +
+    ggplot2::theme(
+      panel.grid.minor = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(
+        fill  = "#F0EDE8",
+        color = "#8A8A8A"
+      ),
+      strip.text = ggplot2::element_text(
+        face   = "bold",
+        colour = "#5D2890"
+      )
+    )
+)
+
+col_data        <- "#8A8A8A"
+col_highlight   <- "#F3A712"
+col_median_line <- "#5D2890"
+```
+
 ## Úvod
 
 U živočichů často čekáme, že větší tělo bude souviset s většími orgány nebo končetinami. U tučňáků si proto můžeme položit jednoduchou otázku: mají jedinci s delší ploutví také větší tělesnou hmotnost? Tato otázka je vhodná pro první krok do světa vztahů dvou proměnných, protože nás nutí přemýšlet nejen o tvaru vzoru, ale i o `r render_glossary_term("variabilita", display = "variabilitě")` dat.
@@ -155,6 +199,12 @@ Co byste čekali ještě před tím, než se podíváme na data?
 - Délka ploutve a hmotnost spolu souviset nebudou.
 
 Než budete číst dál, zkuste si vybrat, která odpověď vám připadá nejpravděpodobnější, a proč.
+:::
+
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Biologicky nejpravděpodobnější je **možnost B**: délka ploutve bude s tělesnou hmotností souviset, ale ne dokonale. Tělesné rozměry tučňáků jsou vzájemně provázány, ale každý jedinec je jiný — liší se druhem, pohlavím, věkem i podmínkami prostředí. Dokonalá shoda by v reálných biologických datech byla překvapivá.
 :::
 
 ## Co si z této lekce odnést
@@ -197,27 +247,18 @@ Nejprve si zobrazíme co nejjednodušší bodový graf. V tuto chvíli nechceme 
 ```{r}
 #| label: prvni-bodovy-graf
 #| echo: false
-data_graf <-
-  na.omit(
-    palmerpenguins::penguins[
-      , c("flipper_length_mm", "body_mass_g")
-    ]
+#| message: false
+#| warning: false
+#| fig-cap: "Bodový graf délky ploutve (mm) a tělesné hmotnosti (g) pro 333 tučňáků z datasetu Palmer Penguins."
+ggplot2::ggplot(
+  data    = data_tucnaci,
+  mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
+) +
+  ggplot2::geom_point(colour = col_data, alpha = 0.7, size = 2) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
   )
-
-vec_delka_ploutve_mm <-
-  data_graf$flipper_length_mm
-
-vec_hmotnost_g <-
-  data_graf$body_mass_g
-
-plot(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  xlab = "Délka ploutve (mm)",
-  ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = "gray30"
-)
 ```
 
 ## Co v grafu vidíme
@@ -230,112 +271,256 @@ Před dalším čtením se zkuste zastavit u tří krátkých otázek:
 - Jak velký je `r render_glossary_term("rozptyl", display = "rozptyl")` kolem hlavního směru?
 - Vidíte body, které se od většiny ostatních odlišují?
 
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Celkový směr vztahu je zřetelně rostoucí: tučňáci s delší ploutví bývají těžší. Kolem tohoto trendu ale zůstává dost široký oblak bodů. Vztah v datech vidíme, ale není natolik jednoduchý, aby se dal popsat jedinou čarou bez dalších otázek.
+:::
+
 Základní odpověď je tato: celkový směr vztahu je zřetelně rostoucí, ale kolem něj zůstává dost široký oblak bodů. Už teď tedy víme dvě důležité věci zároveň: vztah v datech opravdu vidíme, ale není natolik jednoduchý, aby se dal popsat jedinou „čistou“ čarou bez dalších otázek.
-
-## Stejný graf, ale s viditelnými druhy
-
-Když do stejného grafu přidáme informaci o druhu, začne být část struktury mnohem čitelnější. Původní šedý oblak bodů se rozpadne na několik podskupin, které se částečně překrývají, ale zároveň mají vlastní polohu a vlastní `r render_glossary_term("rozptyl", display = "rozptyl")`.
-
-To je důležité didakticky i biologicky. V původním bodovém grafu jsme viděli „jeden“ vztah, ale část tohoto vztahu je tvořena tím, že různé druhy mají různé typické kombinace délky ploutve a hmotnosti. Jinými slovy: část rozptylu není jen náhodný šum, ale odráží i skutečnou strukturu dat.
-
-
-```{r}
-#| label: bodovy-graf-podle-druhu
-#| echo: false
-plot(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  xlab = "Délka ploutve (mm)",
-  ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = barvy_druhu[data_tucnaci$druh_tucnaka]
-)
-
-legend(
-  "topleft",
-  legend = names(barvy_druhu),
-  col = barvy_druhu,
-  pch = 16,
-  bty = "n",
-  title = "Druh"
-)
-```
-
 
 ## Jaké proměnné budeme sledovat
 
-Po prvním pohledu na graf se teď vyplatí pojmenovat, co jsme vlastně zobrazili a proč tento typ grafu dával smysl.
+Po prvním pohledu na graf se teď vyplatí pojmenovat, co jsme vlastně zobrazili. Pracujeme se dvěma `r render_glossary_term("numericka-promenna", display = "numerickými proměnnými")`:
 
-V této lekci budeme rozlišovat tři role proměnných:
+- **osa x**: délka ploutve v milimetrech (`flipper_length_mm`)
+- **osa y**: tělesná hmotnost v gramech (`body_mass_g`)
+- doplňkově `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` druh tučňáka (`species`)
 
-- `r render_glossary_term("prediktor", display = "Prediktor")`: délka ploutve v milimetrech (`flipper_length_mm`)
-- `r render_glossary_term("odezva", display = "Odezva")`: tělesná hmotnost v gramech (`body_mass_g`)
-- doplňkově také `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnnou")` druh tučňáka (`species`)
+Přiřazení os je při popisu korelace libovolné. Kdybychom osy prohodili — délku svisle a hmotnost vodorovně — bodový mrak by vypadal jinak, ale síla vztahu by zůstala naprosto stejná. Pojmy *prediktor* a *odezva*, které popisují asymetrii os (jedna proměnná „vysvětluje" druhou), patří k regresním modelům; ty si ukážeme v pozdějších lekcích.
 
-V našem dosavadním příkladu jsou obě hlavní proměnné `r render_glossary_term("numericka-promenna", display = "numerické proměnné")`, proto byl první volbou právě bodový graf. Ten nám umožňuje podívat se současně na směr vztahu i na to, jak moc jsou hodnoty rozptýlené kolem hlavního vzoru.
+```{r}
+#| label: flip-axes-demo
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Stejná data, dvě orientace os. Tvar mraku bodů se změní, ale síla vztahu zůstane identická."
+p_flip_standard <-
+  ggplot2::ggplot(
+    data    = data_tucnaci,
+    mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
+  ) +
+  ggplot2::geom_point(colour = col_data, alpha = 0.7, size = 2) +
+  ggplot2::labs(
+    x        = "Délka ploutve (mm)",
+    y        = "Tělesná hmotnost (g)",
+    subtitle = "Délka ploutve na ose x"
+  )
+
+p_flip_flipped <-
+  ggplot2::ggplot(
+    data    = data_tucnaci,
+    mapping = ggplot2::aes(x = hmotnost_g, y = delka_ploutve_mm)
+  ) +
+  ggplot2::geom_point(colour = col_data, alpha = 0.7, size = 2) +
+  ggplot2::labs(
+    x        = "Tělesná hmotnost (g)",
+    y        = "Délka ploutve (mm)",
+    subtitle = "Hmotnost na ose x"
+  )
+
+cowplot::plot_grid(p_flip_standard, p_flip_flipped, ncol = 2)
+```
+
+Bodový graf nám umožňuje podívat se současně na směr vztahu i na to, jak moc jsou hodnoty rozptýlené kolem hlavního vzoru.
 
 Když ale sledujeme vztah dvou proměnných obecněji, typ grafu vybíráme podle toho, jaké proměnné máme k dispozici:
 
 | Dvojice proměnných | Co chceme na první pohled vidět | Dobrá první volba |
 | --- | --- | --- |
 | dvě numerické proměnné | směr vztahu a rozptyl bodů | bodový graf |
-| `r render_glossary_term("kategoricka-promenna", display = "kategoriální")` + `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` | rozdíly mezi skupinami a překryv rozdělení | `r render_glossary_term("boxplot", display = "boxplot")`, případně body ve skupinách |
+| `r render_glossary_term("kategoricka-promenna", display = "kategoriální")` + `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` | rozdíly mezi skupinami a překryv `r render_glossary_term("rozdeleni", display = "rozdělení")` | `r render_glossary_term("boxplot", display = "boxplot")`, případně body ve skupinách |
 | dvě kategoriální proměnné | kolik pozorování spadá do jednotlivých kombinací | tabulka `r render_glossary_term("cetnost", display = "četností")` nebo sloupcový graf |
 
-Obecné pravidlo tedy nezní jen „je v datech nějaký vztah?“, ale také „jaký graf vůbec dává pro tuto dvojici proměnných smysl?“
-
-## Ne každý vztah začíná bodovým grafem
-
-Dosud jsme sledovali vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")`. Vztah dvou proměnných ale nemusí vždy znamenat, že na obou osách budou čísla. Když místo délky ploutve použijeme druh tučňáka, pořád sledujeme vztah dvou proměnných, jen jiného typu: `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` určuje skupiny a `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` se mezi nimi porovnává.
-
-```{r}
-#| label: hmotnost-podle-druhu
-#| echo: false
-boxplot(
-  hmotnost_g ~ druh_tucnaka,
-  data = data_tucnaci,
-  xlab = "Druh tučňáka",
-  ylab = "Tělesná hmotnost (g)",
-  col = unname(barvy_druhu[levels(data_tucnaci$druh_tucnaka)]),
-  border = "gray30"
-)
-
-stripchart(
-  hmotnost_g ~ druh_tucnaka,
-  data = data_tucnaci,
-  method = "jitter",
-  vertical = TRUE,
-  pch = 16,
-  cex = 0.6,
-  col = adjustcolor("gray20", alpha.f = 0.55),
-  add = TRUE
-)
-```
-
-Než si přečtete vysvětlení, zkuste si v grafu najít tři věci:
-
-- Který druh leží typicky nejvýš?
-- Kde se `r render_glossary_term("rozdeleni", display = "rozdělení")` hmotnosti mezi druhy překrývá a kde už méně?
-- Je `r render_glossary_term("rozptyl", display = "rozptyl")` uvnitř jednotlivých druhů malý, nebo i v rámci jednoho druhu zůstává docela velký?
-
-Na tomto grafu nečteme směr vztahu jako v bodovém grafu. Místo toho sledujeme, zda se rozdělení tělesné hmotnosti mezi druhy překrývá, nebo zda některé skupiny leží typicky výš či níž. I to je vztah dvou proměnných: hodnota jedné proměnné se mění podle úrovně druhé.
-
-Na první pohled se zdá, že tučňáci druhu Gentoo leží typicky výš než Adelie a Chinstrap. Zároveň ale skupiny nejsou úplně oddělené a i uvnitř každého druhu zůstává viditelný rozptyl. To je přesně typ informace, kterou potřebujeme mít v hlavě, až se vrátíme k bodovému grafu.
-
-Je užitečné vrátit se s touto variantou zpět k předchozímu bodovému grafu. Část rozptylu, kterou jsme v něm viděli mezi body, totiž může být vysvětlena právě tím, že v jednom obrázku mícháme více druhů.
-
+Obecné pravidlo tedy nezní jen „je v datech nějaký vztah?“, ale také „jaký graf vůbec dává pro tuto dvojici proměnných smysl?“ V této chvíli ale zůstaneme u první řádky tabulky a budeme dál číst jeden bodový graf dvou numerických proměnných.
 
 ## `r render_glossary_term("rozptyl", display = "Rozptyl")` ve dvou směrech
 
 U jednorozměrných dat sledujeme rozptyl jen v jednom směru, například jak moc se hodnoty hmotnosti liší kolem `r render_glossary_term("prumer", display = "průměru")`. V bodovém grafu ale kolísají obě osy současně. Jeden tučňák může mít o něco delší ploutev než jiný a zároveň se může lišit i hmotností. Výsledkem je mrak bodů, který má šířku i výšku.
 
+Na obrázku níže je stejný vztah zobrazený dvakrát. Vlevo si všímáme, že i při podobné délce ploutve mohou mít jedinci docela odlišnou hmotnost. Vpravo naopak vidíme, že i při podobné hmotnosti se může měnit délka ploutve.
+
+```{r}
+#| label: rozptyl-ve-dvou-smerech-graf
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Stejný bodový graf můžeme číst ve dvou směrech: při podobné délce ploutve se může lišit hmotnost a při podobné hmotnosti se může lišit délka ploutve. Zvýrazněné body leží uvnitř příslušného pásu."
+strip_delka_lwr   <- 193
+strip_delka_upr   <- 197
+strip_hmotnost_lwr <- 4100L
+strip_hmotnost_upr <- 4300L
+
+data_rozptyl <-
+  data_tucnaci |>
+  dplyr::mutate(
+    in_strip_delka    = delka_ploutve_mm >= strip_delka_lwr &
+      delka_ploutve_mm <= strip_delka_upr,
+    in_strip_hmotnost = hmotnost_g >= strip_hmotnost_lwr &
+      hmotnost_g <= strip_hmotnost_upr
+  )
+
+p_rozptyl_delka <-
+  ggplot2::ggplot(
+    data    = data_rozptyl,
+    mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin  = strip_delka_lwr,
+    xmax  = strip_delka_upr,
+    ymin  = -Inf,
+    ymax  = Inf,
+    fill  = col_highlight,
+    alpha = 0.2
+  ) +
+  ggplot2::geom_point(
+    data   = dplyr::filter(data_rozptyl, !in_strip_delka),
+    colour = col_data,
+    alpha  = 0.5,
+    size   = 1.6
+  ) +
+  ggplot2::geom_point(
+    data   = dplyr::filter(data_rozptyl, in_strip_delka),
+    colour = col_highlight,
+    alpha  = 0.9,
+    size   = 2.5
+  ) +
+  ggplot2::labs(
+    x        = "Délka ploutve (mm)",
+    y        = "Tělesná hmotnost (g)",
+    subtitle = "Podobná délka ploutve"
+  )
+
+p_rozptyl_hmotnost <-
+  ggplot2::ggplot(
+    data    = data_rozptyl,
+    mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin  = -Inf,
+    xmax  = Inf,
+    ymin  = strip_hmotnost_lwr,
+    ymax  = strip_hmotnost_upr,
+    fill  = col_median_line,
+    alpha = 0.15
+  ) +
+  ggplot2::geom_point(
+    data   = dplyr::filter(data_rozptyl, !in_strip_hmotnost),
+    colour = col_data,
+    alpha  = 0.5,
+    size   = 1.6
+  ) +
+  ggplot2::geom_point(
+    data   = dplyr::filter(data_rozptyl, in_strip_hmotnost),
+    colour = col_median_line,
+    alpha  = 0.9,
+    size   = 2.5
+  ) +
+  ggplot2::labs(
+    x        = "Délka ploutve (mm)",
+    y        = "Tělesná hmotnost (g)",
+    subtitle = "Podobná hmotnost"
+  )
+
+cowplot::plot_grid(p_rozptyl_delka, p_rozptyl_hmotnost, ncol = 2)
+```
+
 To je důležité pro interpretaci. Když vidíme podlouhlý oblak bodů směřující zleva dole doprava nahoru, znamená to, že vedle celkového trendu stále existuje velký lokální rozptyl. Dva jedinci s téměř stejnou délkou ploutve nemusí mít stejnou hmotnost a dva podobně těžcí jedinci nemusí mít stejně dlouhou ploutev.
 
-Část tohoto dvourozměrného rozptylu může být biologická, část může souviset s tím, že do jednoho grafu spojujeme více druhů, a část je prostě běžná nepřesnost a proměnlivost reálných dat. Viditelný trend a velká variabilita se proto navzájem nevylučují.
+```{r}
+#| label: maly-vzorek-rovnice
+#| echo: false
+#| message: false
+#| warning: false
+# Malý vzorek 4 tučňáků druhu Adelie pro ilustraci rovnic
+idx_maly <-
+  which(data_tucnaci$druh_tucnaka == "Adelie")[1:4]
+
+maly_vzorek_delka <-
+  data_tucnaci$delka_ploutve_mm[idx_maly]
+
+maly_vzorek_hmotnost <-
+  data_tucnaci$hmotnost_g[idx_maly]
+
+n_maly <- length(maly_vzorek_delka)
+
+prumer_maly_delka <- mean(maly_vzorek_delka)
+prumer_maly_hmotnost <- mean(maly_vzorek_hmotnost)
+
+odchylky_delka <- maly_vzorek_delka - prumer_maly_delka
+odchylky_hmotnost <- maly_vzorek_hmotnost - prumer_maly_hmotnost
+
+ctverce_odchylek <- odchylky_delka^2
+soucet_ctvercu <- sum(ctverce_odchylek)
+rozptyl_maly <- soucet_ctvercu / (n_maly - 1L)
+
+souciny_odchylek <- odchylky_delka * odchylky_hmotnost
+soucet_soucinu_maly <- sum(souciny_odchylek)
+kovariance_maly <- soucet_soucinu_maly / (n_maly - 1L)
+
+prumer_maly_delka_txt <-
+  formatC(prumer_maly_delka, format = "f", digits = 1, decimal.mark = ",")
+prumer_maly_hmotnost_txt <-
+  formatC(prumer_maly_hmotnost, format = "f", digits = 0, decimal.mark = ",")
+
+ctverce_txt <-
+  formatC(ctverce_odchylek, format = "f", digits = 1, decimal.mark = ",")
+odchylky_delka_txt <-
+  formatC(odchylky_delka, format = "f", digits = 1, decimal.mark = ",")
+odchylky_hmotnost_txt <-
+  formatC(odchylky_hmotnost, format = "f", digits = 0, decimal.mark = ",")
+souciny_txt_maly <-
+  formatC(souciny_odchylek, format = "f", digits = 0, decimal.mark = ",")
+
+soucet_ctvercu_txt <-
+  formatC(soucet_ctvercu, format = "f", digits = 1, decimal.mark = ",")
+soucet_soucinu_maly_txt <-
+  formatC(soucet_soucinu_maly, format = "f", digits = 0, decimal.mark = ",")
+rozptyl_maly_txt <-
+  formatC(rozptyl_maly, format = "f", digits = 1, decimal.mark = ",")
+kovariance_maly_txt <-
+  formatC(kovariance_maly, format = "f", digits = 0, decimal.mark = ",")
+```
+
+Abychom rozptyl jedné proměnné vyjádřili přesně číslem, zavedeme jeho přesnou definici a z ní odvozenou `r render_glossary_term("smerodatna-odchylka", display = "směrodatnou odchylku")`. Jako příklad použijeme čtyři tučňáky druhu Adelie (průměr délky ploutve: `r prumer_maly_delka_txt` mm). Tabulka ukazuje délku ploutve každého z nich, odchylku od průměru a čtverec té odchylky:
+
+```{r}
+#| label: tabulka-rozptyl
+#| echo: false
+knitr::kable(
+  data.frame(
+    tucnak   = seq_len(n_maly),
+    delka    = maly_vzorek_delka,
+    odchylka = round(odchylky_delka, 1),
+    ctverec  = round(ctverce_odchylek, 1)
+  ),
+  col.names = c(
+    "Tučňák",
+    "Délka ploutve (mm)",
+    paste0("Odchylka od průměru (", prumer_maly_delka_txt, " mm)"),
+    "Čtverec odchylky (mm²)"
+  ),
+  align = "c"
+)
+```
+
+$$\begin{align}
+s^2_x &= \frac{(`r maly_vzorek_delka[1]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[2]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[3]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[4]` - `r prumer_maly_delka_txt`)^2}{`r n_maly` - 1} \\[6pt]
+      &= \frac{`r ctverce_txt[1]` + `r ctverce_txt[2]` + `r ctverce_txt[3]` + `r ctverce_txt[4]`}{`r n_maly - 1`} \\[6pt]
+      &= \frac{`r soucet_ctvercu_txt`}{`r n_maly - 1`} = `r rozptyl_maly_txt`\text{ mm}^2
+\end{align}$$
+
+Pro libovolný soubor $n$ pozorování platí obecný zápis:
+
+$$s^2_x = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2, \qquad s_x = \sqrt{s^2_x}$$
+
+V celém souboru tučňáků vychází směrodatná odchylka délky ploutve přibližně `r round(sd(data_tucnaci$delka_ploutve_mm), 1)` mm a tělesné hmotnosti přibližně `r round(sd(data_tucnaci$hmotnost_g))` g. Tato čísla říkají, o kolik milimetrů nebo gramů se typický jedinec odchyluje od průměru celého souboru. V dalším kroku tuto myšlenku rozšíříme na dvě proměnné zároveň.
 
 ## Proč jsou data rozptýlená
 
-`r render_glossary_term("variabilita", display = "Variabilita")` v biologických datech není chyba, kterou bychom měli odstranit. Je to vlastnost reálného světa. Dva tučňáci mohou mít podobně dlouhou ploutev, ale lišit se druhem, pohlavím, věkem nebo celkovou tělesnou stavbou. K rozptylu přispívá i běžná nepřesnost měření a to, že žádný biologický vztah nebývá dokonale přesný.
+`r render_glossary_term("variabilita", display = "Variabilita")` v biologických datech není chyba, kterou bychom měli odstranit. Je to vlastnost reálného světa. Dva tučňáci mohou mít podobně dlouhou ploutev, ale lišit se druhem, pohlavím, věkem nebo celkovou tělesnou stavbou. K `r render_glossary_term("rozptyl", display = "rozptylu")` přispívá i běžná nepřesnost měření a to, že žádný biologický vztah nebývá dokonale přesný.
 
 Na tomto místě je užitečné rozlišit několik zdrojů rozptylu, které se v grafu míchají dohromady:
 
@@ -374,11 +559,309 @@ spearman_korelace_txt <- formatC(
   digits = 2,
   decimal.mark = ","
 )
+
+x_linear <- 1:12
+y_linear <- c(1.2, 2.1, 2.8, 4.2, 5.1, 5.9, 7.0, 8.3, 9.2, 10.1, 10.8, 12.2)
+
+x_curve <- 1:12
+y_curve <- c(1.4, 2.1, 2.5, 2.9, 3.4, 4.0, 4.8, 5.9, 7.1, 8.7, 10.6, 12.8)
+
+pearson_linear_txt <- formatC(
+  cor(x_linear, y_linear, method = "pearson"),
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+
+spearman_linear_txt <- formatC(
+  cor(x_linear, y_linear, method = "spearman"),
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+
+pearson_curve_txt <- formatC(
+  cor(x_curve, y_curve, method = "pearson"),
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+
+spearman_curve_txt <- formatC(
+  cor(x_curve, y_curve, method = "spearman"),
+  format = "f",
+  digits = 2,
+  decimal.mark = ","
+)
+
+# Covariance and normalization
+kovariance_val <-
+  cov(
+    data_tucnaci$delka_ploutve_mm,
+    data_tucnaci$hmotnost_g
+  )
+
+kovariance_txt <-
+  formatC(
+    kovariance_val,
+    format = "f",
+    digits = 0,
+    decimal.mark = ","
+  )
+
+pearson_from_cov_txt <-
+  formatC(
+    kovariance_val / (
+      sd(data_tucnaci$delka_ploutve_mm) *
+        sd(data_tucnaci$hmotnost_g)
+    ),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+# Toy data: no correlation
+x_none <- 1:12
+y_none <-
+  c(6.1, 3.8, 8.2, 5.5, 2.9, 9.0, 4.4, 7.6, 3.1, 8.8, 5.2, 6.7)
+
+pearson_none_txt <-
+  formatC(
+    cor(x_none, y_none, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_none_txt <-
+  formatC(
+    cor(x_none, y_none, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+# Toy data: strong negative linear
+x_neg <- 1:12
+y_neg <-
+  c(12.1, 10.8, 10.2, 8.9, 7.7, 6.5, 5.4, 4.3, 3.1, 2.2, 1.3, 0.5)
+
+pearson_neg_txt <-
+  formatC(
+    cor(x_neg, y_neg, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_neg_txt <-
+  formatC(
+    cor(x_neg, y_neg, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
 ```
+
+## `r render_glossary_term("kovariance", display = "Kovariance")`: jak se dvě proměnné pohybují společně
+
+`r render_glossary_term("rozptyl", display = "Rozptyl")` jedné proměnné popisuje, jak moc jsou její hodnoty rozptýleny kolem `r render_glossary_term("prumer", display = "průměru")`. Jakmile ale sledujeme dvě proměnné zároveň, zajímá nás, zda se jejich odchylky od průměru pohybují *společně*. Když jedinci s nadprůměrně dlouhou ploutví mají také nadprůměrnou hmotnost, jejich odchylky od průměru mají stejné znaménko a součin je kladný. Právě to zachycuje kovariance. Pro stejné čtyři tučňáky Adelie tabulka ukazuje odchylky obou proměnných od jejich průměrů a součin každé dvojice odchylek:
+
+```{r}
+#| label: tabulka-kovariance
+#| echo: false
+knitr::kable(
+  data.frame(
+    tucnak     = seq_len(n_maly),
+    odch_delka = round(odchylky_delka, 1),
+    odch_hmotn = round(odchylky_hmotnost, 0),
+    soucin     = round(souciny_odchylek, 0)
+  ),
+  col.names = c(
+    "Tučňák",
+    paste0("Odch. délky (mm), prům. ", prumer_maly_delka_txt, " mm"),
+    paste0("Odch. hmotnosti (g), prům. ", prumer_maly_hmotnost_txt, " g"),
+    "Součin odchylek (mm·g)"
+  ),
+  align = "c"
+)
+```
+
+$$\begin{align}
+\text{cov}(x, y) &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{`r n_maly` - 1} \\[6pt]
+  &= \frac{`r souciny_txt_maly[1]` + `r souciny_txt_maly[2]` + `r souciny_txt_maly[3]` + `r souciny_txt_maly[4]`}{`r n_maly - 1`} \\[6pt]
+  &= \frac{`r soucet_soucinu_maly_txt`}{`r n_maly - 1`} = `r kovariance_maly_txt`\text{ mm·g}
+\end{align}$$
+
+Pro $n$ pozorování obecně:
+
+$$\text{cov}(x, y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})$$
+
+Intuici si usnadníme grafem. Přidáme do bodového grafu dvě přerušované čáry — vertikální ve výši průměrné délky ploutve (`r round(mean(data_tucnaci$delka_ploutve_mm), 1)` mm) a horizontální ve výši průměrné hmotnosti (`r round(mean(data_tucnaci$hmotnost_g))` g). Vzniknou čtyři kvadranty, z nichž každý přispívá ke kovarianci jinak:
+
+- **vpravo nahoře** ($x > \bar{x}$, $y > \bar{y}$): obě odchylky kladné — příspěvek kladný
+- **vlevo dole** ($x < \bar{x}$, $y < \bar{y}$): obě odchylky záporné — součin je stále kladný $(-)\cdot(-) = (+)$
+- **vpravo dole** ($x > \bar{x}$, $y < \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
+- **vlevo nahoře** ($x < \bar{x}$, $y > \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
+
+```{r}
+#| label: kovariance-schema
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Bodový graf tučňáků s průměrnými čarami (přerušovaně). Oranžové kvadranty přispívají ke kovarianci kladně, fialové záporně."
+prumer_delka    <- mean(data_tucnaci$delka_ploutve_mm)
+prumer_hmotnost <- mean(data_tucnaci$hmotnost_g)
+
+x_min <- min(data_tucnaci$delka_ploutve_mm) - 3
+x_max <- max(data_tucnaci$delka_ploutve_mm) + 3
+y_min <- min(data_tucnaci$hmotnost_g) - 150
+y_max <- max(data_tucnaci$hmotnost_g) + 150
+
+ggplot2::ggplot(
+  data    = data_tucnaci,
+  mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
+) +
+  ggplot2::annotate(
+    "rect",
+    xmin = prumer_delka, xmax = x_max,
+    ymin = prumer_hmotnost, ymax = y_max,
+    fill = col_highlight, alpha = 0.15
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = x_min, xmax = prumer_delka,
+    ymin = y_min, ymax = prumer_hmotnost,
+    fill = col_highlight, alpha = 0.15
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = prumer_delka, xmax = x_max,
+    ymin = y_min, ymax = prumer_hmotnost,
+    fill = col_median_line, alpha = 0.12
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = x_min, xmax = prumer_delka,
+    ymin = prumer_hmotnost, ymax = y_max,
+    fill = col_median_line, alpha = 0.12
+  ) +
+  ggplot2::geom_vline(
+    xintercept = prumer_delka,
+    linetype   = "dashed",
+    colour     = "gray50",
+    linewidth  = 0.8
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_hmotnost,
+    linetype   = "dashed",
+    colour     = "gray50",
+    linewidth  = 0.8
+  ) +
+  ggplot2::geom_point(colour = col_data, alpha = 0.6, size = 1.8) +
+  ggplot2::coord_cartesian(xlim = c(x_min, x_max), ylim = c(y_min, y_max)) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  )
+```
+
+::: {.callout-tip}
+## Přečtěte si obrázek
+
+Podivejte se na obrázek: ve kterých kvadrantech se shlukuje nejvíce bodů? Co to říká o tom, jakým směrem se délka ploutve a hmotnost pohybují spolu?
+:::
+
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Oranžové kvadranty (vpravo nahoře a vlevo dole) převažují — jedinci s nadprůměrně dlouhou ploutví mají zpravidla i nadprůměrnou hmotnost, a naopak. Kovariance proto bude kladná.
+:::
+
+Oranžové kvadranty převažují — jedinci s delší ploutví mají zpravidla i větší hmotnost, a naopak. `r render_glossary_term("kovariance", display = "Kovariance")` proto vychází kladná: přibližně `r kovariance_txt` mm·g.
+
+Kovariance ale závisí na jednotkách. Kdybychom přepočítali délku z milimetrů na centimetry, kovariance by se stokrát zmenšila. Abychom vztah popsali číslem nezávislým na jednotkách, vydělíme kovarianci součinem `r render_glossary_term("smerodatna-odchylka", display = "směrodatných odchylek")` obou proměnných:
+
+$$r = \frac{\text{cov}(x, y)}{s_x \cdot s_y}$$
+
+Tímto normalizováním dostaneme Pearsonův korelační koeficient, který leží vždy v intervalu $[-1, +1]$. V našich datech vychází přibližně `r pearson_from_cov_txt` — přesně stejný výsledek jako přímý výpočet (`r pearson_korelace_txt`), jen odvozený jinou cestou.
 
 ## Korelace jako stručný číselný popis
 
-Graf je vždy první krok, ale někdy chceme vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` shrnout i číslem. K tomu slouží korelace. V našich datech vychází Pearsonova korelace přibližně `r pearson_korelace_txt` a Spearmanova korelace přibližně `r spearman_korelace_txt`.
+Graf je vždy první krok, ale někdy chceme vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` shrnout i číslem. K tomu slouží korelace. V datech tučňáků vychází Pearsonova korelace přibližně `r pearson_korelace_txt` a Spearmanova korelace přibližně `r spearman_korelace_txt`. Pearsonovo $r$ jsme před chvílí odvodili z `r render_glossary_term("kovariance", display = "kovariance")` — vydělíme kovarianci součinem `r render_glossary_term("smerodatna-odchylka", display = "směrodatných odchylek")` a dostaneme číslo v rozsahu $[-1, +1]$.
+
+Na schématu níže jsou čtyři typické situace. Všimněte si, jak se tvar bodového mraku mění a jak na různé hodnoty $r$ reagují Pearson (P) a Spearman (S) odlišně.
+
+```{r}
+#| label: korelace-schemata
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Čtyři typické situace korelace: silná kladná lineární, žádná korelace, silná záporná lineární a monotónní, ale zakřivený vztah. U každého panelu jsou hodnoty Pearsonovy (P) a Spearmanovy (S) korelace."
+make_korelace_panel <- function(x, y, line_layer = NULL, label) {
+  df <-
+    data.frame(x = x, y = y)
+  p <-
+    ggplot2::ggplot(df, ggplot2::aes(x = x, y = y)) +
+    ggplot2::geom_point(colour = col_data, size = 2, alpha = 0.8) +
+    ggplot2::labs(subtitle = label, x = "X", y = "Y")
+  if (!is.null(line_layer)) {
+    p <- p + line_layer
+  }
+  p
+}
+
+p_linear <-
+  make_korelace_panel(
+    x          = x_linear,
+    y          = y_linear,
+    line_layer = ggplot2::geom_smooth(
+      method    = "lm",
+      formula   = y ~ x,
+      se        = FALSE,
+      colour    = col_highlight,
+      linewidth = 1.2
+    ),
+    label = paste0("Silná kladná lineární\nP ", pearson_linear_txt, " | S ", spearman_linear_txt)
+  )
+
+p_none <-
+  make_korelace_panel(
+    x          = x_none,
+    y          = y_none,
+    line_layer = ggplot2::geom_hline(
+      yintercept = mean(y_none),
+      linetype   = "dashed",
+      colour     = "gray50",
+      linewidth  = 0.8
+    ),
+    label = paste0("Žádná korelace\nP ", pearson_none_txt, " | S ", spearman_none_txt)
+  )
+
+p_neg <-
+  make_korelace_panel(
+    x          = x_neg,
+    y          = y_neg,
+    line_layer = ggplot2::geom_smooth(
+      method    = "lm",
+      formula   = y ~ x,
+      se        = FALSE,
+      colour    = col_median_line,
+      linewidth = 1.2
+    ),
+    label = paste0("Silná záporná lineární\nP ", pearson_neg_txt, " | S ", spearman_neg_txt)
+  )
+
+p_curve <-
+  make_korelace_panel(
+    x          = x_curve,
+    y          = y_curve,
+    line_layer = ggplot2::geom_line(colour = col_highlight, linewidth = 1.2),
+    label      = paste0("Monotónní, ale zakřivený\nP ", pearson_curve_txt, " | S ", spearman_curve_txt)
+  )
+
+cowplot::plot_grid(p_linear, p_none, p_neg, p_curve, ncol = 2)
+```
 
 | Pearson | Spearman |
 | --- | --- |
@@ -392,6 +875,973 @@ Když body tvoří přibližně rostoucí oblak bez výrazně zvláštních bod�
 
 V této lekci je důležité hlavně to, že obě čísla mají podpůrnou roli. Nenahrazují graf ani biologickou interpretaci. Pomáhají jen stručně vyjádřit, že delší ploutve bývají spojeny s vyšší hmotností a že tento vztah je v datech zřetelný i po převodu do číselné podoby.
 
+## Stejný graf, ale s viditelnými druhy
+
+Teď se můžeme vrátit ke stejnému bodovému grafu a odkrýt ještě jednu informaci: druh tučňáka. Původní šedý oblak bodů se rozpadne na několik podskupin, které se částečně překrývají, ale zároveň mají vlastní polohu a vlastní `r render_glossary_term("rozptyl", display = "rozptyl")`.
+
+To je důležité didakticky i biologicky. V původním bodovém grafu jsme viděli „jeden“ vztah, ale část tohoto vztahu je tvořena tím, že různé druhy mají různé typické kombinace délky ploutve a hmotnosti. Jinými slovy: část rozptylu není jen náhodný šum, ale odráží i skutečnou strukturu dat.
+
+```{r}
+#| label: bodovy-graf-podle-druhu
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data    = data_tucnaci,
+  mapping = ggplot2::aes(
+    x      = delka_ploutve_mm,
+    y      = hmotnost_g,
+    colour = druh_tucnaka
+  )
+) +
+  ggplot2::geom_point(alpha = 0.7, size = 2) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    name   = "Druh"
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  )
+```
+
+Jakmile jsou druhy vidět, je snazší pochopit, proč byl původní rozptyl tak široký. Část `r render_glossary_term("variabilita", display = "variability")` vzniká uvnitř druhů, ale část je dána i tím, že v jednom obrázku mícháme více biologicky odlišných skupin. To je přesně okamžik, kdy nám doplňková `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` pomůže lépe číst vztah dvou `r render_glossary_term("numericka-promenna", display = "číselných proměnných")`.
+
+```{r}
+#| label: pripravit-kategorie-pro-vyber-grafu
+#| echo: false
+#| message: false
+#| warning: false
+hranice_delky_ploutve <-
+  stats::quantile(
+    x = data_tucnaci$delka_ploutve_mm,
+    probs = c(1 / 3, 2 / 3),
+    na.rm = TRUE
+  )
+
+data_tucnaci_typy_grafu <-
+  data_tucnaci |>
+  dplyr::mutate(
+    kategorie_delky_ploutve = cut(
+      x = delka_ploutve_mm,
+      breaks = c(-Inf, hranice_delky_ploutve[[1]], hranice_delky_ploutve[[2]], Inf),
+      labels = c("kratší", "střední", "delší"),
+      ordered_result = TRUE
+    )
+  )
+
+barvy_kategorii_delky <-
+  c(
+    "kratší" = "#EFCB68",
+    "střední" = "#8A8A8A",
+    "delší" = "#5D2890"
+  )
+
+data_ctetnosti_typy_grafu <-
+  data_tucnaci_typy_grafu |>
+  dplyr::count(
+    kategorie_delky_ploutve,
+    druh_tucnaka,
+    name = "pocet",
+    .drop = FALSE
+  ) |>
+  dplyr::mutate(
+    barva_popisku = dplyr::if_else(
+      condition = pocet >= max(pocet) / 2,
+      true = "white",
+      false = "#2E2E2E"
+    )
+  )
+
+data_waffle_typy_grafu <-
+  data_ctetnosti_typy_grafu |>
+  dplyr::group_by(kategorie_delky_ploutve) |>
+  dplyr::mutate(
+    podil = pocet / sum(pocet),
+    surove_dlazdice = podil * 100,
+    n_dlazdic = floor(surove_dlazdice),
+    zbytek = surove_dlazdice - n_dlazdic,
+    chybejici_dlazdice = 100 - sum(n_dlazdic),
+    poradi_zbytku = rank(-zbytek, ties.method = "first"),
+    n_dlazdic = n_dlazdic + as.integer(
+      poradi_zbytku <= dplyr::first(chybejici_dlazdice)
+    )
+  ) |>
+  dplyr::ungroup() |>
+  dplyr::select(
+    kategorie_delky_ploutve,
+    druh_tucnaka,
+    n_dlazdic
+  ) |>
+  tidyr::uncount(
+    weights = n_dlazdic,
+    .id = "id_dlazdice"
+  ) |>
+  dplyr::group_by(kategorie_delky_ploutve) |>
+  dplyr::mutate(
+    sloupec = ((id_dlazdice - 1) %% 10) + 1,
+    radek = 10 - ((id_dlazdice - 1) %/% 10)
+  ) |>
+  dplyr::ungroup()
+
+data_typicka_hmotnost_delky <-
+  data_tucnaci_typy_grafu |>
+  dplyr::group_by(kategorie_delky_ploutve) |>
+  dplyr::summarise(
+    typicka_hmotnost_g = stats::median(hmotnost_g),
+    .groups = "drop"
+  )
+```
+
+## Jak typ proměnných určuje výběr grafu
+
+Typ grafu nevybíráme podle toho, co je "hezčí", ale podle toho, jaký vztah mezi proměnnými chceme přečíst. Jinak čteme dvě číselné osy, jinak porovnáváme skupiny proti číslům a jinak sledujeme složení dvou `r render_glossary_term("kategoricka-promenna", display = "kategoriálních proměnných")`.
+
+Jako rychlá pomůcka pomáhají dvě otázky:
+
+- Jsou obě proměnné `r render_glossary_term("numericka-promenna", display = "číselné")`?
+- Nebo jedna z nich hlavně rozděluje pozorování do skupin?
+
+### Dvě numerické proměnné: délka ploutve a hmotnost
+
+Právě proto jsme v této lekci začali bodovým grafem. Když jsou obě proměnné `r render_glossary_term("numericka-promenna", display = "numerické")`, bývá bodový graf nejlepší první volbou: každý bod nese dvojici hodnot a my můžeme najednou číst směr vztahu, sílu `r render_glossary_term("rozptyl", display = "rozptylu")`, možné shluky i `r render_glossary_term("odlehla-pozorovani", display = "odlehlé body")`.
+
+```{r}
+#| label: dve-numericke-promenne
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Dvě numerické proměnné: bodový graf je přirozený první krok, protože každý bod nese dvojici hodnot současně."
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = delka_ploutve_mm,
+    y = hmotnost_g
+  )
+) +
+  ggplot2::geom_point(
+    alpha = 0.65,
+    colour = col_data,
+    size = 2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  )
+```
+
+U tučňáků jsme v něm viděli, že delší ploutve bývají spojené s vyšší hmotností, ale také že vztah není dokonale těsný. Právě to je důvod, proč bodový graf nepřeskakovat. Žádné jediné číslo nám neukáže tvar oblaku bodů tak přímo.
+
+Když ale chceme ve stejných datech zvýraznit jinou vlastnost vztahu, můžeme použít i několik dalších variant. Každá z nich ukazuje něco trochu jiného.
+
+::: {.panel-tabset}
+
+#### Hladký trend
+
+Čára pomáhá rychle přečíst hlavní směr vztahu, ale body pořád zůstávají viditelné.
+
+```{r}
+#| label: galerie-dve-numericke-hladky-trend
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = delka_ploutve_mm,
+    y = hmotnost_g
+  )
+) +
+  ggplot2::geom_point(
+    alpha = 0.45,
+    colour = col_data,
+    size = 1.8
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_highlight,
+    linewidth = 1.2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    title = "Bodový graf s vyznačeným hlavním trendem"
+  )
+```
+
+#### Hustota v mřížce
+
+Když je bodů hodně, můžeme místo jednotlivých bodů ukázat, kde se měření hromadí nejvíce.
+
+```{r}
+#| label: galerie-dve-numericke-hustota
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = delka_ploutve_mm,
+    y = hmotnost_g
+  )
+) +
+  ggplot2::geom_bin2d(
+    bins = 18
+  ) +
+  ggplot2::scale_fill_gradient(
+    low = "#F0EDE8",
+    high = "#5D2890",
+    name = "Počet\nbodů"
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    title = "Mřížka hustoty místo jednotlivých bodů"
+  )
+```
+
+#### Po druzích
+
+Rozdělení do panelů pomáhá odlišit, co je společný trend a co je rozdíl mezi skupinami.
+
+```{r}
+#| label: galerie-dve-numericke-po-druzich
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = delka_ploutve_mm,
+    y = hmotnost_g,
+    colour = druh_tucnaka
+  )
+) +
+  ggplot2::geom_point(
+    alpha = 0.65,
+    size = 1.7
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(druh_tucnaka),
+    nrow = 1
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    title = "Stejný vztah rozdělený podle druhu"
+  )
+```
+
+:::
+
+### Kategoriální a numerická proměnná: druh a hmotnost
+
+Jakmile nás začne zajímat přímo vztah mezi druhem a tělesnou hmotností, bodový graf už není nejpřirozenější první volbou. Teď totiž nesrovnáváme dvě číselné osy, ale `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnnou")` určující skupiny a `r render_glossary_term("numericka-promenna", display = "numerickou proměnnou")`, která se mezi nimi porovnává.
+
+```{r}
+#| label: hmotnost-podle-druhu
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data    = data_tucnaci,
+  mapping = ggplot2::aes(
+    x      = druh_tucnaka,
+    y      = hmotnost_g,
+    colour = druh_tucnaka,
+    fill   = druh_tucnaka
+  )
+) +
+  ggplot2::geom_boxplot(
+    alpha         = 0.35,
+    outlier.shape = NA
+  ) +
+  ggbeeswarm::geom_beeswarm(
+    alpha = 0.55,
+    size  = 1.4
+  ) +
+  ggplot2::scale_colour_manual(values = barvy_druhu, guide = "none") +
+  ggplot2::scale_fill_manual(values = barvy_druhu, guide = "none") +
+  ggplot2::labs(
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)"
+  )
+```
+
+Než si přečtete vysvětlení, zkuste si v grafu najít tři věci:
+
+- Který druh leží typicky nejvýš?
+- Kde se `r render_glossary_term("rozdeleni", display = "rozdělení")` hmotnosti mezi druhy překrývá a kde už méně?
+- Je `r render_glossary_term("rozptyl", display = "rozptyl")` uvnitř jednotlivých druhů malý, nebo i v rámci jednoho druhu zůstává docela velký?
+
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Tučňáci druhu Gentoo leží typicky nejvýš. Adelie a Chinstrap se vzájemně překrývají více. I uvnitř každého druhu je viditelný `r render_glossary_term("rozptyl", display = "rozptyl")` — takže ani znalost druhu sama o sobě nestačí k přesnému odhadu hmotnosti konkrétního jedince.
+:::
+
+Na tomto grafu nečteme směr vztahu jako v bodovém grafu. Místo toho sledujeme, zda se `r render_glossary_term("rozdeleni", display = "rozdělení")` tělesné hmotnosti mezi druhy překrývá, nebo zda některé skupiny leží typicky výš či níž. I to je vztah dvou proměnných: hodnota jedné proměnné se mění podle úrovně druhé.
+
+Na první pohled se zdá, že tučňáci druhu Gentoo leží typicky výš než Adelie a Chinstrap. Zároveň ale skupiny nejsou úplně oddělené a i uvnitř každého druhu zůstává viditelný rozptyl. Pro tuto kombinaci typů proměnných je proto často přirozenější `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do skupin než klasický bodový graf.
+
+Totéž srovnání ale můžeme nakreslit i jinak podle toho, zda chceme zdůraznit jednotlivé body, šířku skupin nebo jen jejich shrnutí.
+
+::: {.panel-tabset}
+
+#### Samotné body
+
+Nejlépe ukazují jednotlivá měření a překryv skupin, ale hůře shrnují jejich střed.
+
+```{r}
+#| label: galerie-kategorie-numericka-body
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = druh_tucnaka,
+    y = hmotnost_g,
+    colour = druh_tucnaka
+  )
+) +
+  ggbeeswarm::geom_beeswarm(
+    alpha = 0.65,
+    size = 1.6
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    title = "Skupiny zobrazené jen jako jednotlivé body"
+  )
+```
+
+#### Krabice bez bodů
+
+Rychle shrnou polohu a překryv skupin, ale skryjí jemnější tvar rozložení uvnitř každého druhu.
+
+```{r}
+#| label: galerie-kategorie-numericka-krabice
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = druh_tucnaka,
+    y = hmotnost_g,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_boxplot(
+    alpha = 0.45,
+    width = 0.55,
+    outlier.shape = NA
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    title = "Krabicový graf jako stručné shrnutí skupin"
+  )
+```
+
+#### Šířka rozložení
+
+Hladký obrys dává lepší představu o tom, kde je v každé skupině více a méně hodnot.
+
+```{r}
+#| label: galerie-kategorie-numericka-sirka
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci,
+  mapping = ggplot2::aes(
+    x = druh_tucnaka,
+    y = hmotnost_g,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_violin(
+    alpha = 0.35,
+    trim = FALSE,
+    colour = NA
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.14,
+    alpha = 0.45,
+    outlier.shape = NA,
+    colour = "#2E2E2E"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    title = "Obrys skupin zdůrazňuje jejich vnitřní tvar"
+  )
+```
+
+:::
+
+Další užitečný případ jsou dvě `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnné")` najednou.
+
+### Druh a kategorie délky ploutve
+
+Jinou situaci dostaneme, když obě proměnné rozdělují data do skupin. Abychom si to ukázali na stejných datech, rozdělíme délku ploutve do tří seřazených kategorií: kratší, střední a delší. Je to jen didaktická ukázka kombinace typů proměnných, ne doporučený první analytický krok pro spojitou proměnnou. Teď už nechceme číst přesné číselné hodnoty na ose y, ale složení skupin podle podílů.
+
+```{r}
+#| label: druh-a-kategorie-delky-ploutve
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_bar(
+    position = "fill",
+    colour = "#2E2E2E"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = "Druh tučňáka"
+  ) +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Podíl",
+    title = "Dvě kategoriální proměnné: složení skupin podle podílů"
+  )
+```
+
+U takového grafu nás zajímá něco jiného než u boxplotu. Neptáme se, jaká je typická hodnota, ale jaké je zastoupení druhů uvnitř jednotlivých kategorií délky ploutve. Proto se zde velmi hodí proporční sloupcový graf: každá skupina má stejnou výšku 100 % a my snadno porovnáváme podíly.
+
+Než si přečtete vysvětlení, zkuste odhadnout:
+
+- Ve které kategorii délky ploutve má druh Gentoo největší podíl?
+- Kde naopak převažuje Adelie?
+- Vypadá kategorie středních ploutví druhově smíšeněji než krajní kategorie?
+
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Gentoo má nejvyšší podíl mezi delšími ploutvemi, zatímco Adelie převažuje mezi kratšími ploutvemi. Střední kategorie bývá druhově smíšenější. Právě tuto změnu ve složení skupin proporční sloupcový graf ukazuje velmi přehledně.
+:::
+
+Stejná dvojice kategoriálních proměnných se ale dá zobrazit i jinými způsoby podle toho, zda chceme zdůraznit podíly, absolutní počty nebo přehled celé tabulky najednou.
+
+::: {.panel-tabset}
+
+#### Proporce
+
+Když mají mít všechny sloupce stejnou výšku, snadno porovnáváme složení kategorií mezi sebou.
+
+```{r}
+#| label: galerie-dve-kategorie-proporce
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_bar(
+    position = "fill",
+    colour = "#2E2E2E"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = "Druh tučňáka"
+  ) +
+  ggplot2::scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Podíl",
+    title = "Proporční sloupce"
+  )
+```
+
+#### Absolutní počty
+
+Vedle sebe postavené sloupce se hodí tehdy, když nás zajímá i velikost jednotlivých skupin, nejen jejich složení.
+
+```{r}
+#| label: galerie-dve-kategorie-pocty
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_bar(
+    position = ggplot2::position_dodge(width = 0.75),
+    width = 0.68
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = "Druh tučňáka"
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Počet pozorování",
+    title = "Sloupce vedle sebe"
+  )
+```
+
+#### Tepelná mapa
+
+Když chceme rychle přečíst celou tabulku kombinací, je praktické převést ji na barevnou mřížku.
+
+```{r}
+#| label: galerie-dve-kategorie-tepelna-mapa
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_ctetnosti_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    y = druh_tucnaka,
+    fill = pocet
+  )
+) +
+  ggplot2::geom_tile(
+    colour = "white",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_text(
+    mapping = ggplot2::aes(
+      label = pocet,
+      colour = barva_popisku
+    ),
+    size = 4.2,
+    show.legend = FALSE
+  ) +
+  ggplot2::scale_fill_gradient(
+    low = "#F0EDE8",
+    high = "#5D2890",
+    name = "Počet"
+  ) +
+  ggplot2::scale_colour_identity() +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Druh tučňáka",
+    title = "Tepelná mapa kombinací kategorií"
+  )
+```
+
+#### Dlaždicový graf
+
+Každý čtvereček představuje 1 % dané kategorie. Tento typ grafu se hodí tehdy, když chceme podíly ukázat ještě doslova a po malých dílcích.
+
+```{r}
+#| label: galerie-dve-kategorie-waffle
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_waffle_typy_grafu,
+  mapping = ggplot2::aes(
+    x = sloupec,
+    y = radek,
+    fill = druh_tucnaka
+  )
+) +
+  ggplot2::geom_tile(
+    colour = "white",
+    linewidth = 0.5
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(kategorie_delky_ploutve),
+    nrow = 1
+  ) +
+  ggplot2::coord_equal() +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = "Druh tučňáka"
+  ) +
+  ggplot2::scale_x_continuous(
+    breaks = NULL
+  ) +
+  ggplot2::scale_y_continuous(
+    breaks = NULL
+  ) +
+  ggplot2::labs(
+    x = NULL,
+    y = NULL,
+    title = "Dlaždicový graf: 100 dílků pro každou kategorii délky ploutve"
+  ) +
+  ggplot2::theme(
+    panel.grid = ggplot2::element_blank(),
+    axis.text = ggplot2::element_blank(),
+    axis.ticks = ggplot2::element_blank()
+  )
+```
+
+:::
+
+Ještě jiný případ je seřazená osa proti `r render_glossary_term("numericka-promenna", display = "numerické proměnné")`.
+
+### Seřazené kategorie délky ploutve a hmotnost
+
+Stejně vytvořené kategorie můžeme použít ještě jinak: jako ordinální proměnnou na ose x a hmotnost jako numerickou proměnnou na ose y. V takové chvíli je užitečný opět `r render_glossary_term("boxplot", display = "boxplot")`, ale tentokrát je zásadní, že pořadí kategorií na ose nese informaci.
+
+```{r}
+#| label: hmotnost-podle-kategorie-delky-ploutve
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    y = hmotnost_g,
+    fill = kategorie_delky_ploutve
+  )
+) +
+  ggplot2::geom_boxplot(
+    alpha = 0.5,
+    outlier.shape = NA
+  ) +
+  ggbeeswarm::geom_beeswarm(
+    alpha = 0.35,
+    size = 1.2,
+    colour = "#2E2E2E"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = c(
+      "kratší" = "#EFCB68",
+      "střední" = "#8A8A8A",
+      "delší" = "#5D2890"
+    ),
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Tělesná hmotnost (g)",
+    title = "Ordinální + numerická proměnná: záleží i na pořadí kategorií"
+  )
+```
+
+Než si přečtete vysvětlení, zkuste si všimnout tří věcí:
+
+- Posouvá se typická hmotnost od kratších ploutví k delším?
+- Kde se skupiny ještě překrývají a kde už méně?
+- Co by se ztratilo, kdybychom pořadí kategorií na ose x promíchali?
+
+Tentokrát neporovnáváme nepojmenované skupiny, ale seřazené stupně. Proto má smysl sledovat, zda se s rostoucí kategorií posouvá i typická hmotnost. Kdybychom pořadí kategorií na ose promíchali, velká část sdělení grafu by se ztratila.
+
+I zde ale existuje více rozumných variant. Některé lépe ukazují jednotlivá pozorování, jiné zase co nejstručnější souhrn podle pořadí.
+
+::: {.panel-tabset}
+
+#### Samotné body
+
+Když chceme ponechat všechna měření viditelná, stačí je rozložit do stran v jednotlivých kategoriích.
+
+```{r}
+#| label: galerie-ordinalni-numericka-body
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    y = hmotnost_g,
+    colour = kategorie_delky_ploutve
+  )
+) +
+  ggbeeswarm::geom_beeswarm(
+    alpha = 0.55,
+    size = 1.4
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_kategorii_delky,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Tělesná hmotnost (g)",
+    title = "Všechna měření v seřazených kategoriích"
+  )
+```
+
+#### Spojené středy
+
+Pokud chceme co nejrychleji číst posun od kratších k delším kategoriím, pomůže jednoduché spojení typických hodnot.
+
+```{r}
+#| label: galerie-ordinalni-numericka-stredy
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_typicka_hmotnost_delky,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    y = typicka_hmotnost_g,
+    group = 1
+  )
+) +
+  ggplot2::geom_line(
+    colour = col_median_line,
+    linewidth = 1.2
+  ) +
+  ggplot2::geom_point(
+    colour = col_median_line,
+    size = 3
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Typická hmotnost (g)",
+    title = "Stručné shrnutí podle pořadí kategorií"
+  )
+```
+
+#### Šířka rozložení
+
+Hladký obrys pomůže ukázat, kde jsou v každé seřazené skupině data koncentrovaná a kde naopak řídká.
+
+```{r}
+#| label: galerie-ordinalni-numericka-sirka
+#| echo: false
+#| message: false
+#| warning: false
+ggplot2::ggplot(
+  data = data_tucnaci_typy_grafu,
+  mapping = ggplot2::aes(
+    x = kategorie_delky_ploutve,
+    y = hmotnost_g,
+    fill = kategorie_delky_ploutve
+  )
+) +
+  ggplot2::geom_violin(
+    alpha = 0.4,
+    trim = FALSE,
+    colour = NA
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.14,
+    alpha = 0.45,
+    outlier.shape = NA,
+    colour = "#2E2E2E"
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_kategorii_delky,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Kategorie délky ploutve",
+    y = "Tělesná hmotnost (g)",
+    title = "Obrys rozložení v seřazených kategoriích"
+  )
+```
+
+:::
+
+::: {.callout-note collapse="true"}
+## Poznámka k tomuto příkladu
+
+Kategorie kratší, střední a delší jsme zde vytvořili uměle z `r render_glossary_term("numericka-promenna", display = "číselné proměnné")` jen proto, abychom si ukázali práci s ordinální proměnnou. Stejný typ grafu bychom ale použili i pro přirozeně seřazené biologické škály, například malý–střední–velký nebo nízký–střední–vysoký.
+:::
+
+### Rychlá tabulka: který graf zvolit jako první?
+
+```{r}
+#| label: tabulka-vyber-grafu
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+data_prehled_grafu <-
+  tibble::tibble(
+    co_chceme_zobrazit = c(
+      stringr::str_glue("Jak vypadá {render_glossary_term('rozdeleni', display = 'rozdělení')} jedné číselné proměnné"),
+      stringr::str_glue("Kolik pozorování padá do jednotlivých skupin"),
+      stringr::str_glue("Jak spolu souvisejí dvě číselné proměnné"),
+      stringr::str_glue("Jak se liší číselná proměnná mezi skupinami"),
+      stringr::str_glue("Jak se mezi skupinami mění složení kategorií"),
+      stringr::str_glue("Jak se mění číselná proměnná napříč seřazenými stupni")
+    ),
+    typ_promennych = c(
+      "jedna numerická",
+      stringr::str_glue("jedna {render_glossary_term('kategoricka-promenna', display = 'kategoriální proměnná') }"),
+      "numerická + numerická",
+      "kategoriální + numerická",
+      "kategoriální + kategoriální",
+      "ordinální + numerická"
+    ),
+    dobry_prvni_graf = c(
+      stringr::str_glue("{render_glossary_term('histogram', display = 'histogram') }"),
+      "sloupcový graf",
+      "bodový graf",
+      stringr::str_glue("{render_glossary_term('boxplot', display = 'boxplot') } + body"),
+      "skládaný sloupcový graf s proporcemi",
+      "boxplot se seřazenou osou"
+    ),
+    co_v_nem_hledat = c(
+      stringr::str_glue("tvar rozdělení, {render_glossary_term('rozptyl', display = 'rozptyl') }, {render_glossary_term('odlehla-pozorovani', display = 'odlehlé body') }"),
+      stringr::str_glue("{render_glossary_term('cetnost', display = 'četnosti') }, podíly, nerovnováha skupin"),
+      "směr vztahu, tvar oblaku bodů, shluky, odlehlé body",
+      "typická hodnota, překryv skupin, vnitroskupinový rozptyl",
+      "rozdíly v podílech mezi skupinami",
+      stringr::str_glue("posun {render_glossary_term('median', display = 'mediánu') }, překryv, monotónní trend")
+    )
+  )
+
+if (knitr::is_html_output()) {
+  nahled_histogram <-
+    kableExtra::spec_hist(
+      x = c(4, 5, 5, 6, 6, 6, 7, 7, 8, 9),
+      width = 180,
+      height = 54,
+      col = col_data,
+      border = "white"
+    )
+
+  nahled_sloupce <-
+    kableExtra::spec_plot(
+      x = 1:4,
+      y = c(4, 8, 5, 6),
+      width = 180,
+      height = 54,
+      type = "h",
+      lwd = 14,
+      col = col_data
+    )
+
+  nahled_body <-
+    kableExtra::spec_plot(
+      x = c(1, 2, 2.4, 3, 3.8, 4.2, 5, 5.8, 6.2),
+      y = c(1.1, 1.8, 2.4, 2.2, 3.3, 3.1, 3.9, 4.6, 4.9),
+      width = 180,
+      height = 54,
+      type = "p",
+      pch = 16,
+      cex = 1.4,
+      col = col_data
+    )
+
+  nahled_boxplot <-
+    kableExtra::spec_boxplot(
+      x = c(2.1, 2.4, 2.8, 3.1, 3.2, 3.4, 3.9, 4.5, 4.9),
+      width = 180,
+      height = 54,
+      col = "#D9E6EA",
+      border = col_data,
+      medcol = col_median_line
+    )
+
+  nahled_skladany <-
+    paste(
+      "<svg xmlns='http://www.w3.org/2000/svg' width='180' height='54' viewBox='0 0 180 54'>",
+      "<rect x='14' y='8' width='28' height='16' fill='darkorange'/>",
+      "<rect x='14' y='24' width='28' height='11' fill='mediumpurple'/>",
+      "<rect x='14' y='35' width='28' height='7' fill='cyan4'/>",
+      "<rect x='56' y='8' width='28' height='9' fill='darkorange'/>",
+      "<rect x='56' y='17' width='28' height='12' fill='mediumpurple'/>",
+      "<rect x='56' y='29' width='28' height='13' fill='cyan4'/>",
+      "<rect x='98' y='8' width='28' height='6' fill='darkorange'/>",
+      "<rect x='98' y='14' width='28' height='10' fill='mediumpurple'/>",
+      "<rect x='98' y='24' width='28' height='18' fill='cyan4'/>",
+      "<line x1='8' y1='42.5' x2='134' y2='42.5' stroke='#6F6F6F' stroke-width='1.2'/>",
+      "</svg>",
+      sep = ""
+    )
+
+  nahled_ordinalni <-
+    paste(
+      "<svg xmlns='http://www.w3.org/2000/svg' width='180' height='54' viewBox='0 0 180 54'>",
+      "<line x1='20' y1='14' x2='20' y2='44' stroke='#6F6F6F' stroke-width='1.5'/>",
+      "<rect x='13' y='28' width='14' height='10' fill='#D9E6EA' stroke='#6F6F6F' stroke-width='1.2'/>",
+      "<line x1='13' y1='33' x2='27' y2='33' stroke='#5D2890' stroke-width='1.5'/>",
+      "<line x1='70' y1='10' x2='70' y2='44' stroke='#6F6F6F' stroke-width='1.5'/>",
+      "<rect x='63' y='23' width='14' height='12' fill='#D9E6EA' stroke='#6F6F6F' stroke-width='1.2'/>",
+      "<line x1='63' y1='29' x2='77' y2='29' stroke='#5D2890' stroke-width='1.5'/>",
+      "<line x1='120' y1='8' x2='120' y2='44' stroke='#6F6F6F' stroke-width='1.5'/>",
+      "<rect x='113' y='18' width='14' height='14' fill='#D9E6EA' stroke='#6F6F6F' stroke-width='1.2'/>",
+      "<line x1='113' y1='25' x2='127' y2='25' stroke='#5D2890' stroke-width='1.5'/>",
+      "<line x1='10' y1='44.5' x2='132' y2='44.5' stroke='#6F6F6F' stroke-width='1.2'/>",
+      "</svg>",
+      sep = ""
+    )
+
+  data_prehled_grafu |>
+    dplyr::mutate(
+      nahled = c(
+        stringr::str_replace(nahled_histogram[["svg_text"]], "^<\\?xml[^>]*>\\n?", ""),
+        stringr::str_replace(nahled_sloupce[["svg_text"]], "^<\\?xml[^>]*>\\n?", ""),
+        stringr::str_replace(nahled_body[["svg_text"]], "^<\\?xml[^>]*>\\n?", ""),
+        stringr::str_replace(nahled_boxplot[["svg_text"]], "^<\\?xml[^>]*>\\n?", ""),
+        nahled_skladany,
+        nahled_ordinalni
+      )
+    ) |>
+    dplyr::select(
+      `Typ proměnných` = typ_promennych,
+      `Co chceme zobrazit` = co_chceme_zobrazit,
+      `Dobrý první graf` = dobry_prvni_graf,
+      `Co v něm hledat` = co_v_nem_hledat,
+      Nahled = nahled
+    ) |>
+    knitr::kable(
+      format = "html",
+      escape = FALSE,
+      col.names = c("Typ proměnných", "Co chceme zobrazit", "Dobrý první graf", "Co v něm hledat", "Náhled")
+    ) |>
+    kableExtra::kable_styling(
+      full_width = TRUE,
+      bootstrap_options = c("striped", "hover", "condensed")
+    ) |>
+    kableExtra::column_spec(1, width = "11em") |>
+    kableExtra::column_spec(2, width = "16em") |>
+    kableExtra::column_spec(3, width = "12em") |>
+    kableExtra::column_spec(4, width = "15em") |>
+    kableExtra::column_spec(5, width = "12em")
+} else {
+  data_prehled_grafu |>
+    dplyr::transmute(
+      `Typ proměnných` = typ_promennych,
+      `Co chceme zobrazit` = co_chceme_zobrazit,
+      `Dobrý první graf` = dobry_prvni_graf,
+      `Co v něm hledat` = co_v_nem_hledat
+    ) |>
+    knitr::kable()
+}
+```
+
+Tahle tabulka není seznam všech možných grafů. Je to bezpečný první krok pro situaci, kdy si nejdřív potřebujeme ujasnit, co vlastně porovnáváme. Až potom má smysl přidávat další vrstvy, jemnější styl nebo formálnější model.
+
 ## Co zatím ještě nemůžeme tvrdit
 
 ::: {.callout-important}
@@ -400,8 +1850,12 @@ V této lekci je důležité hlavně to, že obě čísla mají podpůrnou roli.
 - **A:** V grafu je vidět vztah, takže jsme prokázali `r render_glossary_term("efekt", display = "efekt")`.
 - **B:** V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
 - **C:** Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+:::
 
-Nejlepší odpověď je **B**.
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Nejlepší odpověď je **B**. Graf ukazuje vzor, ale nestačí k prokázání efektu — k tomu potřebujeme model, odhad velikosti vztahu a kvantifikaci nejistoty.
 :::
 
 Častý omyl zní: v grafu je vidět vztah, takže jsme prokázali efekt. To je předčasný závěr. Z grafu zatím víme, že data vypadají zajímavě a že stojí za další analýzu. Nevíme ještě, jak přesně vztah popsat, jak je silný a jak velká je `r render_glossary_term("nejistota", display = "nejistota")` kolem našeho odhadu.
@@ -430,11 +1884,11 @@ knitr::include_graphics(
 
 ## Shrnutí
 
-- Typ grafu vybíráme podle dvojice proměnných: numerická × numerická, kategoriální × numerická, kategoriální × kategoriální.
-- Pro dvě numerické proměnné je přirozenou první volbou bodový graf, pro skupiny často `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do kategorií.
-- I jeden „obyčejný“ bodový graf může skrývat více podskupin, které se ukážou až po doplnění další informace.
+- Nejprve se vyplatí dobře přečíst jeden bodový graf dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` a teprve potom přidávat další vrstvy informace.
 - V bodovém grafu sledujeme `r render_glossary_term("rozptyl", display = "rozptyl")` ve dvou směrech současně, ne jen odchylku kolem jediné hodnoty.
 - Korelace je stručný číselný popis vztahu dvou numerických proměnných, ale sama o sobě nenahrazuje graf ani interpretaci.
+- Doplňková `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` může odhalit, že část původního rozptylu souvisí se skutečnou strukturou dat.
+- Typ grafu vybíráme podle dvojice proměnných: pro numerická data často bodový graf, pro kategoriální a numerickou proměnnou často `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do skupin.
 - V grafu můžeme rozpoznat směr vztahu, ale ještě tím neprokazujeme `r render_glossary_term("efekt", display = "efekt")`.
 - L02 připravuje půdu pro další krok: přesnější popis vztahu a `r render_glossary_term("nejistota", display = "nejistoty")` pomocí modelu.
 
