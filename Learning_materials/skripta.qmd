@@ -263,7 +263,22 @@ ggplot2::ggplot(
 
 Tento první graf obsahuje `r nrow(data_tucnaci)` tučňáků a ukazuje stejná data, která si studenti později vyzkoušejí číst i pomocí modelu.
 
-Kdybyste si chtěli tentýž první bodový graf rychle nakreslit v základním R, stačí krátký příkaz jako tento:
+Než si podobný graf nakreslíme sami, je užitečné v R rychle zkontrolovat prvních několik hodnot na obou osách:
+
+```{r}
+#| label: nahled-na-promenne-pro-prvni-graf
+#| echo: true
+#| eval: true
+head(
+  x = data_tucnaci$delka_ploutve_mm
+)
+
+head(
+  x = data_tucnaci$hmotnost_g
+)
+```
+
+Jakmile víme, které dvě proměnné chceme porovnat, můžeme tentýž první bodový graf rychle nakreslit v základním R:
 
 ```{r}
 #| label: prvni-bodovy-graf-v-zakladnim-r
@@ -275,7 +290,7 @@ plot(
   xlab = "Délka ploutve (mm)",
   ylab = "Tělesná hmotnost (g)",
   pch = 16,
-  col = rgb(0.54, 0.54, 0.54, 0.6)
+  col = rgb(red = 0.54, green = 0.54, blue = 0.54, alpha = 0.6)
 )
 ```
 
@@ -852,6 +867,27 @@ $$r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x
 ## Korelace jako stručný číselný popis
 
 Graf je vždy první krok, ale někdy chceme vztah dvou `r render_glossary_term("numericka-promenna", display = "numerických proměnných")` shrnout i číslem. K tomu slouží korelace. V datech tučňáků vychází Pearsonova korelace přibližně `r pearson_korelace_txt` a Spearmanova korelace přibližně `r spearman_korelace_txt`. Pearsonovo $r$ jsme před chvílí odvodili z `r render_glossary_term("kovariance", display = "kovariance")` — vydělíme kovarianci součinem `r render_glossary_term("smerodatna-odchylka", display = "směrodatných odchylek")` a dostaneme číslo v rozsahu $[-1, +1]$.
+
+V R si obě čísla spočítáme přímo nad stejnými dvěma sloupci, které jsme předtím použili pro bodový graf:
+
+```{r}
+#| label: spocitat-korelaci-v-zakladnim-r
+#| echo: true
+#| eval: true
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+```
+
+Takto dostaneme dvě stručná čísla, která shrnují tutéž biologickou otázku trochu jiným způsobem: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
 
 Na schématu níže jsou čtyři typické situace. Všimněte si, jak se tvar bodového mraku mění a jak na různé hodnoty $r$ reagují Pearson (P) a Spearman (S) odlišně.
 
