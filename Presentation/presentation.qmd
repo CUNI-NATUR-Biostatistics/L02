@@ -1,5 +1,5 @@
 ---
-format: 
+format:
   revealjs:
     slide-number: true
     theme: [default, ../theme/presentation_theme.scss]
@@ -29,19 +29,14 @@ library(here)
 here::i_am("Presentation/presentation.qmd")
 
 if (!require("tidyverse")) install.packages("tidyverse")
-if (!require("ggbeeswarm")) install.packages("ggbeeswarm")
-if (!require("ggview")) install.packages("ggview")
-if (!require("magick")) install.packages("magick")
+if (!require("palmerpenguins")) install.packages("palmerpenguins")
 if (!require("cowplot")) install.packages("cowplot")
-if (!require("remotes")) install.packages("remotes")
-if (!require("waffle")) remotes::install_github("hrbrmstr/waffle")
+if (!require("ggview")) install.packages("ggview")
 
 library(tidyverse)
-library(ggbeeswarm)
-library(ggview)
-library(magick)
+library(palmerpenguins)
 library(cowplot)
-library(waffle)
+library(ggview)
 
 path_materials <-
   "Presentation/Materials"
@@ -58,28 +53,885 @@ include_local_figure <- function(data_source) {
 ```
 
 ```{r}
-#| label: dynamic link generation
+#| label: dynamic-link-generation
 #| include: false
 project_name <-
   basename(here::here())
 
 display_name <-
-  paste("Biostatistika", "-", project_name)
+  stringr::str_glue("Biostatistika - {project_name}")
 
 github_url <-
-  paste0(
-    "https://github.com/CUNI-NATUR-Biostatistics/",
-    project_name
+  stringr::str_glue(
+    "https://github.com/CUNI-NATUR-Biostatistics/{project_name}"
   )
 
 slides_url <-
-  paste0(
-    "https://CUNI-NATUR-Biostatistics.github.io/",
-    project_name, "/"
+  stringr::str_glue(
+    "https://CUNI-NATUR-Biostatistics.github.io/{project_name}/"
   )
 ```
 
-## Vztahy dvou proměnných, vizualizace, pravděpodobnost
+```{r}
+#| label: pripravit-data
+#| include: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+data_tucnaci <-
+  palmerpenguins::penguins |>
+  tidyr::drop_na(
+    flipper_length_mm,
+    body_mass_g,
+    species,
+    island
+  ) |>
+  dplyr::transmute(
+    druh_tucnaka = factor(
+      x = species,
+      levels = c("Adelie", "Chinstrap", "Gentoo")
+    ),
+    ostrov = factor(
+      x = island,
+      levels = c("Biscoe", "Dream", "Torgersen")
+    ),
+    delka_ploutve_mm = flipper_length_mm,
+    hmotnost_g = body_mass_g
+  )
+
+barvy_druhu <-
+  c(
+    "Adelie" = "darkorange",
+    "Chinstrap" = "mediumpurple",
+    "Gentoo" = "cyan4"
+  )
+
+col_data <- "#8A8A8A"
+col_highlight <- "#F3A712"
+col_secondary <- "#5D2890"
+
+ggplot2::theme_set(
+  ggplot2::theme_minimal() +
+    ggplot2::theme(
+      panel.grid.minor = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(
+        fill = "#F0EDE8",
+        color = "#8A8A8A"
+      ),
+      strip.text = ggplot2::element_text(
+        face = "bold",
+        colour = col_secondary
+      )
+    )
+)
+
+strip_delka_lwr <- 193
+strip_delka_upr <- 197
+strip_hmotnost_lwr <- 4100L
+strip_hmotnost_upr <- 4300L
+
+data_rozptyl <-
+  data_tucnaci |>
+  dplyr::mutate(
+    in_strip_delka = delka_ploutve_mm >= strip_delka_lwr &
+      delka_ploutve_mm <= strip_delka_upr,
+    in_strip_hmotnost = hmotnost_g >= strip_hmotnost_lwr &
+      hmotnost_g <= strip_hmotnost_upr
+  )
+
+prumer_delka <-
+  mean(data_tucnaci$delka_ploutve_mm)
+
+prumer_hmotnost <-
+  mean(data_tucnaci$hmotnost_g)
+
+kovariance_mm_g <-
+  stats::cov(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g
+  )
+
+kovariance_cm_kg <-
+  stats::cov(
+    x = data_tucnaci$delka_ploutve_mm / 10,
+    y = data_tucnaci$hmotnost_g / 1000
+  )
+
+pearson_korelace <-
+  stats::cor(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g,
+    method = "pearson"
+  )
+
+spearman_korelace <-
+  stats::cor(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g,
+    method = "spearman"
+  )
+
+kovariance_mm_g_txt <-
+  formatC(
+    kovariance_mm_g,
+    format = "f",
+    digits = 0,
+    big.mark = " ",
+    decimal.mark = ","
+  )
+
+kovariance_cm_kg_txt <-
+  formatC(
+    kovariance_cm_kg,
+    format = "f",
+    digits = 3,
+    decimal.mark = ","
+  )
+
+pearson_korelace_txt <-
+  formatC(
+    pearson_korelace,
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_korelace_txt <-
+  formatC(
+    spearman_korelace,
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+x_linear <-
+  seq(1, 10, length.out = 12)
+
+y_linear <-
+  c(1.5, 1.7, 2.4, 2.9, 3.1, 3.8, 4.2, 4.7, 5.1, 5.3, 6.0, 6.2)
+
+x_none <-
+  seq(1, 10, length.out = 12)
+
+y_none <-
+  c(3.2, 4.8, 2.7, 5.1, 3.9, 4.4, 2.9, 5.0, 3.5, 4.1, 3.8, 4.6)
+
+x_neg <-
+  seq(1, 10, length.out = 12)
+
+y_neg <-
+  c(6.0, 5.8, 5.5, 5.2, 4.7, 4.5, 4.2, 3.9, 3.4, 3.2, 2.8, 2.5)
+
+x_curve <-
+  seq(1, 10, length.out = 12)
+
+y_curve <-
+  c(1.1, 1.6, 2.0, 2.5, 3.1, 3.7, 4.2, 4.6, 4.9, 5.1, 5.2, 5.3)
+
+pearson_linear_txt <-
+  formatC(
+    stats::cor(x_linear, y_linear, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_linear_txt <-
+  formatC(
+    stats::cor(x_linear, y_linear, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+pearson_none_txt <-
+  formatC(
+    stats::cor(x_none, y_none, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_none_txt <-
+  formatC(
+    stats::cor(x_none, y_none, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+pearson_neg_txt <-
+  formatC(
+    stats::cor(x_neg, y_neg, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_neg_txt <-
+  formatC(
+    stats::cor(x_neg, y_neg, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+pearson_curve_txt <-
+  formatC(
+    stats::cor(x_curve, y_curve, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_curve_txt <-
+  formatC(
+    stats::cor(x_curve, y_curve, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+```
+
+```{r}
+#| label: vytvorit-grafy
+#| include: false
+#| message: false
+#| warning: false
+plot_prvni_bodovy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.72,
+    size = 2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_prvni_bodovy,
+  file = here::here(path_materials, "prvni_bodovy_graf.png")
+)
+
+plot_s_primkou <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.55,
+    size = 1.9
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_highlight,
+    linewidth = 1.2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_s_primkou,
+  file = here::here(path_materials, "bodovy_graf_s_primkou.png")
+)
+
+plot_standard_osy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.7,
+    size = 1.8
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Délka ploutve na ose x"
+  )
+
+plot_prohozene_osy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = hmotnost_g,
+      y = delka_ploutve_mm
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.7,
+    size = 1.8
+  ) +
+  ggplot2::labs(
+    x = "Tělesná hmotnost (g)",
+    y = "Délka ploutve (mm)",
+    subtitle = "Hmotnost na ose x"
+  )
+
+plot_jine_osy <-
+  cowplot::plot_grid(
+    plot_standard_osy,
+    plot_prohozene_osy,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_jine_osy,
+  file = here::here(path_materials, "stejna_data_jine_osy.png")
+)
+
+plot_rozptyl_delka <-
+  ggplot2::ggplot(
+    data = data_rozptyl,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = strip_delka_lwr,
+    xmax = strip_delka_upr,
+    ymin = -Inf,
+    ymax = Inf,
+    fill = col_highlight,
+    alpha = 0.20
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, !in_strip_delka),
+    colour = col_data,
+    alpha = 0.45,
+    size = 1.6
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, in_strip_delka),
+    colour = col_highlight,
+    alpha = 0.9,
+    size = 2.4
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Podobná délka ploutve, různá hmotnost"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_rozptyl_delka,
+  file = here::here(path_materials, "rozptyl_podle_delky.png")
+)
+
+plot_rozptyl_hmotnost <-
+  ggplot2::ggplot(
+    data = data_rozptyl,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = -Inf,
+    xmax = Inf,
+    ymin = strip_hmotnost_lwr,
+    ymax = strip_hmotnost_upr,
+    fill = col_secondary,
+    alpha = 0.15
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, !in_strip_hmotnost),
+    colour = col_data,
+    alpha = 0.45,
+    size = 1.6
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, in_strip_hmotnost),
+    colour = col_secondary,
+    alpha = 0.9,
+    size = 2.4
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Podobná hmotnost, různá délka ploutve"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_rozptyl_hmotnost,
+  file = here::here(path_materials, "rozptyl_podle_hmotnosti.png")
+)
+
+x_min <-
+  min(data_tucnaci$delka_ploutve_mm) - 3
+
+x_max <-
+  max(data_tucnaci$delka_ploutve_mm) + 3
+
+y_min <-
+  min(data_tucnaci$hmotnost_g) - 150
+
+y_max <-
+  max(data_tucnaci$hmotnost_g) + 150
+
+plot_kovariance_stred <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_vline(
+    xintercept = prumer_delka,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_hmotnost,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.62,
+    size = 1.8
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(x_min, x_max),
+    ylim = c(y_min, y_max)
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kovariance_stred,
+  file = here::here(path_materials, "kovariance_stred.png")
+)
+
+plot_kovariance_kvadranty <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = prumer_delka,
+    xmax = x_max,
+    ymin = prumer_hmotnost,
+    ymax = y_max,
+    fill = col_highlight,
+    alpha = 0.15
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = x_min,
+    xmax = prumer_delka,
+    ymin = y_min,
+    ymax = prumer_hmotnost,
+    fill = col_highlight,
+    alpha = 0.15
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = prumer_delka,
+    xmax = x_max,
+    ymin = y_min,
+    ymax = prumer_hmotnost,
+    fill = col_secondary,
+    alpha = 0.12
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = x_min,
+    xmax = prumer_delka,
+    ymin = prumer_hmotnost,
+    ymax = y_max,
+    fill = col_secondary,
+    alpha = 0.12
+  ) +
+  ggplot2::geom_vline(
+    xintercept = prumer_delka,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_hmotnost,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.62,
+    size = 1.8
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(x_min, x_max),
+    ylim = c(y_min, y_max)
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kovariance_kvadranty,
+  file = here::here(path_materials, "kovariance_kvadranty.png")
+)
+
+data_linear <-
+  tibble::tibble(x = x_linear, y = y_linear)
+
+data_none <-
+  tibble::tibble(x = x_none, y = y_none)
+
+data_neg <-
+  tibble::tibble(x = x_neg, y = y_neg)
+
+data_curve <-
+  tibble::tibble(x = x_curve, y = y_curve)
+
+plot_linear <-
+  ggplot2::ggplot(
+    data = data_linear,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_highlight,
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Silná kladná lineární\nP {pearson_linear_txt} | S {spearman_linear_txt}"
+    )
+  ) +
+  ggview::canvas(
+    width = 1000,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_linear,
+  file = here::here(path_materials, "korelace_linear.png")
+)
+
+plot_none <-
+  ggplot2::ggplot(
+    data = data_none,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_hline(
+    yintercept = mean(data_none$y),
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Žádná zřetelná souvislost\nP {pearson_none_txt} | S {spearman_none_txt}"
+    )
+  ) +
+  ggview::canvas(
+    width = 1000,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_none,
+  file = here::here(path_materials, "korelace_bez_vztahu.png")
+)
+
+plot_neg <-
+  ggplot2::ggplot(
+    data = data_neg,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_secondary,
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Silná záporná lineární\nP {pearson_neg_txt} | S {spearman_neg_txt}"
+    )
+  )
+
+plot_curve <-
+  ggplot2::ggplot(
+    data = data_curve,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_line(
+    colour = col_highlight,
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Monotónní, ale zakřivený\nP {pearson_curve_txt} | S {spearman_curve_txt}"
+    )
+  ) +
+  ggview::canvas(
+    width = 1000,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_curve,
+  file = here::here(path_materials, "korelace_zakrivena.png")
+)
+
+plot_ctyri_situace_korelace <-
+  cowplot::plot_grid(
+    plot_linear,
+    plot_none,
+    plot_neg,
+    plot_curve,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_ctyri_situace_korelace,
+  file = here::here(path_materials, "ctyri_situace_korelace.png")
+)
+
+plot_druhy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_point(
+    alpha = 0.72,
+    size = 2
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    name = "Druh"
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_druhy,
+  file = here::here(path_materials, "graf_podle_druhu.png")
+)
+
+data_ctetnosti <-
+  data_tucnaci |>
+  dplyr::count(druh_tucnaka, ostrov)
+
+plot_scatter_priklad <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.65,
+    size = 1.6
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve",
+    y = "Hmotnost",
+    subtitle = "Dvě numerické"
+  )
+
+plot_box_priklad <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = druh_tucnaka,
+      y = hmotnost_g,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_boxplot(
+    outlier.shape = NA,
+    width = 0.55,
+    alpha = 0.25
+  ) +
+  ggplot2::geom_jitter(
+    width = 0.10,
+    alpha = 0.35,
+    size = 1.2
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Druh",
+    y = "Hmotnost",
+    subtitle = "Kategoriální + numerická"
+  )
+
+plot_tile_priklad <-
+  ggplot2::ggplot(
+    data = data_ctetnosti,
+    mapping = ggplot2::aes(
+      x = ostrov,
+      y = druh_tucnaka,
+      fill = n
+    )
+  ) +
+  ggplot2::geom_tile(
+    colour = "white"
+  ) +
+  ggplot2::geom_text(
+    mapping = ggplot2::aes(label = n),
+    colour = "white",
+    fontface = "bold"
+  ) +
+  ggplot2::scale_fill_gradient(
+    low = "#D7E6F5",
+    high = col_secondary,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Ostrov",
+    y = "Druh",
+    subtitle = "Dvě kategoriální"
+  )
+
+plot_tri_priklady <-
+  cowplot::plot_grid(
+    plot_scatter_priklad,
+    plot_box_priklad,
+    plot_tile_priklad,
+    ncol = 3
+  ) +
+  ggview::canvas(
+    width = 1800,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_tri_priklady,
+  file = here::here(path_materials, "tri_rychle_priklady.png")
+)
+```
+
+## Vztahy dvou proměnných a vizualizace
 
 <br>
 
@@ -95,23 +947,332 @@ slides_url <-
 
 ## Výsledky učení
 
-Po absolvování této přednášky budete schopni:
+Po dnešní přednášce budete schopni:
 
-- navrhnout vhodný graf pro vztah dvou proměnných
-- vysvětlit variabilitu dat a proč „vidím vzor“ neznamená „je to efekt“
+::: {.incremental}
+- přečíst první bodový graf pro dvě numerické proměnné
+- vysvětlit, co nám ukáže rozptyl a co přidá korelace
+- zvolit vhodný první graf podle typu dvojice proměnných
+- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
+:::
 
-# Obsah přednášky
+## Biologická otázka
 
-## Snímek 1
+:::: {.columns}
 
-TODO: obsah snímku
+::: {.column width="55%"}
+
+Chceme zjistit:
+
+::: {.blockquote}
+Mají tučňáci s delší ploutví vyšší tělesnou hmotnost?
+:::
+
+Dnes ještě nebudeme testovat hypotézu.
+
+Dnes chceme umět:
+
+::: {.incremental}
+- dobře se podívat na data
+- všimnout si směru a rozptylu
+- poznat, co už z grafu říct můžeme a co ještě ne
+:::
+
+:::
+
+::: {.column width="45%"}
 
 ```{r}
-#| label: demo-plot
-#| echo: true
-# TODO: ukázka kódu v R
+#| echo: false
+#| out.width: "100%"
+include_local_figure("lter_penguins.png")
+```
+
+Ilustrace: Allison Horst
+
+:::
+
+::::
+
+## Odhad před prvním grafem
+
+Který popis čekáte nejspíš?
+
+- A: Delší ploutev téměř vždy znamená vyšší hmotnost.
+- B: Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
+- C: Délka ploutve a hmotnost spolu souviset nebudou.
+
+Fallback bez hlasování: zvedněte ruku pro možnost, která vám dává největší biologický smysl.
+
+## První pohled na data
+
+```{r}
+#| label: zobrazit-prvni-bodovy-graf
+#| echo: false
+include_local_figure("prvni_bodovy_graf.png")
+```
+
+## Než něco pojmenujeme
+
+*Nejdřív 20 sekund ticha: napište si jednu větu, co z grafu opravdu vidíte.*
+
+::: {.incremental}
+- Je hlavní směr spíš rostoucí, nebo ne?
+- Je oblak bodů úzký, nebo široký?
+- Vidíte místa, kde by stálo za to zpomalit a podívat se podrobněji?
+:::
+
+## Stejná data, jiné osy
+
+```{r}
+#| label: zobrazit-jine-osy
+#| echo: false
+include_local_figure("stejna_data_jine_osy.png")
+```
+
+## Rozptyl v jednom směru
+
+```{r}
+#| label: zobrazit-rozptyl-delka
+#| echo: false
+include_local_figure("rozptyl_podle_delky.png")
+```
+
+## A teď druhý směr
+
+```{r}
+#| label: zobrazit-rozptyl-hmotnost
+#| echo: false
+include_local_figure("rozptyl_podle_hmotnosti.png")
+```
+
+## Vracíme se k biologické otázce
+
+Co už po těchto třech pohledech umíme říct?
+
+::: {.incremental}
+- Delší ploutve bývají spojeny s vyšší hmotností.
+- Vztah je zřetelný, ale není dokonale těsný.
+- Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
+:::
+
+## Co už můžeme tvrdit?
+
+Která formulace je v této chvíli nejlepší?
+
+- A: V grafu je vidět vztah, takže jsme prokázali efekt.
+- B: V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
+- C: Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+
+Fallback bez hlasování: napište si písmeno, které byste obhajovali před spolužákem.
+
+## Správně je B
+
+Viditelný vzor v grafu je důležitý začátek.
+
+Ještě ale nemáme:
+
+::: {.incremental}
+- model, který vztah popíše přesněji
+- odhad velikosti vztahu
+- kvantifikaci nejistoty kolem odhadu
+:::
+
+## Co když je v oblaku skrytá struktura?
+
+Než přidáme další vrstvu, odhadněte:
+
+- A: Barvy nic důležitého nezmění.
+- B: Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
+- C: Po rozdělení podle druhu zmizí veškerý vztah.
+
+Fallback bez hlasování: zvedněte ruku pro možnost, kterou byste chtěli ověřit jako první.
+
+## Stejná data, ale s druhem
+
+```{r}
+#| label: zobrazit-graf-podle-druhu
+#| echo: false
+include_local_figure("graf_podle_druhu.png")
+```
+
+## Co se po obarvení změnilo?
+
+::: {.incremental}
+- Celkový vztah nezmizel.
+- Část variability souvisí s tím, že mícháme více druhů dohromady.
+- Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
+:::
+
+## Jak převést směr oblaku do čísla?
+
+Nejdřív pomocná myšlenka:
+
+::: {.blockquote}
+Když se obě proměnné pohybují stejným směrem od svého průměru, mělo by to zvyšovat souhrnné číslo vztahu.
+:::
+
+## Nejprve jen střed grafu
+
+```{r}
+#| label: zobrazit-kovarianci-stred
+#| echo: false
+include_local_figure("kovariance_stred.png")
+```
+
+## Které části grafu pomáhají kladné kovarianci?
+
+Než něco vybarvíme, odhadněte:
+
+- A: vpravo nahoře a vlevo dole
+- B: vlevo nahoře a vpravo dole
+- C: všechny stejně
+
+Fallback bez hlasování: ukažte prstem do dvojice kvadrantů, které byste vybrali.
+
+## Takto vypadá kladná kovariance
+
+```{r}
+#| label: zobrazit-kovarianci-kvadranty
+#| echo: false
+include_local_figure("kovariance_kvadranty.png")
+```
+
+## Proč samotná kovariance nestačí
+
+::: {.incremental}
+- V milimetrech a gramech vyjde kovariance `r kovariance_mm_g_txt`.
+- V centimetrech a kilogramech vyjde `r kovariance_cm_kg_txt`.
+- Směr vztahu se nezměnil, ale velikost čísla ano.
+- Proto chceme bezrozměrný souhrn: korelaci.
+:::
+
+## Dvě čísla, která budeme používat
+
+::: {.incremental}
+- Pearsonova korelace shrnuje hlavně lineární vztah.
+- Spearmanova korelace sleduje pořadí a monotónní vztah.
+- V našich datech vycházejí velmi podobně: `r pearson_korelace_txt` a `r spearman_korelace_txt`.
+- Obě čísla jsou doplněk ke grafu, ne náhrada grafu.
+:::
+
+## Odhad před odhalením
+
+Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
+
+- A: silný lineární vztah bez zvláštních bodů
+- B: žádná zřetelná souvislost
+- C: monotónní, ale zakřivený vztah
+
+Fallback bez hlasování: napište si A, B, nebo C a krátce proč.
+
+## Monotónní, ale zakřivený vztah
+
+```{r}
+#| label: zobrazit-korelace-curve
+#| echo: false
+include_local_figure("korelace_zakrivena.png")
+```
+
+## Čtyři situace najednou
+
+```{r}
+#| label: zobrazit-ctyri-situace-korelace
+#| echo: false
+include_local_figure("ctyri_situace_korelace.png")
+```
+
+## Co nám to říká právě o tučňácích?
+
+::: {.incremental}
+- U tučňáků jsou Pearson i Spearman velmi podobné.
+- To je dobrá zpráva: celkový vztah je monotónní a zároveň docela blízký lineárnímu.
+- Zároveň jsme už viděli, že barva podle druhu ukazuje další biologickou strukturu, kterou jedno číslo samo nevysvětlí.
+:::
+
+## Co z korelace ještě neplyne?
+
+Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
+
+- A: Ano, protože korelace je vysoká.
+- B: Ne, vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
+- C: Ano, pokud jsou Pearson a Spearman podobné.
+
+Fallback bez hlasování: zkuste jednou větou obhájit možnost, kterou byste vybrali.
+
+## Správně je B
+
+::: {.incremental}
+- Korelace popisuje společnou změnu dvou proměnných.
+- Sama neoddělí příčinu od dalších proměnných nebo společného mechanismu.
+- U tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla.
+:::
+
+## Jaký graf byste zvolili?
+
+Pro dvojici **délka ploutve × hmotnost**:
+
+- A: bodový graf
+- B: boxplot
+- C: dlaždicový graf
+
+Fallback bez hlasování: napište si první volbu na papír.
+
+## A pro dvojici druh × hmotnost?
+
+- A: bodový graf
+- B: boxplot nebo body ve skupinách
+- C: dlaždicový graf
+
+Fallback bez hlasování: zkuste si říct, co přesně chcete v grafu vidět.
+
+## A pro dvojici druh × ostrov?
+
+- A: bodový graf
+- B: boxplot
+- C: tabulka četností nebo dlaždicový graf
+
+Fallback bez hlasování: pokud váháte, nejdřív si řekněte, zda jsou proměnné numerické, nebo kategoriální.
+
+## Tři rychlé příklady
+
+```{r}
+#| label: zobrazit-tri-rychle-priklady
+#| echo: false
+include_local_figure("tri_rychle_priklady.png")
+```
+
+## Pravidlo pro první volbu grafu
+
+| Dvojice proměnných | Co chceme vidět | Dobrá první volba |
+|---|---|---|
+| dvě numerické proměnné | směr vztahu a rozptyl bodů | bodový graf |
+| kategoriální + numerická | rozdíly mezi skupinami | boxplot nebo body ve skupinách |
+| dvě kategoriální proměnné | četnosti kombinací | tabulka četností nebo dlaždicový graf |
+
+## Co nám přidá model?
+
+Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc oproti samotnému korelačnímu koeficientu?
+
+Fallback bez hlasování: zkuste si dopsat jednu větu začínající slovy „Přímka by nám mohla ukázat...“
+
+## Příště přidáme model
+
+```{r}
+#| label: zobrazit-graf-s-primkou
+#| echo: false
+include_local_figure("bodovy_graf_s_primkou.png")
 ```
 
 ## Shrnutí
 
-- TODO: klíčové body přednášky
+::: {.incremental}
+- Jeden bodový graf už umí ukázat směr vztahu i šířku rozptylu.
+- Viditelný vzor je silný začátek, ale ještě to není formální důkaz efektu.
+- Korelace pomáhá shrnout vztah číslem, ale bez grafu může být zavádějící.
+- První graf vybíráme podle typu proměnných a podle otázky, kterou chceme zodpovědět.
+:::
+
+## Závěrečná otázka
+
+Co ještě potřebujeme, abychom z viditelného vzoru v grafu přešli k přesnějšímu tvrzení o velikosti efektu a nejistotě?
