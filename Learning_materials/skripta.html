@@ -2852,16 +2852,31 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 <p>Tento první graf obsahuje 342 tučňáků a ukazuje stejná data, která si studenti později vyzkoušejí číst i pomocí modelu.</p>
-<p>Kdybyste si chtěli tentýž první bodový graf rychle nakreslit v základním R, stačí krátký příkaz jako tento:</p>
+<p>Než si podobný graf nakreslíme sami, je užitečné v R rychle zkontrolovat prvních několik hodnot na obou osách:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>delka_ploutve_mm,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> data_tucnaci<span class="sc">$</span>hmotnost_g,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Délka ploutve (mm)&quot;</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Tělesná hmotnost (g)&quot;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="fl">0.54</span>, <span class="fl">0.54</span>, <span class="fl">0.54</span>, <span class="fl">0.6</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>delka_ploutve_mm</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 181 186 195 193 190 181</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>hmotnost_g</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3750 3800 3250 3450 3650 3625</code></pre>
+</div>
+</div>
+<p>Jakmile víme, které dvě proměnné chceme porovnat, můžeme tentýž první bodový graf rychle nakreslit v základním R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>delka_ploutve_mm,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> data_tucnaci<span class="sc">$</span>hmotnost_g,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Délka ploutve (mm)&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Tělesná hmotnost (g)&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="at">red =</span> <span class="fl">0.54</span>, <span class="at">green =</span> <span class="fl">0.54</span>, <span class="at">blue =</span> <span class="fl">0.54</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3210,6 +3225,26 @@ r &amp;= \frac{(-7,8) \cdot (-300) + (-2,8) \cdot (-250) + (1,2) \cdot (200) + (
 <section id="korelace-jako-stručný-číselný-popis" class="level2" data-number="10">
 <h2 data-number="10" class="anchored" data-anchor-id="korelace-jako-stručný-číselný-popis"><span class="header-section-number">10</span> Korelace jako stručný číselný popis</h2>
 <p>Graf je vždy první krok, ale někdy chceme vztah dvou <a class="glossary" href>numerických proměnných<span class="def">Promenná nabývající libovolných císelných hodnot na spojité nebo diskrétní císelné stupnici (délky, hmotnosti, teploty, pocty).</span></a> shrnout i číslem. K tomu slouží korelace. V datech tučňáků vychází Pearsonova korelace přibližně 0,87 a Spearmanova korelace přibližně 0,84. Pearsonovo <span class="math inline">\(r\)</span> jsme před chvílí odvodili z <a class="glossary" href>kovariance<span class="def">Míra toho, nakolik se dve numerické promenné odchylují od svých prumeru spolecne; kladná kovariance znací, že mají tendenci rust spolu, záporná že se pohybují opacne.</span></a> — vydělíme kovarianci součinem <a class="glossary" href>směrodatných odchylek<span class="def">Odmocnina rozptylu; vyjadruje prumernou vzdálenost hodnot od prumeru ve stejných jednotkách jako puvodní data.</span></a> a dostaneme číslo v rozsahu <span class="math inline">\([-1, +1]\)</span>.</p>
+<p>V R si obě čísla spočítáme přímo nad stejnými dvěma sloupci, které jsme předtím použili pro bodový graf:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>delka_ploutve_mm,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> data_tucnaci<span class="sc">$</span>hmotnost_g,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8712018</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> data_tucnaci<span class="sc">$</span>delka_ploutve_mm,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> data_tucnaci<span class="sc">$</span>hmotnost_g,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Zkopírovat do schránky" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8399741</code></pre>
+</div>
+</div>
+<p>Takto dostaneme dvě stručná čísla, která shrnují tutéž biologickou otázku trochu jiným způsobem: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.</p>
 <p>Na schématu níže jsou čtyři typické situace. Všimněte si, jak se tvar bodového mraku mění a jak na různé hodnoty <span class="math inline">\(r\)</span> reagují Pearson (P) a Spearman (S) odlišně.</p>
 <div class="cell">
 <div class="cell-output-display">
