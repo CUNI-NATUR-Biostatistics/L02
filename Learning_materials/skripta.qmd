@@ -217,7 +217,7 @@ Biologicky nejpravděpodobnější je **možnost B**: délka ploutve bude s těl
 
 ## Jaká data budeme používat
 
-Budeme pracovat s datasety Palmer Penguins, které shrnují měření tučňáků z oblasti Palmer Station v Antarktidě. Pro tuto lekci jsme ponechali `r nrow(data_tucnaci)` pozorování, u nichž známe délku ploutve, tělesnou hmotnost a druh. V datech se objevují tři druhy: `r paste(sort(unique(data_tucnaci$druh_tucnaka)), collapse = ", ")`.
+Budeme pracovat s datasety Palmer Penguins, které shrnují měření tučňáků z oblasti Palmer Station v Antarktidě. Pro tuto lekci jsme ponechali `r nrow(data_tucnaci)` pozorování, u nichž známe délku ploutve, tělesnou hmotnost a druh. V datech se objevují `r length(unique(data_tucnaci$druh_tucnaka))` druhy: `r paste(sort(unique(data_tucnaci$druh_tucnaka)), collapse = ", ")`.
 
 Na tomto datasetu je užitečné to, že biologický příběh dává smysl i bez složité statistiky. Delší ploutev může souviset s větší tělesnou velikostí, ale zároveň víme, že do výsledku vstupují i další zdroje rozdílů mezi jedinci.
 
@@ -225,7 +225,7 @@ Na tomto datasetu je užitečné to, že biologický příběh dává smysl i be
 #| label: ilustrace-druhy-tucnaku
 #| echo: false
 #| out.width: "85%"
-#| fig-cap: "Tři druhy tučňáků v datasetu Palmer Penguins. Ilustrace: Allison Horst."
+#| fig-cap: "Druhy tučňáků v datasetu Palmer Penguins. Ilustrace: Allison Horst."
 knitr::include_graphics(
   here::here(
     "Learning_materials",
@@ -235,7 +235,7 @@ knitr::include_graphics(
 )
 ```
 
-Na obrázku výše jsou tři druhy, se kterými budeme pracovat. Už z ilustrace je vidět, že se mezi nimi mohou lišit tělesné proporce. To je dobrá připomínka, že část `r render_glossary_term("rozptyl", display = "rozptylu")` v bodovém grafu může souviset i s tím, že nesledujeme jediný homogenní typ jedince.
+Na obrázku výše jsou `r length(unique(data_tucnaci$druh_tucnaka))` druhy, se kterými budeme pracovat. Už z ilustrace je vidět, že se mezi nimi mohou lišit tělesné proporce. To je dobrá připomínka, že část `r render_glossary_term("rozptyl", display = "rozptylu")` v bodovém grafu může souviset i s tím, že nesledujeme jediný homogenní typ jedince.
 
 Jako první krok se ale na data podíváme co nejjednodušším způsobem: bez rozlišování druhů, jen jako na vztah mezi délkou ploutve a tělesnou hmotností.
 
@@ -249,7 +249,7 @@ Nejprve si zobrazíme co nejjednodušší bodový graf. V tuto chvíli nechceme 
 #| echo: false
 #| message: false
 #| warning: false
-#| fig-cap: "Bodový graf délky ploutve (mm) a tělesné hmotnosti (g) pro 333 tučňáků z datasetu Palmer Penguins."
+#| fig-cap: "Bodový graf délky ploutve (mm) a tělesné hmotnosti (g) v datasetu Palmer Penguins."
 ggplot2::ggplot(
   data    = data_tucnaci,
   mapping = ggplot2::aes(x = delka_ploutve_mm, y = hmotnost_g)
@@ -259,6 +259,24 @@ ggplot2::ggplot(
     x = "Délka ploutve (mm)",
     y = "Tělesná hmotnost (g)"
   )
+```
+
+Tento první graf obsahuje `r nrow(data_tucnaci)` tučňáků a ukazuje stejná data, která si studenti později vyzkoušejí číst i pomocí modelu.
+
+Kdybyste si chtěli tentýž první bodový graf rychle nakreslit v základním R, stačí krátký příkaz jako tento:
+
+```{r}
+#| label: prvni-bodovy-graf-v-zakladnim-r
+#| echo: true
+#| eval: true
+plot(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = rgb(0.54, 0.54, 0.54, 0.6)
+)
 ```
 
 ## Co v grafu vidíme
@@ -287,7 +305,7 @@ Po prvním pohledu na graf se teď vyplatí pojmenovat, co jsme vlastně zobrazi
 - **osa y**: tělesná hmotnost v gramech (`body_mass_g`)
 - doplňkově `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` druh tučňáka (`species`)
 
-Přiřazení os je při popisu korelace libovolné. Kdybychom osy prohodili — délku svisle a hmotnost vodorovně — bodový mrak by vypadal jinak, ale síla vztahu by zůstala naprosto stejná. Pojmy *prediktor* a *odezva*, které popisují asymetrii os (jedna proměnná „vysvětluje" druhou), patří k regresním modelům; ty si ukážeme v pozdějších lekcích.
+Přiřazení os je při popisu korelace libovolné. Kdybychom osy prohodili — délku svisle a hmotnost vodorovně — bodový mrak by vypadal jinak, ale síla vztahu by zůstala naprosto stejná. Pojmy *`r render_glossary_term("prediktor", display = "prediktor")`* a *`r render_glossary_term("odezva", display = "odezva")`*, které popisují asymetrii os (jedna proměnná „vysvětluje" druhou), patří k regresním modelům; ty si ukážeme v pozdějších lekcích.
 
 ```{r}
 #| label: flip-axes-demo
@@ -434,9 +452,10 @@ To je důležité pro interpretaci. Když vidíme podlouhlý oblak bodů směřu
 #| echo: false
 #| message: false
 #| warning: false
-# Malý vzorek 4 tučňáků druhu Adelie pro ilustraci rovnic
+# Malý ilustrační vzorek 4 tučňáků druhu Adelie vybraný tak,
+# aby byl v datech dobře vidět kladný vztah mezi délkou ploutve a hmotností.
 idx_maly <-
-  which(data_tucnaci$druh_tucnaka == "Adelie")[1:4]
+  which(data_tucnaci$druh_tucnaka == "Adelie")[c(1, 2, 9, 14)]
 
 maly_vzorek_delka <-
   data_tucnaci$delka_ploutve_mm[idx_maly]
@@ -456,9 +475,13 @@ ctverce_odchylek <- odchylky_delka^2
 soucet_ctvercu <- sum(ctverce_odchylek)
 rozptyl_maly <- soucet_ctvercu / (n_maly - 1L)
 
+ctverce_odchylek_hmotnost <- odchylky_hmotnost^2
+soucet_ctvercu_hmotnost <- sum(ctverce_odchylek_hmotnost)
+
 souciny_odchylek <- odchylky_delka * odchylky_hmotnost
 soucet_soucinu_maly <- sum(souciny_odchylek)
 kovariance_maly <- soucet_soucinu_maly / (n_maly - 1L)
+pearson_maly <- stats::cor(maly_vzorek_delka, maly_vzorek_hmotnost)
 
 prumer_maly_delka_txt <-
   formatC(prumer_maly_delka, format = "f", digits = 1, decimal.mark = ",")
@@ -467,6 +490,8 @@ prumer_maly_hmotnost_txt <-
 
 ctverce_txt <-
   formatC(ctverce_odchylek, format = "f", digits = 1, decimal.mark = ",")
+ctverce_hmotnost_txt <-
+  formatC(ctverce_odchylek_hmotnost, format = "f", digits = 0, decimal.mark = ",")
 odchylky_delka_txt <-
   formatC(odchylky_delka, format = "f", digits = 1, decimal.mark = ",")
 odchylky_hmotnost_txt <-
@@ -476,15 +501,19 @@ souciny_txt_maly <-
 
 soucet_ctvercu_txt <-
   formatC(soucet_ctvercu, format = "f", digits = 1, decimal.mark = ",")
+soucet_ctvercu_hmotnost_txt <-
+  formatC(soucet_ctvercu_hmotnost, format = "f", digits = 0, decimal.mark = ",")
 soucet_soucinu_maly_txt <-
   formatC(soucet_soucinu_maly, format = "f", digits = 0, decimal.mark = ",")
 rozptyl_maly_txt <-
   formatC(rozptyl_maly, format = "f", digits = 1, decimal.mark = ",")
 kovariance_maly_txt <-
   formatC(kovariance_maly, format = "f", digits = 0, decimal.mark = ",")
+pearson_maly_txt <-
+  formatC(pearson_maly, format = "f", digits = 2, decimal.mark = ",")
 ```
 
-Abychom rozptyl jedné proměnné vyjádřili přesně číslem, zavedeme jeho přesnou definici a z ní odvozenou `r render_glossary_term("smerodatna-odchylka", display = "směrodatnou odchylku")`. Jako příklad použijeme čtyři tučňáky druhu Adelie (průměr délky ploutve: `r prumer_maly_delka_txt` mm). Tabulka ukazuje délku ploutve každého z nich, odchylku od průměru a čtverec té odchylky:
+Abychom rozptyl jedné proměnné vyjádřili přesně číslem, zavedeme jeho přesnou definici a z ní odvozenou `r render_glossary_term("smerodatna-odchylka", display = "směrodatnou odchylku")`. Jako příklad použijeme malý vzorek `r n_maly` tučňáků druhu Adelie (průměr délky ploutve: `r prumer_maly_delka_txt` mm). Tabulka ukazuje délku ploutve každého z nich, odchylku od průměru a čtverec té odchylky:
 
 ```{r}
 #| label: tabulka-rozptyl
@@ -665,7 +694,7 @@ spearman_neg_txt <-
 
 ## `r render_glossary_term("kovariance", display = "Kovariance")`: jak se dvě proměnné pohybují společně
 
-`r render_glossary_term("rozptyl", display = "Rozptyl")` jedné proměnné popisuje, jak moc jsou její hodnoty rozptýleny kolem `r render_glossary_term("prumer", display = "průměru")`. Jakmile ale sledujeme dvě proměnné zároveň, zajímá nás, zda se jejich odchylky od průměru pohybují *společně*. Když jedinci s nadprůměrně dlouhou ploutví mají také nadprůměrnou hmotnost, jejich odchylky od průměru mají stejné znaménko a součin je kladný. Právě to zachycuje kovariance. Pro stejné čtyři tučňáky Adelie tabulka ukazuje odchylky obou proměnných od jejich průměrů a součin každé dvojice odchylek:
+`r render_glossary_term("rozptyl", display = "Rozptyl")` jedné proměnné popisuje, jak moc jsou její hodnoty rozptýleny kolem `r render_glossary_term("prumer", display = "průměru")`. Jakmile ale sledujeme dvě proměnné zároveň, zajímá nás, zda se jejich odchylky od průměru pohybují *společně*. Když jedinci s nadprůměrně dlouhou ploutví mají také nadprůměrnou hmotnost, jejich odchylky od průměru mají stejné znaménko a součin je kladný. Právě to zachycuje kovariance. Pro stejný malý vzorek `r n_maly` tučňáků Adelie tabulka ukazuje odchylky obou proměnných od jejich průměrů a součin každé dvojice odchylek:
 
 ```{r}
 #| label: tabulka-kovariance
@@ -780,11 +809,45 @@ Oranžové kvadranty (vpravo nahoře a vlevo dole) převažují — jedinci s na
 
 Oranžové kvadranty převažují — jedinci s delší ploutví mají zpravidla i větší hmotnost, a naopak. `r render_glossary_term("kovariance", display = "Kovariance")` proto vychází kladná: přibližně `r kovariance_txt` mm·g.
 
-Kovariance ale závisí na jednotkách. Kdybychom přepočítali délku z milimetrů na centimetry, kovariance by se stokrát zmenšila. Abychom vztah popsali číslem nezávislým na jednotkách, vydělíme kovarianci součinem `r render_glossary_term("smerodatna-odchylka", display = "směrodatných odchylek")` obou proměnných:
+Kovariance ale závisí na jednotkách. Kdybychom přepočítali délku z milimetrů na centimetry, kovariance by se stokrát zmenšila. Abychom vztah popsali číslem nezávislým na jednotkách, musíme ji ještě přepočítat pomocí `r render_glossary_term("smerodatna-odchylka", display = "směrodatných odchylek")` obou proměnných. Nejdřív si to ukážeme na stejném malém vzorku a teprve potom zapíšeme obecný vzorec.
 
-$$r = \frac{\text{cov}(x, y)}{s_x \cdot s_y}$$
+Na stejném malém vzorku `r n_maly` tučňáků si můžeme ukázat i plný výpočet Pearsonova $r$. Potřebujeme pro něj stejnou informaci jako před chvílí u kovariance, ale navíc i čtverce odchylek obou proměnných:
+
+```{r}
+#| label: tabulka-pearson
+#| echo: false
+knitr::kable(
+  data.frame(
+    tucnak            = seq_len(n_maly),
+    odch_delka        = round(odchylky_delka, 1),
+    odch_hmotnost     = round(odchylky_hmotnost, 0),
+    soucin_odchylek   = round(souciny_odchylek, 0),
+    ctverec_delky     = round(ctverce_odchylek, 1),
+    ctverec_hmotnosti = round(ctverce_odchylek_hmotnost, 0)
+  ),
+  col.names = c(
+    "Tučňák",
+    "Odch. délky (mm)",
+    "Odch. hmotnosti (g)",
+    "Součin odchylek",
+    "Čtverec odch. délky",
+    "Čtverec odch. hmotnosti"
+  ),
+  align = "c"
+)
+```
+
+$$\begin{align}
+r &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{\sqrt{\left[(`r odchylky_delka_txt[1]`)^2 + (`r odchylky_delka_txt[2]`)^2 + (`r odchylky_delka_txt[3]`)^2 + (`r odchylky_delka_txt[4]`)^2\right] \left[(`r odchylky_hmotnost_txt[1]`)^2 + (`r odchylky_hmotnost_txt[2]`)^2 + (`r odchylky_hmotnost_txt[3]`)^2 + (`r odchylky_hmotnost_txt[4]`)^2\right]}} \\[6pt]
+  &= \frac{`r souciny_txt_maly[1]` + `r souciny_txt_maly[2]` + `r souciny_txt_maly[3]` + `r souciny_txt_maly[4]`}{\sqrt{(`r ctverce_txt[1]` + `r ctverce_txt[2]` + `r ctverce_txt[3]` + `r ctverce_txt[4]`) \cdot (`r ctverce_hmotnost_txt[1]` + `r ctverce_hmotnost_txt[2]` + `r ctverce_hmotnost_txt[3]` + `r ctverce_hmotnost_txt[4]`)}} \\[6pt]
+  &= \frac{`r soucet_soucinu_maly_txt`}{\sqrt{`r soucet_ctvercu_txt` \cdot `r soucet_ctvercu_hmotnost_txt`}} = `r pearson_maly_txt`
+\end{align}$$
 
 Tímto normalizováním dostaneme Pearsonův korelační koeficient, který leží vždy v intervalu $[-1, +1]$. V našich datech vychází přibližně `r pearson_from_cov_txt` — přesně stejný výsledek jako přímý výpočet (`r pearson_korelace_txt`), jen odvozený jinou cestou.
+
+Obecně tedy můžeme Pearsonovu korelaci zapsat i bez jednotek takto:
+
+$$r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2} \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}$$
 
 ## Korelace jako stručný číselný popis
 
@@ -1855,16 +1918,16 @@ Tahle tabulka není seznam všech možných grafů. Je to bezpečný první krok
 ::: {.callout-note collapse="true"}
 ## Odpověď
 
-Nejlepší odpověď je **B**. Graf ukazuje vzor, ale nestačí k prokázání efektu — k tomu potřebujeme model, odhad velikosti vztahu a kvantifikaci nejistoty.
+Nejlepší odpověď je **B**. Graf ukazuje vzor, ale nestačí k prokázání efektu — k tomu potřebujeme model, odhad velikosti vztahu a kvantifikaci `r render_glossary_term("nejistota", display = "nejistoty")`.
 :::
 
-Častý omyl zní: v grafu je vidět vztah, takže jsme prokázali efekt. To je předčasný závěr. Z grafu zatím víme, že data vypadají zajímavě a že stojí za další analýzu. Nevíme ještě, jak přesně vztah popsat, jak je silný a jak velká je `r render_glossary_term("nejistota", display = "nejistota")` kolem našeho odhadu.
+Častý omyl zní: v grafu je vidět vztah, takže jsme prokázali efekt. To je předčasný závěr. Z grafu zatím víme, že data vypadají zajímavě a že stojí za další analýzu. Nevíme ještě, jak přesně vztah popsat, jak je silný a jak velká je nejistota kolem našeho odhadu.
 
 Správná formulace pro tuto chvíli je skromnější: v datech vidíme vzor, který je biologicky smysluplný a který chceme v dalších lekcích popsat přesněji.
 
 ## Co bude následovat dál
 
-V další lekci navážeme lineárním modelem, který nám pomůže převést viditelný vzor do číselné podoby. Teprve potom bude dávat smysl mluvit o tom, jak velký vztah mezi proměnnými je a jak moc mu věříme.
+V další lekci navážeme `r render_glossary_term("linearni-model", display = "lineárním modelem")`, který nám pomůže převést viditelný vzor do číselné podoby. Teprve potom bude dávat smysl mluvit o tom, jak velký vztah mezi proměnnými je a jak moc mu věříme.
 
 Palmer Penguins ale nabízí i další proměnné, které se budou hodit pro pozdější příklady, například délku a hloubku zobáku. Stejná logika výběru grafu a interpretace vztahu se pak bude dát použít i na jiné biologické otázky než jen na délku ploutve a hmotnost.
 
