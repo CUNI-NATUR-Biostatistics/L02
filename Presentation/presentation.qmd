@@ -9,6 +9,8 @@ format:
     output-ext: "html"
     highlight-style: github-light
     include-in-header: "../theme/fonts-include.html"
+filters:
+  - ../_extensions/EmilHvitfeldt/roughnotation/rough.lua
 ---
 
 ```{r}
@@ -166,6 +168,74 @@ slides_url <-
 .reveal .soft-note {
   font-size: 0.72em;
   color: #6F6F6F;
+}
+
+.reveal .option-panel,
+.reveal .prompt-panel,
+.reveal .signal-panel,
+.reveal .open-panel,
+.reveal .warning-panel {
+  padding: 0.65rem 0.9rem 0.8rem 0.9rem;
+  text-align: left;
+  border-radius: 12px;
+  min-height: 9.5rem;
+}
+
+.reveal .option-panel {
+  background: #FFFAF1;
+  border-left: 6px solid #F3A712;
+}
+
+.reveal .prompt-panel {
+  background: #F5F7FA;
+  border-left: 6px solid #7A8AA0;
+}
+
+.reveal .signal-panel {
+  background: #F7F1FF;
+  border-left: 6px solid #5D2890;
+}
+
+.reveal .open-panel {
+  background: #FFF5DB;
+  border-left: 6px solid #F3A712;
+}
+
+.reveal .warning-panel {
+  background: #FFF1F1;
+  border-left: 6px solid #C94C4C;
+}
+
+.reveal .option-panel h3,
+.reveal .prompt-panel h3,
+.reveal .signal-panel h3,
+.reveal .open-panel h3,
+.reveal .warning-panel h3,
+.reveal .option-panel .panel-title,
+.reveal .prompt-panel .panel-title,
+.reveal .signal-panel .panel-title,
+.reveal .open-panel .panel-title,
+.reveal .warning-panel .panel-title {
+  margin: 0 0 0.35rem 0;
+}
+
+.reveal .panel-title {
+  font-size: 0.92em;
+  font-weight: 700;
+}
+
+.reveal .option-panel p,
+.reveal .option-panel ul,
+.reveal .prompt-panel p,
+.reveal .prompt-panel ul,
+.reveal .signal-panel p,
+.reveal .signal-panel ul,
+.reveal .open-panel p,
+.reveal .open-panel ul,
+.reveal .warning-panel p,
+.reveal .warning-panel ul {
+  font-size: 0.82em;
+  line-height: 1.35;
 }
 </style>
 
@@ -1187,33 +1257,30 @@ include_local_figure("prvni_bodovy_graf.png")
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Hledejte v grafu</p>
-
-### Směr
+::: {.prompt-panel}
+<p class="panel-title">Směr</p>
 
 Je hlavní směr spíš rostoucí, nebo ne?
 :::
+
 :::
 
 ::: {.column width="34%"}
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Hledejte v grafu</p>
-
-### Šířku oblaku
+::: {.prompt-panel}
+<p class="panel-title">Šířku oblaku</p>
 
 Je oblak bodů úzký, nebo široký?
 :::
+
 :::
 
 ::: {.column width="33%"}
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Hledejte v grafu</p>
-
-### Místa ke zpomalení
+::: {.prompt-panel}
+<p class="panel-title">Místa ke zpomalení</p>
 
 Vidíte body nebo části grafu, kde stojí za to ptát se dál?
 :::
+
 :::
 
 ::::
@@ -1239,10 +1306,8 @@ include_local_figure("stejna_data_jine_osy.png")
 include_local_figure("rozptyl_podle_delky.png")
 ```
 
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Při podobné ploutvi</p>
-
-### Hmotnost se stále liší
+::: {.blockquote}
+<p class="panel-title">Při podobné ploutvi</p>
 
 - I v úzkém svislém pruhu vidíme více různých hmotností.
 - Rozptyl tedy nečteme jen podle hlavního směru oblaku.
@@ -1259,10 +1324,8 @@ include_local_figure("rozptyl_podle_delky.png")
 include_local_figure("rozptyl_podle_hmotnosti.png")
 ```
 
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Při podobné hmotnosti</p>
-
-### Délka ploutve se stále liší
+::: {.blockquote}
+<p class="panel-title">Při podobné hmotnosti</p>
 
 - Stejně můžeme číst i vodorovný směr.
 - Rozptyl je vlastnost vztahu, ne jen jedna odchylka od čáry.
@@ -1283,10 +1346,8 @@ Co už po těchto třech pohledech umíme říct?
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-known}
-<p class="kicker">Co už vidíme</p>
-
-### Signál
+::: {.signal-panel}
+<p class="panel-title">Signál</p>
 
 - Delší ploutve bývají spojeny s vyšší hmotností.
 - Celkový směr je zřetelně rostoucí.
@@ -1294,10 +1355,8 @@ Co už po těchto třech pohledech umíme říct?
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-open}
-<p class="kicker">Co ještě zůstává otevřené</p>
-
-### Rozptyl
+::: {.open-panel}
+<p class="panel-title">Rozptyl</p>
 
 - Vztah není dokonale těsný.
 - Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
@@ -1317,30 +1376,30 @@ Která formulace je v této chvíli nejlepší?
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost A</p>
 
-### Příliš silné tvrzení
+### A. Příliš silné tvrzení
 
 V grafu je vidět vztah, takže jsme prokázali efekt.
 :::
 :::
 
 ::: {.column width="34%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost B</p>
 
-### Přiměřený závěr
+### B. Přiměřený závěr
 
 V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
 :::
 :::
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost C</p>
 
-### Příliš slabé tvrzení
+### C. Příliš slabé tvrzení
 
 Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
 :::
@@ -1357,10 +1416,8 @@ Když nehlasujeme: napište si písmeno, které byste obhajovali před spolužá
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-known}
-<p class="kicker">Co už víme</p>
-
-### Viditelný vzor je důležitý začátek
+::: {.signal-panel}
+<p class="panel-title">Viditelný vzor je důležitý začátek</p>
 
 - Vidíme směr vztahu.
 - Vidíme rozptyl kolem hlavního směru.
@@ -1369,10 +1426,8 @@ Když nehlasujeme: napište si písmeno, které byste obhajovali před spolužá
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-open}
-<p class="kicker">Co ještě nemáme</p>
-
-### Zatím chybí další krok
+::: {.open-panel}
+<p class="panel-title">Zatím chybí další krok</p>
 
 - model, který vztah popíše přesněji
 - odhad velikosti vztahu
@@ -1384,7 +1439,7 @@ Když nehlasujeme: napište si písmeno, které byste obhajovali před spolužá
 
 ## Nejdřív malý příklad v R
 
-Toto je záměrně malý didaktický příklad se čtyřmi dvojicemi hodnot, jen abychom viděli logiku příkazu.
+Toto je záměrně [malý didaktický příklad]{.rn-fragment rn-type=underline rn-color="#F3A712" rn-strokewidth=3 rn-padding=2}, jen abychom viděli logiku příkazu.
 
 :::: {.columns}
 
@@ -1474,30 +1529,30 @@ Než přidáme další vrstvu, odhadněte:
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost A</p>
 
-### Barvy nic nepřidají
+### A. Barvy nic nepřidají
 
 Barvy nic důležitého nezmění.
 :::
 :::
 
 ::: {.column width="34%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost B</p>
 
-### Skupiny mohou něco vysvětlit
+### B. Skupiny mohou něco vysvětlit
 
 Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
 :::
 :::
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost C</p>
 
-### Vztah by se měl ztratit
+### C. Vztah by se měl ztratit
 
 Po rozdělení podle druhu zmizí veškerý vztah.
 :::
@@ -1522,10 +1577,8 @@ include_local_figure("graf_podle_druhu.png")
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-known}
-<p class="kicker">Co zůstalo stejné</p>
-
-### Celkový vztah nezmizel
+::: {.signal-panel}
+<p class="panel-title">Celkový vztah nezmizel</p>
 
 - Delší ploutve jsou stále spojeny s vyšší hmotností.
 - Hlavní směr oblaku pořád dává biologický smysl.
@@ -1533,10 +1586,8 @@ include_local_figure("graf_podle_druhu.png")
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-open}
-<p class="kicker">Co se zpřesnilo</p>
-
-### Rozptyl už není jen „šum“
+::: {.open-panel}
+<p class="panel-title">Rozptyl už není jen „šum“</p>
 
 - Část variability souvisí s tím, že mícháme více druhů dohromady.
 - Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
@@ -1616,23 +1667,19 @@ include_local_figure("kovariance_kvadranty.png")
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">V milimetrech a gramech</p>
+### V milimetrech a gramech
 
-### Kovariance `r kovariance_mm_g_txt`
+Kovariance `r kovariance_mm_g_txt`
 
 Směr vztahu je kladný, ale číslo pořád závisí na použitých jednotkách.
 :::
-:::
 
 ::: {.column width="50%"}
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">V centimetrech a kilogramech</p>
+### V centimetrech a kilogramech
 
-### Kovariance `r kovariance_cm_kg_txt`
+Kovariance `r kovariance_cm_kg_txt`
 
 Biologický vztah je stejný, ale velikost čísla se po změně jednotek změní.
-:::
 :::
 
 ::::
@@ -1646,10 +1693,8 @@ Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="a
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .rule-card}
-<p class="kicker">Pearson</p>
-
-### Lineární čtení vztahu
+::: {.blockquote}
+<p class="panel-title">Lineární čtení vztahu</p>
 
 - shrnuje hlavně lineární vztah
 - v našich datech vychází `r pearson_korelace_txt`
@@ -1657,10 +1702,8 @@ Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="a
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .rule-card}
-<p class="kicker">Spearman</p>
-
-### Pořadí a monotónní směr
+::: {.blockquote}
+<p class="panel-title">Pořadí a monotónní směr</p>
 
 - sleduje pořadí hodnot a monotónní vztah
 - v našich datech vychází `r spearman_korelace_txt`
@@ -1680,30 +1723,30 @@ Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card .compact-card}
+::: {.option-panel}
 <p class="kicker">Možnost A</p>
 
-### Silný lineární vztah
+### A. Silný lineární vztah
 
 Bez zvláštních bodů.
 :::
 :::
 
 ::: {.column width="34%"}
-::: {.slide-card .vote-card .compact-card}
+::: {.option-panel}
 <p class="kicker">Možnost B</p>
 
-### Žádná zřetelná souvislost
+### B. Žádná zřetelná souvislost
 
 Obě čísla by měla být nízká.
 :::
 :::
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card .compact-card}
+::: {.option-panel}
 <p class="kicker">Možnost C</p>
 
-### Monotónní, ale zakřivený vztah
+### C. Monotónní, ale zakřivený vztah
 
 Pořadí sedí, linearita už ne úplně.
 :::
@@ -1736,10 +1779,8 @@ include_local_figure("ctyri_situace_korelace.png")
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-known}
-<p class="kicker">Dobrá zpráva</p>
-
-### Obě korelace si tu rozumějí
+::: {.signal-panel}
+<p class="panel-title">Obě korelace si tu rozumějí</p>
 
 - U tučňáků jsou Pearson i Spearman velmi podobné.
 - Celkový vztah je monotónní a zároveň docela blízký lineárnímu.
@@ -1747,10 +1788,8 @@ include_local_figure("ctyri_situace_korelace.png")
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-open}
-<p class="kicker">Co tím pořád nevysvětlíme</p>
-
-### Jedno číslo nestačí na celou biologii
+::: {.open-panel}
+<p class="panel-title">Jedno číslo nestačí na celou biologii</p>
 
 - Barva podle druhu ukazuje další strukturu.
 - Samotná korelace neřekne, odkud se vztah bere.
@@ -1801,10 +1840,8 @@ cor(
 include_local_figure("maly_bodovy_graf.png")
 ```
 
-::: {.slide-card .rule-card .compact-card}
-<p class="kicker">Co ten příkaz shrnuje</p>
-
-### Pořadí i směr jdou stejně
+::: {.blockquote}
+<p class="panel-title">Pořadí i směr jdou stejně</p>
 
 - Delší ploutev znamená v tomto malém příkladu vyšší hmotnost.
 - Číslo jen shrne to, co už z těchto čtyř bodů vidíme.
@@ -1872,30 +1909,30 @@ Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnos
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost A</p>
 
-### Vysoká korelace už stačí
+### A. Vysoká korelace už stačí
 
 Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
 :::
 :::
 
 ::: {.column width="34%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost B</p>
 
-### Asociace ano, kauzalita ne
+### B. Asociace ano, kauzalita ne
 
 Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
 :::
 :::
 
 ::: {.column width="33%"}
-::: {.slide-card .vote-card}
+::: {.option-panel}
 <p class="kicker">Možnost C</p>
 
-### Shoda dvou koeficientů je důkaz
+### C. Shoda dvou koeficientů je důkaz
 
 Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
 :::
@@ -1912,10 +1949,8 @@ Když nehlasujeme: zkuste jednou větou obhájit možnost, kterou byste vybrali.
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.slide-card .checkpoint-known}
-<p class="kicker">Co korelace říká</p>
-
-### Společná změna dvou proměnných
+::: {.signal-panel}
+<p class="panel-title">Společná změna dvou proměnných</p>
 
 - Korelace popisuje, že se dvě proměnné mění společně.
 - Pomáhá shrnout směr a těsnost vztahu.
@@ -1923,10 +1958,8 @@ Když nehlasujeme: zkuste jednou větou obhájit možnost, kterou byste vybrali.
 :::
 
 ::: {.column width="50%"}
-::: {.slide-card .warning-card}
-<p class="kicker">Co korelace neříká</p>
-
-### Sama neoddělí příčinu
+::: {.warning-panel}
+<p class="panel-title">[Sama neoddělí příčinu]{.rn-fragment rn-type=box rn-color="#C94C4C" rn-strokewidth=2 rn-padding=3}</p>
 
 - neoddělí příčinu od dalších proměnných nebo společného mechanismu
 - u tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla
@@ -1941,29 +1974,17 @@ Když nehlasujeme: zkuste jednou větou obhájit možnost, kterou byste vybrali.
 
 ::: {.column width="58%"}
 
-::: {.slide-card .compact-card}
-<p class="kicker">Dvojice 1</p>
-
 ### Délka ploutve × hmotnost
 
 Obě proměnné jsou numerické.
-:::
-
-::: {.slide-card .compact-card}
-<p class="kicker">Dvojice 2</p>
 
 ### Druh × hmotnost
 
 Jedna proměnná tvoří skupiny, druhá je numerická.
-:::
-
-::: {.slide-card .compact-card}
-<p class="kicker">Dvojice 3</p>
 
 ### Druh × ostrov
 
 Obě proměnné jsou kategoriální.
-:::
 
 :::
 
@@ -1979,10 +2000,8 @@ Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
 - tabulka četností nebo dlaždicový graf
 :::
 
-::: {.slide-card .checkpoint-open .compact-card}
-<p class="kicker">Začněte vždy stejně</p>
-
-### Co si řeknu jako první?
+::: {.open-panel}
+<p class="panel-title">Co si řeknu jako první?</p>
 
 - Jsou proměnné numerické, nebo kategoriální?
 - Co z jejich vztahu chci v grafu přečíst?
@@ -2005,33 +2024,21 @@ include_local_figure("tri_rychle_priklady.png")
 :::: {.columns}
 
 ::: {.column width="33%"}
-::: {.slide-card .rule-card}
-<p class="kicker">Dvě numerické proměnné</p>
-
 ### Bodový graf
 
 Chceme číst směr vztahu a rozptyl bodů.
 :::
-:::
 
 ::: {.column width="34%"}
-::: {.slide-card .rule-card}
-<p class="kicker">Kategoriální + numerická</p>
-
 ### Boxplot nebo body ve skupinách
 
 Chceme porovnat rozdíly mezi skupinami.
 :::
-:::
 
 ::: {.column width="33%"}
-::: {.slide-card .rule-card}
-<p class="kicker">Dvě kategoriální proměnné</p>
-
 ### Tabulka četností nebo dlaždicový graf
 
 Chceme číst četnosti kombinací.
-:::
 :::
 
 ::::
@@ -2053,10 +2060,8 @@ Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc opr
 :::
 
 ::: {.column width="42%"}
-::: {.slide-card .checkpoint-open .compact-card}
-<p class="kicker">Začněte touto větou</p>
-
-### Přímka by nám mohla ukázat...
+::: {.open-panel}
+<p class="panel-title">Přímka by nám mohla ukázat...</p>
 
 - směr a velikost změny
 - typický sklon vztahu
