@@ -75,6 +75,43 @@ slides_url <-
 ```
 
 <style>
+.reveal .slides section:not(.center) > h2 {
+  margin-bottom: 0.58em;
+}
+
+.reveal .slides section:not(.center) > h2 + p,
+.reveal .slides section:not(.center) > h2 + .columns,
+.reveal .slides section:not(.center) > h2 + .cell,
+.reveal .slides section:not(.center) > h2 + .thought-box,
+.reveal .slides section:not(.center) > h2 + .blockquote,
+.reveal .slides section:not(.center) > h2 + .takeaway-strip {
+  margin-top: 0.55rem;
+}
+
+.reveal .slides section:not(.center) > p + .columns,
+.reveal .slides section:not(.center) > p + .cell,
+.reveal .slides section:not(.center) > p + .thought-box,
+.reveal .slides section:not(.center) > p + .blockquote,
+.reveal .slides section:not(.center) > p + .takeaway-strip {
+  margin-top: 1.2rem;
+}
+
+.reveal .slides section:not(.center) > .cell + .columns,
+.reveal .slides section:not(.center) > .cell + .blockquote,
+.reveal .slides section:not(.center) > .cell + .takeaway-strip,
+.reveal .slides section:not(.center) > .columns + .thought-box,
+.reveal .slides section:not(.center) > .columns + .takeaway-strip,
+.reveal .slides section:not(.center) > .blockquote + .takeaway-strip {
+  margin-top: 1.28rem;
+}
+
+.reveal .slides section:not(.center) > .cell + .takeaway-strip.compact-strip,
+.reveal .slides section:not(.center) > .columns + .takeaway-strip.compact-strip,
+.reveal .slides section:not(.center) > .blockquote + .takeaway-strip.compact-strip,
+.reveal .slides section:not(.center) > p + .takeaway-strip.compact-strip {
+  margin-top: 0.72rem;
+}
+
 .reveal .slide-card {
   border-radius: 18px;
   padding: 0.75rem 1rem 0.95rem 1rem;
@@ -242,6 +279,29 @@ slides_url <-
 .reveal .columns.align-top p,
 .reveal .columns.align-top pre {
   margin-top: 0;
+}
+
+.reveal .blockquote {
+  padding: 0.8rem 1rem;
+  border-radius: 0 12px 12px 0;
+  background: #F7F1FF;
+  border-left: 6px solid #5D2890;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
+
+.reveal .blockquote p {
+  margin: 0;
+}
+
+.reveal .blockquote ul {
+  margin: 0.35rem 0 0 1.15rem;
+}
+
+.reveal .blockquote p,
+.reveal .blockquote ul {
+  font-size: 0.82em;
+  line-height: 1.28;
 }
 
 .reveal .compact-blockquote {
@@ -1243,7 +1303,7 @@ ggview::save_ggplot(
 
 ## Výsledky učení
 
-Po dnešní přednášce budete schopni:
+### Po dnešní přednášce budete schopni:
 
 ::: {.incremental}
 - přečíst první bodový graf pro dvě numerické proměnné
@@ -1258,7 +1318,7 @@ Po dnešní přednášce budete schopni:
 
 ::: {.column width="55%"}
 
-Chceme zjistit:
+### Chceme zjistit:
 
 ::: {.blockquote}
 Mají tučňáci s delší ploutví vyšší tělesnou hmotnost?
@@ -1266,7 +1326,7 @@ Mají tučňáci s delší ploutví vyšší tělesnou hmotnost?
 
 Dnes ještě nebudeme testovat hypotézu.
 
-Dnes chceme umět:
+### Dnes chceme umět:
 
 ::: {.incremental}
 - dobře se podívat na data
@@ -1284,11 +1344,13 @@ Dnes chceme umět:
 include_local_figure("lter_penguins.png")
 ```
 
-Ilustrace: Allison Horst
-
 :::
 
 ::::
+
+::: {.footer}
+Ilustrace: [Allison Horst](https://allisonhorst.com/)
+:::
 
 ## Odhad před prvním grafem
 
@@ -1296,7 +1358,7 @@ Který popis čekáte nejspíš?
 
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Téměř jisté pravidlo</p>
 
@@ -1304,15 +1366,20 @@ Delší ploutev téměř vždy znamená vyšší hmotnost.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Trend, ale ne dokonale</p>
-
 Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Bez vztahu</p>
 
@@ -1336,11 +1403,13 @@ include_local_figure("prvni_bodovy_graf.png")
 
 ## Než něco pojmenujeme
 
-*Nejdřív 20 sekund ticha: napište si jednu větu, co z grafu opravdu vidíte.*
+*Napište si jednu větu, co z grafu opravdu vidíte( 20 sekund ticha)*
+
+<br>
 
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.prompt-panel}
 <p class="panel-title">Směr</p>
 
@@ -1349,7 +1418,10 @@ Je hlavní směr spíš rostoucí, nebo ne?
 
 :::
 
-::: {.column width="34%"}
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
 ::: {.prompt-panel}
 <p class="panel-title">Šířku oblaku</p>
 
@@ -1358,7 +1430,10 @@ Je oblak bodů úzký, nebo široký?
 
 :::
 
-::: {.column width="33%"}
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
 ::: {.prompt-panel}
 <p class="panel-title">Místa ke zpomalení</p>
 
@@ -1390,11 +1465,6 @@ include_local_figure("stejna_data_jine_osy.png")
 include_local_figure("rozptyl_podle_delky.png")
 ```
 
-::: {.blockquote .compact-blockquote}
-<p class="panel-title">Při podobné ploutvi</p>
-
-I v úzkém svislém pruhu vidíme různé hmotnosti, takže rozptyl nečteme jen podle hlavního směru oblaku.
-:::
 
 :::
 
@@ -1407,12 +1477,6 @@ I v úzkém svislém pruhu vidíme různé hmotnosti, takže rozptyl nečteme je
 include_local_figure("rozptyl_podle_hmotnosti.png")
 ```
 
-::: {.blockquote .compact-blockquote}
-<p class="panel-title">Při podobné hmotnosti</p>
-
-Stejně můžeme číst i vodorovný směr: rozptyl je vlastnost vztahu, ne jen jedna odchylka od čáry.
-:::
-
 :::
 
 ::::
@@ -1424,6 +1488,8 @@ Když čteme bodový graf, díváme se současně na <span class="answer-highlig
 ## Vracíme se k biologické otázce
 
 Co už po těchto třech pohledech umíme říct?
+
+<br>
 
 :::: {.columns}
 
@@ -1447,6 +1513,8 @@ Co už po těchto třech pohledech umíme říct?
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
 Už máme <span class="answer-highlight">biologicky smysluplný vzor</span>, ale ještě ne model, odhad efektu ani nejistotu.
 :::
@@ -1455,9 +1523,11 @@ Už máme <span class="answer-highlight">biologicky smysluplný vzor</span>, ale
 
 Která formulace je v této chvíli nejlepší?
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Příliš silné tvrzení</p>
 
@@ -1465,7 +1535,7 @@ V grafu je vidět vztah, takže jsme prokázali efekt.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">[Přiměřený závěr]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
 
@@ -1473,7 +1543,7 @@ V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Příliš slabé tvrzení</p>
 
@@ -1483,11 +1553,15 @@ Protože body neleží na jedné přímce, mezi proměnnými žádný vztah nen�
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
 Když nehlasujeme: napište si závěr, který byste obhajovali před spolužákem.
 :::
 
 ## Nejlépe funguje přiměřený závěr
+
+<br>
 
 :::: {.columns}
 
@@ -1599,9 +1673,11 @@ include_local_figure("prvni_bodovy_graf.png")
 
 Než přidáme další vrstvu, odhadněte:
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Barvy nic nepřidají</p>
 
@@ -1609,7 +1685,7 @@ Barvy nic důležitého nezmění.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">[Skupiny mohou něco vysvětlit]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
 
@@ -1617,7 +1693,7 @@ Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Vztah by se měl ztratit</p>
 
@@ -1626,6 +1702,8 @@ Po rozdělení podle druhu zmizí veškerý vztah.
 :::
 
 ::::
+
+<br>
 
 ::: {.takeaway-strip}
 Když nehlasujeme: zvedněte ruku pro závěr, který byste chtěli ověřit jako první.
@@ -1640,6 +1718,8 @@ include_local_figure("graf_podle_druhu.png")
 ```
 
 ## Co se po obarvení změnilo?
+
+<br>
 
 :::: {.columns}
 
@@ -1667,6 +1747,8 @@ include_local_figure("graf_podle_druhu.png")
 
 Nejdřív pomocná myšlenka:
 
+<br>
+
 ::: {.thought-box}
 Když se obě proměnné pohybují <span class="answer-highlight">stejným směrem od svého průměru</span>, mělo by to zvyšovat souhrnné číslo vztahu.
 :::
@@ -1683,9 +1765,11 @@ include_local_figure("kovariance_stred.png")
 
 Než něco vybarvíme, odhadněte:
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">[Vpravo nahoře a vlevo dole]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
 
@@ -1693,7 +1777,7 @@ Obě proměnné jsou tam na stejné straně od svého průměru.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Vlevo nahoře a vpravo dole</p>
 
@@ -1701,7 +1785,7 @@ Jedna proměnná je nad průměrem a druhá pod ním.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Všechny stejně</p>
 
@@ -1710,6 +1794,8 @@ Na poloze bodů vůči středu by nezáleželo.
 :::
 
 ::::
+
+<br>
 
 ::: {.takeaway-strip}
 Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
@@ -1745,11 +1831,15 @@ Biologický vztah je stejný, ale velikost čísla se po změně jednotek změn�
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
 Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="answer-highlight">bezrozměrný souhrn</span>: korelaci.
 :::
 
 ## Dvě čísla, která budeme používat
+
+<br>
 
 :::: {.columns}
 
@@ -1773,6 +1863,8 @@ Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="a
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
 Obě čísla jsou <span class="answer-highlight">doplněk ke grafu</span>, ne jeho náhrada.
 :::
@@ -1781,9 +1873,11 @@ Obě čísla jsou <span class="answer-highlight">doplněk ke grafu</span>, ne je
 
 Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Silný lineární vztah</p>
 
@@ -1791,7 +1885,7 @@ Bez zvláštních bodů.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Žádná zřetelná souvislost</p>
 
@@ -1799,7 +1893,7 @@ Obě čísla by měla být nízká.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">[Monotónní, ale zakřivený vztah]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
 
@@ -1808,6 +1902,8 @@ Pořadí sedí, linearita už ne úplně.
 :::
 
 ::::
+
+<br>
 
 ::: {.takeaway-strip}
 Když nehlasujeme: napište si situaci, kterou byste vybrali, a krátce proč.
@@ -1831,6 +1927,8 @@ include_local_figure("ctyri_situace_korelace.png")
 ```
 
 ## Co nám to říká právě o tučňácích?
+
+<br>
 
 :::: {.columns}
 
@@ -1860,7 +1958,7 @@ Použijeme stejný malý didaktický příklad, jen místo obrázku teď zkusím
 
 :::: {.columns .align-top}
 
-::: {.column width="55%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: kod-male-korelace-v-r
@@ -1887,7 +1985,7 @@ cor(
 
 :::
 
-::: {.column width="45%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: zobrazit-maly-bodovy-graf-pro-korelaci
@@ -1963,6 +2061,8 @@ cor(
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip .compact-strip}
 Krátký výstup čteme takto: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
 :::
@@ -1971,9 +2071,11 @@ Krátký výstup čteme takto: Pearson zdůrazňuje lineární vztah, Spearman p
 
 Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Vysoká korelace už stačí</p>
 
@@ -1981,7 +2083,7 @@ Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
 :::
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">[Asociace ano, kauzalita ne]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
 
@@ -1989,7 +2091,7 @@ Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
 :::
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ::: {.option-panel}
 <p class="answer-title">Shoda dvou koeficientů je důkaz</p>
 
@@ -1999,11 +2101,15 @@ Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
 Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
 :::
 
 ## Korelace ukazuje asociaci, ne příčinu
+
+<br>
 
 :::: {.columns}
 
@@ -2059,16 +2165,16 @@ Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
 - tabulka četností nebo dlaždicový graf
 :::
 
+:::
+
+::::
+
 ::: {.open-panel}
 <p class="panel-title">Co si řeknu jako první?</p>
 
 - Jsou proměnné numerické, nebo kategoriální?
 - Co z jejich vztahu chci v grafu přečíst?
 :::
-
-:::
-
-::::
 
 ## Tři rychlé příklady
 
@@ -2082,19 +2188,19 @@ include_local_figure("tri_rychle_priklady.png")
 
 :::: {.columns}
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ### Bodový graf
 
 Chceme číst směr vztahu a rozptyl bodů.
 :::
 
-::: {.column width="34%"}
+::: {.column width="32%"}
 ### Boxplot nebo body ve skupinách
 
 Chceme porovnat rozdíly mezi skupinami.
 :::
 
-::: {.column width="33%"}
+::: {.column width="32%"}
 ### Tabulka četností nebo dlaždicový graf
 
 Chceme číst četnosti kombinací.
