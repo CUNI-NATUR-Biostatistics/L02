@@ -2,7 +2,7 @@
 format:
   revealjs:
     slide-number: true
-    theme: [default, ../theme/presentation_theme.scss]
+    theme: [default, ../theme/presentation_theme.scss, ../theme/presentation_components.scss]
     embed-resources: true
     preview-links: false
     output-file: "presentation"
@@ -74,297 +74,6 @@ slides_url <-
   )
 ```
 
-<style>
-.reveal .slides section:not(.center) > h2 {
-  margin-bottom: 0.58em;
-}
-
-.reveal .slides section:not(.center) > h2 + p,
-.reveal .slides section:not(.center) > h2 + .columns,
-.reveal .slides section:not(.center) > h2 + .cell,
-.reveal .slides section:not(.center) > h2 + .thought-box,
-.reveal .slides section:not(.center) > h2 + .blockquote,
-.reveal .slides section:not(.center) > h2 + .takeaway-strip {
-  margin-top: 0.55rem;
-}
-
-.reveal .slides section:not(.center) > p + .columns,
-.reveal .slides section:not(.center) > p + .cell,
-.reveal .slides section:not(.center) > p + .thought-box,
-.reveal .slides section:not(.center) > p + .blockquote,
-.reveal .slides section:not(.center) > p + .takeaway-strip {
-  margin-top: 1.2rem;
-}
-
-.reveal .slides section:not(.center) > .cell + .columns,
-.reveal .slides section:not(.center) > .cell + .blockquote,
-.reveal .slides section:not(.center) > .cell + .takeaway-strip,
-.reveal .slides section:not(.center) > .columns + .thought-box,
-.reveal .slides section:not(.center) > .columns + .takeaway-strip,
-.reveal .slides section:not(.center) > .blockquote + .takeaway-strip {
-  margin-top: 1.28rem;
-}
-
-.reveal .slides section:not(.center) > .cell + .takeaway-strip.compact-strip,
-.reveal .slides section:not(.center) > .columns + .takeaway-strip.compact-strip,
-.reveal .slides section:not(.center) > .blockquote + .takeaway-strip.compact-strip,
-.reveal .slides section:not(.center) > p + .takeaway-strip.compact-strip {
-  margin-top: 0.72rem;
-}
-
-.reveal .slide-card {
-  border-radius: 18px;
-  padding: 0.75rem 1rem 0.95rem 1rem;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  text-align: left;
-  min-height: 10rem;
-  margin-bottom: 0.7rem;
-}
-
-.reveal .slide-card + .slide-card {
-  margin-top: 0.9rem;
-}
-
-.reveal .compact-card {
-  min-height: 8rem;
-}
-
-.reveal .slide-card h3 {
-  margin: 0 0 0.35rem 0;
-  color: #2E2E2E;
-}
-
-.reveal .slide-card p,
-.reveal .slide-card ul {
-  font-size: 0.82em;
-  line-height: 1.35;
-}
-
-.reveal .slide-card ul {
-  margin-top: 0.35rem;
-}
-
-.reveal .kicker {
-  margin: 0 0 0.35rem 0;
-  font-size: 0.48em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  color: #6F6F6F;
-}
-
-.reveal .vote-card {
-  background: #FFFAF1;
-  border-top: 7px solid #F3A712;
-}
-
-.reveal .checkpoint-known {
-  background: #F7F1FF;
-  border-top: 7px solid #5D2890;
-}
-
-.reveal .checkpoint-open {
-  background: #FFF5DB;
-  border-top: 7px solid #F3A712;
-}
-
-.reveal .warning-card {
-  background: #FFF1F1;
-  border-top: 7px solid #C94C4C;
-}
-
-.reveal .rule-card {
-  background: #EEF6FF;
-  border-top: 7px solid #3A77B7;
-}
-
-.reveal .takeaway-strip {
-  margin-top: 0.8rem;
-  border-radius: 16px;
-  padding: 0.6rem 0.9rem;
-  text-align: left;
-  font-size: 0.8em;
-  background: linear-gradient(90deg, rgba(93, 40, 144, 0.12), rgba(243, 167, 18, 0.16));
-  border-left: 6px solid #5D2890;
-}
-
-.reveal .takeaway-strip p {
-  margin: 0;
-}
-
-.reveal .answer-highlight {
-  color: #5D2890;
-  font-weight: 700;
-}
-
-.reveal .warning-highlight {
-  color: #C94C4C;
-  font-weight: 700;
-}
-
-.reveal .soft-note {
-  font-size: 0.72em;
-  color: #6F6F6F;
-}
-
-.reveal .option-panel,
-.reveal .prompt-panel,
-.reveal .signal-panel,
-.reveal .open-panel,
-.reveal .warning-panel {
-  padding: 0.65rem 0.9rem 0.8rem 0.9rem;
-  text-align: left;
-  border-radius: 12px;
-  min-height: 9.5rem;
-}
-
-.reveal .option-panel {
-  background: #FFFAF1;
-  border-left: 6px solid #F3A712;
-}
-
-.reveal .prompt-panel {
-  background: #F5F7FA;
-  border-left: 6px solid #7A8AA0;
-}
-
-.reveal .signal-panel {
-  background: #F7F1FF;
-  border-left: 6px solid #5D2890;
-}
-
-.reveal .open-panel {
-  background: #FFF5DB;
-  border-left: 6px solid #F3A712;
-}
-
-.reveal .warning-panel {
-  background: #FFF1F1;
-  border-left: 6px solid #C94C4C;
-}
-
-.reveal .option-panel h3,
-.reveal .prompt-panel h3,
-.reveal .signal-panel h3,
-.reveal .open-panel h3,
-.reveal .warning-panel h3,
-.reveal .option-panel .panel-title,
-.reveal .prompt-panel .panel-title,
-.reveal .signal-panel .panel-title,
-.reveal .open-panel .panel-title,
-.reveal .warning-panel .panel-title {
-  margin: 0 0 0.35rem 0;
-}
-
-.reveal .panel-title {
-  font-size: 0.92em;
-  font-weight: 700;
-}
-
-.reveal .option-panel .answer-title {
-  margin: 0 0 0.35rem 0;
-  font-size: 1.38em;
-  line-height: 1.08;
-  font-family: "Source Sans 3", "Arial Narrow", Arial, sans-serif;
-  font-weight: 600;
-  color: #5D2890;
-  letter-spacing: -0.02em;
-}
-
-.reveal .columns.align-top {
-  align-items: flex-start;
-}
-
-.reveal .columns.align-top .cell,
-.reveal .columns.align-top p,
-.reveal .columns.align-top pre {
-  margin-top: 0;
-}
-
-.reveal .blockquote {
-  padding: 0.8rem 1rem;
-  border-radius: 0 12px 12px 0;
-  background: #F7F1FF;
-  border-left: 6px solid #5D2890;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
-  text-align: left;
-}
-
-.reveal .blockquote p {
-  margin: 0;
-}
-
-.reveal .blockquote ul {
-  margin: 0.35rem 0 0 1.15rem;
-}
-
-.reveal .blockquote p,
-.reveal .blockquote ul {
-  font-size: 0.82em;
-  line-height: 1.28;
-}
-
-.reveal .compact-blockquote {
-  margin-top: 0.3rem;
-  padding: 0.45rem 0.7rem;
-}
-
-.reveal .compact-blockquote p,
-.reveal .compact-blockquote ul {
-  font-size: 0.74em;
-  line-height: 1.22;
-}
-
-.reveal .compact-strip {
-  margin-top: 0.45rem;
-  padding: 0.45rem 0.75rem;
-  font-size: 0.72em;
-}
-
-.reveal .thought-box {
-  margin-top: 0.55rem;
-  padding: 0.95rem 1.1rem;
-  border-radius: 16px;
-  background: #F7F1FF;
-  border-left: 8px solid #5D2890;
-  text-align: left;
-  font-size: 0.95em;
-  line-height: 1.35;
-}
-
-.reveal .result-panel {
-  margin-top: 0.35rem;
-  padding: 0.55rem 0.8rem;
-  border-radius: 12px;
-  background: #F8F9FA;
-  border-left: 6px solid #7A8AA0;
-  text-align: left;
-}
-
-.reveal .result-panel p {
-  margin: 0;
-}
-
-.reveal .result-panel code {
-  background: transparent;
-  font-size: 1em;
-}
-
-.reveal .option-panel p,
-.reveal .option-panel ul,
-.reveal .prompt-panel p,
-.reveal .prompt-panel ul,
-.reveal .signal-panel p,
-.reveal .signal-panel ul,
-.reveal .open-panel p,
-.reveal .open-panel ul,
-.reveal .warning-panel p,
-.reveal .warning-panel ul {
-  font-size: 0.82em;
-  line-height: 1.35;
-}
-</style>
-
 ```{r}
 #| label: pripravit-data
 #| include: false
@@ -429,7 +138,300 @@ strip_delka_lwr <- 193
 strip_delka_upr <- 197
 strip_hmotnost_lwr <- 4100L
 strip_hmotnost_upr <- 4300L
+```
 
+## Vztahy dvou proměnných a vizualizace
+
+<br>
+
+::: {.text-color-white .text-font-heading .text-size-heading1 .text-bold}
+`r display_name`
+:::
+
+<br>
+
+[👤](https://ondrejmottl.github.io/) Ondřej Mottl
+
+[Moodle](https://dl2.cuni.cz/course/view.php?id=106)
+
+## Výsledky učení
+
+### Po dnešní přednášce budete schopni:
+
+::: {.incremental}
+- přečíst první bodový graf pro dvě numerické proměnné
+- vysvětlit, co nám ukáže rozptyl a co přidá korelace
+- zvolit vhodný první graf podle typu dvojice proměnných
+- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
+:::
+
+## Biologická otázka
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+### Chceme zjistit:
+
+::: {.blockquote}
+Mají tučňáci s delší ploutví vyšší tělesnou hmotnost?
+:::
+
+Dnes ještě nebudeme testovat hypotézu.
+
+### Dnes chceme umět:
+
+::: {.incremental}
+- dobře se podívat na data
+- všimnout si směru a rozptylu
+- poznat, co už z grafu říct můžeme a co ještě ne
+:::
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| echo: false
+#| out.width: "100%"
+include_local_figure("lter_penguins.png")
+```
+
+:::
+
+::::
+
+::: {.footer}
+Ilustrace: [Allison Horst](https://allisonhorst.com/)
+:::
+
+```{r}
+#| label: vytvorit-scatter-zakladni
+#| include: false
+#| message: false
+#| warning: false
+plot_prvni_bodovy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.72,
+    size = 2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_prvni_bodovy,
+  file = here::here(path_materials, "prvni_bodovy_graf.png")
+)
+
+plot_maly_bodovy <-
+  ggplot2::ggplot(
+    data = data_maly_priklad_vztahu,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_highlight,
+    size = 3.4,
+    alpha = 0.9
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Čtyři konkrétní dvojice hodnot"
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(184, 206),
+    ylim = c(3700, 4600)
+  ) +
+  ggview::canvas(
+    width = 1000,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_maly_bodovy,
+  file = here::here(path_materials, "maly_bodovy_graf.png")
+)
+
+plot_standard_osy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.7,
+    size = 1.8
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Délka ploutve na ose x"
+  )
+
+plot_prohozene_osy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = hmotnost_g,
+      y = delka_ploutve_mm
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.7,
+    size = 1.8
+  ) +
+  ggplot2::labs(
+    x = "Tělesná hmotnost (g)",
+    y = "Délka ploutve (mm)",
+    subtitle = "Hmotnost na ose x"
+  )
+
+plot_jine_osy <-
+  cowplot::plot_grid(
+    plot_standard_osy,
+    plot_prohozene_osy,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_jine_osy,
+  file = here::here(path_materials, "stejna_data_jine_osy.png")
+)
+```
+
+## Odhad před prvním grafem
+
+Který popis čekáte nejspíš?
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Téměř jisté pravidlo]{.answer-title}
+
+Delší ploutev téměř vždy znamená vyšší hmotnost.
+:::
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Trend, ale ne dokonale]{.answer-title}
+Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
+:::
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Bez vztahu]{.answer-title}
+
+Délka ploutve a hmotnost spolu souviset nebudou.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Když nehlasujeme: zvedněte ruku pro závěr, který vám dává největší biologický smysl.
+:::
+
+## První pohled na data
+
+```{r}
+#| label: zobrazit-prvni-bodovy-graf
+#| echo: false
+include_local_figure("prvni_bodovy_graf.png")
+```
+
+## Než něco pojmenujeme
+
+*Napište si jednu větu, co z grafu opravdu vidíte( 20 sekund ticha)*
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.prompt-panel}
+[Směr]{.panel-title}
+
+Je hlavní směr spíš rostoucí, nebo ne?
+:::
+
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
+::: {.prompt-panel}
+[Šířku oblaku]{.panel-title}
+
+Je oblak bodů úzký, nebo široký?
+:::
+
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="32%"}
+::: {.prompt-panel}
+[Místa ke zpomalení]{.panel-title}
+
+Vidíte body nebo části grafu, kde stojí za to ptát se dál?
+:::
+
+:::
+
+::::
+
+## Stejná data, jiné osy
+
+```{r}
+#| label: zobrazit-jine-osy
+#| echo: false
+include_local_figure("stejna_data_jine_osy.png")
+```
+
+```{r}
+#| label: pripravit-data-rozptyl
+#| include: false
+#| message: false
+#| warning: false
 data_rozptyl <-
   data_tucnaci |>
   dplyr::mutate(
@@ -438,7 +440,438 @@ data_rozptyl <-
     in_strip_hmotnost = hmotnost_g >= strip_hmotnost_lwr &
       hmotnost_g <= strip_hmotnost_upr
   )
+```
 
+```{r}
+#| label: vytvorit-rozptyl
+#| include: false
+#| message: false
+#| warning: false
+plot_rozptyl_delka <-
+  ggplot2::ggplot(
+    data = data_rozptyl,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = strip_delka_lwr,
+    xmax = strip_delka_upr,
+    ymin = -Inf,
+    ymax = Inf,
+    fill = col_highlight,
+    alpha = 0.20
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, !in_strip_delka),
+    colour = col_data,
+    alpha = 0.45,
+    size = 1.6
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, in_strip_delka),
+    colour = col_highlight,
+    alpha = 0.9,
+    size = 2.4
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Podobná délka ploutve, různá hmotnost"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_rozptyl_delka,
+  file = here::here(path_materials, "rozptyl_podle_delky.png")
+)
+
+plot_rozptyl_hmotnost <-
+  ggplot2::ggplot(
+    data = data_rozptyl,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::annotate(
+    "rect",
+    xmin = -Inf,
+    xmax = Inf,
+    ymin = strip_hmotnost_lwr,
+    ymax = strip_hmotnost_upr,
+    fill = col_secondary,
+    alpha = 0.15
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, !in_strip_hmotnost),
+    colour = col_data,
+    alpha = 0.45,
+    size = 1.6
+  ) +
+  ggplot2::geom_point(
+    data = dplyr::filter(data_rozptyl, in_strip_hmotnost),
+    colour = col_secondary,
+    alpha = 0.9,
+    size = 2.4
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "Podobná hmotnost, různá délka ploutve"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_rozptyl_hmotnost,
+  file = here::here(path_materials, "rozptyl_podle_hmotnosti.png")
+)
+```
+
+## Rozptyl čteme ve dvou směrech
+
+:::: {.columns .align-top}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: zobrazit-rozptyl-delka-vedle
+#| echo: false
+#| out.width: "92%"
+include_local_figure("rozptyl_podle_delky.png")
+```
+
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: zobrazit-rozptyl-hmotnost-vedle
+#| echo: false
+#| out.width: "92%"
+include_local_figure("rozptyl_podle_hmotnosti.png")
+```
+
+:::
+
+::::
+
+::: {.takeaway-strip .compact-strip}
+Když čteme bodový graf, díváme se současně na [směr vztahu]{.answer-highlight} i na to, jak široký oblak zůstává v obou směrech.
+:::
+
+## Vracíme se k biologické otázce
+
+Co už po těchto třech pohledech umíme říct?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.signal-panel}
+[Signál]{.panel-title}
+
+- Delší ploutve bývají spojeny s vyšší hmotností.
+- Celkový směr je zřetelně rostoucí.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.open-panel}
+[Rozptyl]{.panel-title}
+
+- Vztah není dokonale těsný.
+- Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Už máme [biologicky smysluplný vzor]{.answer-highlight}, ale ještě ne model, odhad efektu ani nejistotu.
+:::
+
+## Co už můžeme tvrdit?
+
+Která formulace je v této chvíli nejlepší?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Příliš silné tvrzení]{.answer-title}
+
+V grafu je vidět vztah, takže jsme prokázali efekt.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+<p class="answer-title">[Přiměřený závěr]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
+
+V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Příliš slabé tvrzení]{.answer-title}
+
+Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: napište si závěr, který byste obhajovali před spolužákem.
+:::
+
+## Nejlépe funguje přiměřený závěr
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.signal-panel}
+[Viditelný vzor je důležitý začátek]{.panel-title}
+
+- Vidíme směr vztahu.
+- Vidíme rozptyl kolem hlavního směru.
+- Vidíme, že otázka stojí za přesnější popis.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.open-panel}
+[Zatím chybí další krok]{.panel-title}
+
+- model, který vztah popíše přesněji
+- odhad velikosti vztahu
+- kvantifikace nejistoty kolem odhadu
+:::
+:::
+
+::::
+
+## Nejdřív malý příklad v R
+
+Toto je záměrně [malý didaktický příklad]{.rn-fragment rn-type=underline rn-color="#F3A712" rn-strokewidth=3 rn-padding=2}, jen abychom viděli logiku příkazu.
+
+:::: {.columns .align-top}
+
+::: {.column width="55%"}
+
+```{r}
+#| label: kod-maleho-bodoveho-grafu-v-r
+#| echo: true
+#| eval: false
+vec_delka_ploutve_mm <-
+  c(186, 191, 197, 204)
+
+vec_hmotnost_g <-
+  c(3800, 3920, 4300, 4480)
+
+plot(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = "darkorange"
+)
+```
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| label: zobrazit-maly-bodovy-graf
+#| echo: false
+#| out.width: "94%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+:::
+
+::::
+
+::: {.takeaway-strip}
+Nejdřív si stejný nápad zkusíme na pár konkrétních dvojicích hodnot. Pak úplně stejnou logiku použijeme na všechny tučňáky najednou.
+:::
+
+## A teď stejné pro všechny tučňáky
+
+:::: {.columns .align-top}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: kod-prvniho-grafu-v-r
+#| echo: true
+#| eval: false
+plot(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  xlab = "Délka ploutve (mm)",
+  ylab = "Tělesná hmotnost (g)",
+  pch = 16,
+  col = rgb(red = 0.54, green = 0.54, blue = 0.54, alpha = 0.6)
+)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: ukazat-prvni-graf-vedle-kodu
+#| echo: false
+#| out.width: "96%"
+include_local_figure("prvni_bodovy_graf.png")
+```
+
+:::
+
+::::
+
+```{r}
+#| label: vytvorit-scatter-druhy
+#| include: false
+#| message: false
+#| warning: false
+plot_druhy <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_point(
+    alpha = 0.72,
+    size = 2
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    name = "Druh"
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_druhy,
+  file = here::here(path_materials, "graf_podle_druhu.png")
+)
+```
+
+## Co když je v oblaku skrytá struktura?
+
+Než přidáme další vrstvu, odhadněte:
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Barvy nic nepřidají]{.answer-title}
+
+Barvy nic důležitého nezmění.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+<p class="answer-title">[Skupiny mohou něco vysvětlit]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
+
+Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Vztah by se měl ztratit]{.answer-title}
+
+Po rozdělení podle druhu zmizí veškerý vztah.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: zvedněte ruku pro závěr, který byste chtěli ověřit jako první.
+:::
+
+## Stejná data, ale s druhem
+
+```{r}
+#| label: zobrazit-graf-podle-druhu
+#| echo: false
+include_local_figure("graf_podle_druhu.png")
+```
+
+## Co se po obarvení změnilo?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.signal-panel}
+[Celkový vztah nezmizel]{.panel-title}
+
+- Delší ploutve jsou stále spojeny s vyšší hmotností.
+- Hlavní směr oblaku pořád dává biologický smysl.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.open-panel}
+[Rozptyl už není jen „šum“]{.panel-title}
+
+- Část variability souvisí s tím, že mícháme více druhů dohromady.
+- Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
+:::
+:::
+
+::::
+
+```{r}
+#| label: pripravit-data-kovariance
+#| include: false
+#| message: false
+#| warning: false
 prumer_delka <-
   mean(data_tucnaci$delka_ploutve_mm)
 
@@ -618,251 +1051,10 @@ spearman_curve_txt <-
 ```
 
 ```{r}
-#| label: vytvorit-grafy
+#| label: vytvorit-kovariance
 #| include: false
 #| message: false
 #| warning: false
-plot_prvni_bodovy <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = col_data,
-    alpha = 0.72,
-    size = 2
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_prvni_bodovy,
-  file = here::here(path_materials, "prvni_bodovy_graf.png")
-)
-
-plot_maly_bodovy <-
-  ggplot2::ggplot(
-    data = data_maly_priklad_vztahu,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = col_highlight,
-    size = 3.4,
-    alpha = 0.9
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "Čtyři konkrétní dvojice hodnot"
-  ) +
-  ggplot2::coord_cartesian(
-    xlim = c(184, 206),
-    ylim = c(3700, 4600)
-  ) +
-  ggview::canvas(
-    width = 1000,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_maly_bodovy,
-  file = here::here(path_materials, "maly_bodovy_graf.png")
-)
-
-plot_s_primkou <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = col_data,
-    alpha = 0.55,
-    size = 1.9
-  ) +
-  ggplot2::geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    se = FALSE,
-    colour = col_highlight,
-    linewidth = 1.2
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_s_primkou,
-  file = here::here(path_materials, "bodovy_graf_s_primkou.png")
-)
-
-plot_standard_osy <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = col_data,
-    alpha = 0.7,
-    size = 1.8
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "Délka ploutve na ose x"
-  )
-
-plot_prohozene_osy <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = hmotnost_g,
-      y = delka_ploutve_mm
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = col_data,
-    alpha = 0.7,
-    size = 1.8
-  ) +
-  ggplot2::labs(
-    x = "Tělesná hmotnost (g)",
-    y = "Délka ploutve (mm)",
-    subtitle = "Hmotnost na ose x"
-  )
-
-plot_jine_osy <-
-  cowplot::plot_grid(
-    plot_standard_osy,
-    plot_prohozene_osy,
-    ncol = 2
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_jine_osy,
-  file = here::here(path_materials, "stejna_data_jine_osy.png")
-)
-
-plot_rozptyl_delka <-
-  ggplot2::ggplot(
-    data = data_rozptyl,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = strip_delka_lwr,
-    xmax = strip_delka_upr,
-    ymin = -Inf,
-    ymax = Inf,
-    fill = col_highlight,
-    alpha = 0.20
-  ) +
-  ggplot2::geom_point(
-    data = dplyr::filter(data_rozptyl, !in_strip_delka),
-    colour = col_data,
-    alpha = 0.45,
-    size = 1.6
-  ) +
-  ggplot2::geom_point(
-    data = dplyr::filter(data_rozptyl, in_strip_delka),
-    colour = col_highlight,
-    alpha = 0.9,
-    size = 2.4
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "Podobná délka ploutve, různá hmotnost"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_rozptyl_delka,
-  file = here::here(path_materials, "rozptyl_podle_delky.png")
-)
-
-plot_rozptyl_hmotnost <-
-  ggplot2::ggplot(
-    data = data_rozptyl,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = -Inf,
-    xmax = Inf,
-    ymin = strip_hmotnost_lwr,
-    ymax = strip_hmotnost_upr,
-    fill = col_secondary,
-    alpha = 0.15
-  ) +
-  ggplot2::geom_point(
-    data = dplyr::filter(data_rozptyl, !in_strip_hmotnost),
-    colour = col_data,
-    alpha = 0.45,
-    size = 1.6
-  ) +
-  ggplot2::geom_point(
-    data = dplyr::filter(data_rozptyl, in_strip_hmotnost),
-    colour = col_secondary,
-    alpha = 0.9,
-    size = 2.4
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "Podobná hmotnost, různá délka ploutve"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_rozptyl_hmotnost,
-  file = here::here(path_materials, "rozptyl_podle_hmotnosti.png")
-)
-
 x_min <-
   min(data_tucnaci$delka_ploutve_mm) - 3
 
@@ -998,7 +1190,139 @@ ggview::save_ggplot(
   plot = plot_kovariance_kvadranty,
   file = here::here(path_materials, "kovariance_kvadranty.png")
 )
+```
 
+## Jak převést směr oblaku do čísla?
+
+Nejdřív pomocná myšlenka:
+
+<br>
+
+::: {.thought-box}
+Když se obě proměnné pohybují [stejným směrem od svého průměru]{.answer-highlight}, mělo by to zvyšovat souhrnné číslo vztahu.
+:::
+
+## Nejprve jen střed grafu
+
+```{r}
+#| label: zobrazit-kovarianci-stred
+#| echo: false
+include_local_figure("kovariance_stred.png")
+```
+
+## Které části grafu pomáhají kladné kovarianci?
+
+Než něco vybarvíme, odhadněte:
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+<p class="answer-title">[Vpravo nahoře a vlevo dole]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
+
+Obě proměnné jsou tam na stejné straně od svého průměru.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Vlevo nahoře a vpravo dole]{.answer-title}
+
+Jedna proměnná je nad průměrem a druhá pod ním.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Všechny stejně]{.answer-title}
+
+Na poloze bodů vůči středu by nezáleželo.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
+:::
+
+## Takto vypadá kladná kovariance
+
+```{r}
+#| label: zobrazit-kovarianci-kvadranty
+#| echo: false
+include_local_figure("kovariance_kvadranty.png")
+```
+
+## Proč samotná kovariance nestačí
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### V milimetrech a gramech
+
+Kovariance `r kovariance_mm_g_txt`
+
+Směr vztahu je kladný, ale číslo pořád závisí na použitých jednotkách.
+:::
+
+::: {.column width="50%"}
+### V centimetrech a kilogramech
+
+Kovariance `r kovariance_cm_kg_txt`
+
+Biologický vztah je stejný, ale velikost čísla se po změně jednotek změní.
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme [bezrozměrný souhrn]{.answer-highlight}: korelaci.
+:::
+
+## Dvě čísla, která budeme používat
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.blockquote}
+[Lineární čtení vztahu]{.panel-title}
+
+- shrnuje hlavně lineární vztah
+- v našich datech vychází `r pearson_korelace_txt`
+:::
+:::
+
+::: {.column width="50%"}
+::: {.blockquote}
+[Pořadí a monotónní směr]{.panel-title}
+
+- sleduje pořadí hodnot a monotónní vztah
+- v našich datech vychází `r spearman_korelace_txt`
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Obě čísla jsou [doplněk ke grafu]{.answer-highlight}, ne jeho náhrada.
+:::
+
+```{r}
+#| label: vytvorit-korelace-situace
+#| include: false
+#| message: false
+#| warning: false
 data_linear <-
   tibble::tibble(x = x_linear, y = y_linear)
 
@@ -1155,39 +1479,277 @@ ggview::save_ggplot(
   plot = plot_ctyri_situace_korelace,
   file = here::here(path_materials, "ctyri_situace_korelace.png")
 )
+```
 
-plot_druhy <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g,
-      colour = druh_tucnaka
-    )
-  ) +
-  ggplot2::geom_point(
-    alpha = 0.72,
-    size = 2
-  ) +
-  ggplot2::scale_colour_manual(
-    values = barvy_druhu,
-    name = "Druh"
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
+## Odhad před odhalením
 
-ggview::save_ggplot(
-  plot = plot_druhy,
-  file = here::here(path_materials, "graf_podle_druhu.png")
+Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Silný lineární vztah]{.answer-title}
+
+Bez zvláštních bodů.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Žádná zřetelná souvislost]{.answer-title}
+
+Obě čísla by měla být nízká.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+<p class="answer-title">[Monotónní, ale zakřivený vztah]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
+
+Pořadí sedí, linearita už ne úplně.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: napište si situaci, kterou byste vybrali, a krátce proč.
+:::
+
+## Monotónní, ale zakřivený vztah
+
+```{r}
+#| label: zobrazit-korelace-curve
+#| echo: false
+include_local_figure("korelace_zakrivena.png")
+```
+
+## Čtyři situace najednou
+
+```{r}
+#| label: zobrazit-ctyri-situace-korelace
+#| echo: false
+#| out.height: "620px"
+include_local_figure("ctyri_situace_korelace.png")
+```
+
+## Co nám to říká právě o tučňácích?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.signal-panel}
+[Obě korelace si tu rozumějí]{.panel-title}
+
+- U tučňáků jsou Pearson i Spearman velmi podobné.
+- Celkový vztah je monotónní a zároveň docela blízký lineárnímu.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.open-panel}
+[Jedno číslo nestačí na celou biologii]{.panel-title}
+
+- Barva podle druhu ukazuje další strukturu.
+- Samotná korelace neřekne, odkud se vztah bere.
+:::
+:::
+
+::::
+
+## Nejdřív malý příklad korelace v R
+
+Použijeme stejný malý didaktický příklad, jen místo obrázku teď zkusíme spočítat číslo, které ten vztah shrne.
+
+:::: {.columns .align-top}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: kod-male-korelace-v-r
+#| echo: true
+#| eval: false
+vec_delka_ploutve_mm <-
+  c(186, 191, 197, 204)
+
+vec_hmotnost_g <-
+  c(3800, 3920, 4300, 4480)
+
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "pearson"
 )
 
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "spearman"
+)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: zobrazit-maly-bodovy-graf-pro-korelaci
+#| echo: false
+#| out.width: "84%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+::: {.result-panel}
+[Výstup]{.kicker}
+
+Pearson: [1] `r pearson_maly_priklad_txt`  
+Spearman: [1] `r spearman_maly_priklad_txt`
+:::
+
+:::
+
+::::
+
+::: {.takeaway-strip .compact-strip}
+Pořadí i směr jdou v tomto malém příkladu stejně, takže číslo jen shrne to, co už z těchto čtyř bodů vidíme.
+:::
+
+## A stejné příkazy pro všechny tučňáky
+
+:::: {.columns .align-top}
+
+::: {.column width="50%"}
+
+[Pearson]{.panel-title}
+
+```{r}
+#| label: kod-korelace-pearson-v-r
+#| echo: true
+#| eval: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+```
+
+::: {.result-panel}
+[Výstup]{.kicker}
+
+[1] `r pearson_korelace_txt`
+:::
+
+:::
+
+::: {.column width="50%"}
+
+[Spearman]{.panel-title}
+
+```{r}
+#| label: kod-korelace-spearman-v-r
+#| echo: true
+#| eval: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+```
+
+::: {.result-panel}
+[Výstup]{.kicker}
+
+[1] `r spearman_korelace_txt`
+:::
+
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip .compact-strip}
+Krátký výstup čteme takto: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
+:::
+
+## Co z korelace ještě neplyne?
+
+Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Vysoká korelace už stačí]{.answer-title}
+
+Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+<p class="answer-title">[Asociace ano, kauzalita ne]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
+
+Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.option-panel}
+[Shoda dvou koeficientů je důkaz]{.answer-title}
+
+Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
+:::
+
+## Korelace ukazuje asociaci, ne příčinu
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.signal-panel}
+[Společná změna dvou proměnných]{.panel-title}
+
+- Korelace popisuje, že se dvě proměnné mění společně.
+- Pomáhá shrnout směr a těsnost vztahu.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.warning-panel}
+<p class="panel-title">[Sama neoddělí příčinu]{.rn-fragment rn-type=box rn-color="#C94C4C" rn-strokewidth=2 rn-padding=3}</p>
+
+- neoddělí příčinu od dalších proměnných nebo společného mechanismu
+- u tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla
+:::
+:::
+
+::::
+
+```{r}
+#| label: vytvorit-tri-priklady
+#| include: false
+#| message: false
+#| warning: false
 data_ctetnosti <-
   data_tucnaci |>
   dplyr::count(druh_tucnaka, ostrov)
@@ -1287,852 +1849,6 @@ ggview::save_ggplot(
 )
 ```
 
-## Vztahy dvou proměnných a vizualizace
-
-<br>
-
-::: {.text-color-white .text-font-heading .text-size-heading1 .text-bold}
-`r display_name`
-:::
-
-<br>
-
-[👤](https://ondrejmottl.github.io/) Ondřej Mottl
-
-[Moodle](https://dl2.cuni.cz/course/view.php?id=106)
-
-## Výsledky učení
-
-### Po dnešní přednášce budete schopni:
-
-::: {.incremental}
-- přečíst první bodový graf pro dvě numerické proměnné
-- vysvětlit, co nám ukáže rozptyl a co přidá korelace
-- zvolit vhodný první graf podle typu dvojice proměnných
-- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
-:::
-
-## Biologická otázka
-
-:::: {.columns}
-
-::: {.column width="55%"}
-
-### Chceme zjistit:
-
-::: {.blockquote}
-Mají tučňáci s delší ploutví vyšší tělesnou hmotnost?
-:::
-
-Dnes ještě nebudeme testovat hypotézu.
-
-### Dnes chceme umět:
-
-::: {.incremental}
-- dobře se podívat na data
-- všimnout si směru a rozptylu
-- poznat, co už z grafu říct můžeme a co ještě ne
-:::
-
-:::
-
-::: {.column width="45%"}
-
-```{r}
-#| echo: false
-#| out.width: "100%"
-include_local_figure("lter_penguins.png")
-```
-
-:::
-
-::::
-
-::: {.footer}
-Ilustrace: [Allison Horst](https://allisonhorst.com/)
-:::
-
-## Odhad před prvním grafem
-
-Který popis čekáte nejspíš?
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Téměř jisté pravidlo</p>
-
-Delší ploutev téměř vždy znamená vyšší hmotnost.
-:::
-:::
-
-::: {.column width="2%"}
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Trend, ale ne dokonale</p>
-Delší ploutev bude s vyšší hmotností souviset, ale ne dokonale.
-:::
-:::
-
-::: {.column width="2%"}
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Bez vztahu</p>
-
-Délka ploutve a hmotnost spolu souviset nebudou.
-:::
-:::
-
-::::
-
-::: {.takeaway-strip}
-Když nehlasujeme: zvedněte ruku pro závěr, který vám dává největší biologický smysl.
-:::
-
-## První pohled na data
-
-```{r}
-#| label: zobrazit-prvni-bodovy-graf
-#| echo: false
-include_local_figure("prvni_bodovy_graf.png")
-```
-
-## Než něco pojmenujeme
-
-*Napište si jednu větu, co z grafu opravdu vidíte( 20 sekund ticha)*
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.prompt-panel}
-<p class="panel-title">Směr</p>
-
-Je hlavní směr spíš rostoucí, nebo ne?
-:::
-
-:::
-
-::: {.column width="2%"}
-:::
-
-::: {.column width="32%"}
-::: {.prompt-panel}
-<p class="panel-title">Šířku oblaku</p>
-
-Je oblak bodů úzký, nebo široký?
-:::
-
-:::
-
-::: {.column width="2%"}
-:::
-
-::: {.column width="32%"}
-::: {.prompt-panel}
-<p class="panel-title">Místa ke zpomalení</p>
-
-Vidíte body nebo části grafu, kde stojí za to ptát se dál?
-:::
-
-:::
-
-::::
-
-## Stejná data, jiné osy
-
-```{r}
-#| label: zobrazit-jine-osy
-#| echo: false
-include_local_figure("stejna_data_jine_osy.png")
-```
-
-## Rozptyl čteme ve dvou směrech
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-```{r}
-#| label: zobrazit-rozptyl-delka-vedle
-#| echo: false
-#| out.width: "92%"
-include_local_figure("rozptyl_podle_delky.png")
-```
-
-
-:::
-
-::: {.column width="50%"}
-
-```{r}
-#| label: zobrazit-rozptyl-hmotnost-vedle
-#| echo: false
-#| out.width: "92%"
-include_local_figure("rozptyl_podle_hmotnosti.png")
-```
-
-:::
-
-::::
-
-::: {.takeaway-strip .compact-strip}
-Když čteme bodový graf, díváme se současně na <span class="answer-highlight">směr vztahu</span> i na to, jak široký oblak zůstává v obou směrech.
-:::
-
-## Vracíme se k biologické otázce
-
-Co už po těchto třech pohledech umíme říct?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.signal-panel}
-<p class="panel-title">Signál</p>
-
-- Delší ploutve bývají spojeny s vyšší hmotností.
-- Celkový směr je zřetelně rostoucí.
-:::
-:::
-
-::: {.column width="50%"}
-::: {.open-panel}
-<p class="panel-title">Rozptyl</p>
-
-- Vztah není dokonale těsný.
-- Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Už máme <span class="answer-highlight">biologicky smysluplný vzor</span>, ale ještě ne model, odhad efektu ani nejistotu.
-:::
-
-## Co už můžeme tvrdit?
-
-Která formulace je v této chvíli nejlepší?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Příliš silné tvrzení</p>
-
-V grafu je vidět vztah, takže jsme prokázali efekt.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">[Přiměřený závěr]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
-
-V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Příliš slabé tvrzení</p>
-
-Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: napište si závěr, který byste obhajovali před spolužákem.
-:::
-
-## Nejlépe funguje přiměřený závěr
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.signal-panel}
-<p class="panel-title">Viditelný vzor je důležitý začátek</p>
-
-- Vidíme směr vztahu.
-- Vidíme rozptyl kolem hlavního směru.
-- Vidíme, že otázka stojí za přesnější popis.
-:::
-:::
-
-::: {.column width="50%"}
-::: {.open-panel}
-<p class="panel-title">Zatím chybí další krok</p>
-
-- model, který vztah popíše přesněji
-- odhad velikosti vztahu
-- kvantifikace nejistoty kolem odhadu
-:::
-:::
-
-::::
-
-## Nejdřív malý příklad v R
-
-Toto je záměrně [malý didaktický příklad]{.rn-fragment rn-type=underline rn-color="#F3A712" rn-strokewidth=3 rn-padding=2}, jen abychom viděli logiku příkazu.
-
-:::: {.columns .align-top}
-
-::: {.column width="55%"}
-
-```{r}
-#| label: kod-maleho-bodoveho-grafu-v-r
-#| echo: true
-#| eval: false
-vec_delka_ploutve_mm <-
-  c(186, 191, 197, 204)
-
-vec_hmotnost_g <-
-  c(3800, 3920, 4300, 4480)
-
-plot(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  xlab = "Délka ploutve (mm)",
-  ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = "darkorange"
-)
-```
-
-:::
-
-::: {.column width="45%"}
-
-```{r}
-#| label: zobrazit-maly-bodovy-graf
-#| echo: false
-#| out.width: "94%"
-include_local_figure("maly_bodovy_graf.png")
-```
-
-:::
-
-::::
-
-::: {.takeaway-strip}
-Nejdřív si stejný nápad zkusíme na pár konkrétních dvojicích hodnot. Pak úplně stejnou logiku použijeme na všechny tučňáky najednou.
-:::
-
-## A teď stejné pro všechny tučňáky
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-```{r}
-#| label: kod-prvniho-grafu-v-r
-#| echo: true
-#| eval: false
-plot(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  xlab = "Délka ploutve (mm)",
-  ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = rgb(red = 0.54, green = 0.54, blue = 0.54, alpha = 0.6)
-)
-```
-
-:::
-
-::: {.column width="50%"}
-
-```{r}
-#| label: ukazat-prvni-graf-vedle-kodu
-#| echo: false
-#| out.width: "96%"
-include_local_figure("prvni_bodovy_graf.png")
-```
-
-:::
-
-::::
-
-## Co když je v oblaku skrytá struktura?
-
-Než přidáme další vrstvu, odhadněte:
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Barvy nic nepřidají</p>
-
-Barvy nic důležitého nezmění.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">[Skupiny mohou něco vysvětlit]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
-
-Barvy mohou ukázat skupiny, které část rozptylu vysvětlují.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Vztah by se měl ztratit</p>
-
-Po rozdělení podle druhu zmizí veškerý vztah.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: zvedněte ruku pro závěr, který byste chtěli ověřit jako první.
-:::
-
-## Stejná data, ale s druhem
-
-```{r}
-#| label: zobrazit-graf-podle-druhu
-#| echo: false
-include_local_figure("graf_podle_druhu.png")
-```
-
-## Co se po obarvení změnilo?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.signal-panel}
-<p class="panel-title">Celkový vztah nezmizel</p>
-
-- Delší ploutve jsou stále spojeny s vyšší hmotností.
-- Hlavní směr oblaku pořád dává biologický smysl.
-:::
-:::
-
-::: {.column width="50%"}
-::: {.open-panel}
-<p class="panel-title">Rozptyl už není jen „šum“</p>
-
-- Část variability souvisí s tím, že mícháme více druhů dohromady.
-- Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
-:::
-:::
-
-::::
-
-## Jak převést směr oblaku do čísla?
-
-Nejdřív pomocná myšlenka:
-
-<br>
-
-::: {.thought-box}
-Když se obě proměnné pohybují <span class="answer-highlight">stejným směrem od svého průměru</span>, mělo by to zvyšovat souhrnné číslo vztahu.
-:::
-
-## Nejprve jen střed grafu
-
-```{r}
-#| label: zobrazit-kovarianci-stred
-#| echo: false
-include_local_figure("kovariance_stred.png")
-```
-
-## Které části grafu pomáhají kladné kovarianci?
-
-Než něco vybarvíme, odhadněte:
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">[Vpravo nahoře a vlevo dole]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
-
-Obě proměnné jsou tam na stejné straně od svého průměru.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Vlevo nahoře a vpravo dole</p>
-
-Jedna proměnná je nad průměrem a druhá pod ním.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Všechny stejně</p>
-
-Na poloze bodů vůči středu by nezáleželo.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
-:::
-
-## Takto vypadá kladná kovariance
-
-```{r}
-#| label: zobrazit-kovarianci-kvadranty
-#| echo: false
-include_local_figure("kovariance_kvadranty.png")
-```
-
-## Proč samotná kovariance nestačí
-
-:::: {.columns}
-
-::: {.column width="50%"}
-### V milimetrech a gramech
-
-Kovariance `r kovariance_mm_g_txt`
-
-Směr vztahu je kladný, ale číslo pořád závisí na použitých jednotkách.
-:::
-
-::: {.column width="50%"}
-### V centimetrech a kilogramech
-
-Kovariance `r kovariance_cm_kg_txt`
-
-Biologický vztah je stejný, ale velikost čísla se po změně jednotek změní.
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme <span class="answer-highlight">bezrozměrný souhrn</span>: korelaci.
-:::
-
-## Dvě čísla, která budeme používat
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.blockquote}
-<p class="panel-title">Lineární čtení vztahu</p>
-
-- shrnuje hlavně lineární vztah
-- v našich datech vychází `r pearson_korelace_txt`
-:::
-:::
-
-::: {.column width="50%"}
-::: {.blockquote}
-<p class="panel-title">Pořadí a monotónní směr</p>
-
-- sleduje pořadí hodnot a monotónní vztah
-- v našich datech vychází `r spearman_korelace_txt`
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Obě čísla jsou <span class="answer-highlight">doplněk ke grafu</span>, ne jeho náhrada.
-:::
-
-## Odhad před odhalením
-
-Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Silný lineární vztah</p>
-
-Bez zvláštních bodů.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Žádná zřetelná souvislost</p>
-
-Obě čísla by měla být nízká.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">[Monotónní, ale zakřivený vztah]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
-
-Pořadí sedí, linearita už ne úplně.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: napište si situaci, kterou byste vybrali, a krátce proč.
-:::
-
-## Monotónní, ale zakřivený vztah
-
-```{r}
-#| label: zobrazit-korelace-curve
-#| echo: false
-include_local_figure("korelace_zakrivena.png")
-```
-
-## Čtyři situace najednou
-
-```{r}
-#| label: zobrazit-ctyri-situace-korelace
-#| echo: false
-#| out.height: "620px"
-include_local_figure("ctyri_situace_korelace.png")
-```
-
-## Co nám to říká právě o tučňácích?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.signal-panel}
-<p class="panel-title">Obě korelace si tu rozumějí</p>
-
-- U tučňáků jsou Pearson i Spearman velmi podobné.
-- Celkový vztah je monotónní a zároveň docela blízký lineárnímu.
-:::
-:::
-
-::: {.column width="50%"}
-::: {.open-panel}
-<p class="panel-title">Jedno číslo nestačí na celou biologii</p>
-
-- Barva podle druhu ukazuje další strukturu.
-- Samotná korelace neřekne, odkud se vztah bere.
-:::
-:::
-
-::::
-
-## Nejdřív malý příklad korelace v R
-
-Použijeme stejný malý didaktický příklad, jen místo obrázku teď zkusíme spočítat číslo, které ten vztah shrne.
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-```{r}
-#| label: kod-male-korelace-v-r
-#| echo: true
-#| eval: false
-vec_delka_ploutve_mm <-
-  c(186, 191, 197, 204)
-
-vec_hmotnost_g <-
-  c(3800, 3920, 4300, 4480)
-
-cor(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  method = "pearson"
-)
-
-cor(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  method = "spearman"
-)
-```
-
-:::
-
-::: {.column width="50%"}
-
-```{r}
-#| label: zobrazit-maly-bodovy-graf-pro-korelaci
-#| echo: false
-#| out.width: "84%"
-include_local_figure("maly_bodovy_graf.png")
-```
-
-::: {.result-panel}
-<p class="kicker">Výstup</p>
-
-Pearson: [1] `r pearson_maly_priklad_txt`  
-Spearman: [1] `r spearman_maly_priklad_txt`
-:::
-
-:::
-
-::::
-
-::: {.takeaway-strip .compact-strip}
-Pořadí i směr jdou v tomto malém příkladu stejně, takže číslo jen shrne to, co už z těchto čtyř bodů vidíme.
-:::
-
-## A stejné příkazy pro všechny tučňáky
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-<p class="panel-title">Pearson</p>
-
-```{r}
-#| label: kod-korelace-pearson-v-r
-#| echo: true
-#| eval: false
-cor(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  method = "pearson"
-)
-```
-
-::: {.result-panel}
-<p class="kicker">Výstup</p>
-
-[1] `r pearson_korelace_txt`
-:::
-
-:::
-
-::: {.column width="50%"}
-
-<p class="panel-title">Spearman</p>
-
-```{r}
-#| label: kod-korelace-spearman-v-r
-#| echo: true
-#| eval: false
-cor(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  method = "spearman"
-)
-```
-
-::: {.result-panel}
-<p class="kicker">Výstup</p>
-
-[1] `r spearman_korelace_txt`
-:::
-
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip .compact-strip}
-Krátký výstup čteme takto: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
-:::
-
-## Co z korelace ještě neplyne?
-
-Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Vysoká korelace už stačí</p>
-
-Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">[Asociace ano, kauzalita ne]{.rn-fragment rn-type=circle rn-color="#F3A712" rn-strokewidth=3 rn-padding=4}</p>
-
-Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.option-panel}
-<p class="answer-title">Shoda dvou koeficientů je důkaz</p>
-
-Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
-:::
-
-## Korelace ukazuje asociaci, ne příčinu
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.signal-panel}
-<p class="panel-title">Společná změna dvou proměnných</p>
-
-- Korelace popisuje, že se dvě proměnné mění společně.
-- Pomáhá shrnout směr a těsnost vztahu.
-:::
-:::
-
-::: {.column width="50%"}
-::: {.warning-panel}
-<p class="panel-title">[Sama neoddělí příčinu]{.rn-fragment rn-type=box rn-color="#C94C4C" rn-strokewidth=2 rn-padding=3}</p>
-
-- neoddělí příčinu od dalších proměnných nebo společného mechanismu
-- u tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla
-:::
-:::
-
-::::
-
 ## Který první graf se hodí?
 
 :::: {.columns}
@@ -2170,7 +1886,7 @@ Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
 ::::
 
 ::: {.open-panel}
-<p class="panel-title">Co si řeknu jako první?</p>
+[Co si řeknu jako první?]{.panel-title}
 
 - Jsou proměnné numerické, nebo kategoriální?
 - Co z jejich vztahu chci v grafu přečíst?
@@ -2209,8 +1925,49 @@ Chceme číst četnosti kombinací.
 ::::
 
 ::: {.takeaway-strip}
-První volbu grafu neurčuje to, co vypadá nejhezčí, ale <span class="answer-highlight">typ dvojice proměnných a otázka, kterou chceme číst</span>.
+První volbu grafu neurčuje to, co vypadá nejhezčí, ale [typ dvojice proměnných a otázka, kterou chceme číst]{.answer-highlight}.
 :::
+
+```{r}
+#| label: vytvorit-s-primkou
+#| include: false
+#| message: false
+#| warning: false
+plot_s_primkou <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.55,
+    size = 1.9
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_highlight,
+    linewidth = 1.2
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_s_primkou,
+  file = here::here(path_materials, "bodovy_graf_s_primkou.png")
+)
+```
 
 ## Co nám přidá model?
 
@@ -2226,7 +1983,7 @@ Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc opr
 
 ::: {.column width="42%"}
 ::: {.open-panel}
-<p class="panel-title">Přímka by nám mohla ukázat...</p>
+[Přímka by nám mohla ukázat...]{.panel-title}
 
 - směr a velikost změny
 - typický sklon vztahu
