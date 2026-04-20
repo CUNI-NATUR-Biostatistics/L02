@@ -188,14 +188,17 @@ include_local_figure("lter_penguins.png")
 Ilustrace: [Allison Horst](https://allisonhorst.com/)
 :::
 
-## Napište si jednu větu {.text-center}
+## Diskuze se sousedem {.text-center}
 
-<br>
 <br>
 
 ::: {.blockquote .text-bold}
 Jak by podle vás mohl vypadat graf pro zodpovězení této otázky?
 :::
+
+<br>
+
+*30 s přemýšlení — pak sdílejte svůj odhad se sousedem.*
 
 ## Naše data
 
@@ -734,7 +737,7 @@ C) Protože body neleží na jedné přímce, mezi proměnnými žádný vztah n
 <br>
 
 ::: {.panel-olive}
-Když nehlasujeme: napište si závěr, který byste obhajovali před spolužákem.
+Než hlasujeme: přesvědčte souseda, proč jste vybrali svoji možnost.
 :::
 
 ## Stejná data, ale s druhem
@@ -787,25 +790,23 @@ include_local_figure("graf_podle_druhu.png")
 
 ## Co se po obarvení změnilo?
 
-<br>
-
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.panel-result}
-[Celkový vztah nezmizel]{.panel-title}
+::: {.strip-indigo}
+Celkový vztah pořád dává smysl
 
-- Delší ploutve jsou stále spojeny s vyšší hmotností.
-- Hlavní směr oblaku pořád dává biologický smysl.
+- Směr oblaku zůstává kladný: větší tučňák má delší ploutev.
+- Biologická logika platí i po obarvení podle druhu.
 :::
 :::
 
 ::: {.column width="50%"}
-::: {.panel-question}
-[Rozptyl už není jen „šum“]{.panel-title}
+::: {.strip-orange}
+Rozptyl má biologickou strukturu
 
-- Část variability souvisí s tím, že mícháme více druhů dohromady.
-- Jedno číslo pro všechny body může skrýt důležitou biologickou strukturu.
+- Část variability pochází z míchání více druhů v jednom grafu.
+- Jedno číslo pro všechny body může tuto strukturu skrýt.
 :::
 :::
 
@@ -1136,14 +1137,264 @@ ggview::save_ggplot(
 )
 ```
 
-## Jak převést směr oblaku do čísla?
+```{r}
+#| label: vytvorit-bod-lupou
+#| include: false
+#| message: false
+#| warning: false
+idx_bod <-
+  which(
+    data_tucnaci$delka_ploutve_mm > prumer_delka &
+      data_tucnaci$hmotnost_g > prumer_hmotnost
+  )[10]
 
-Nejdřív pomocná myšlenka:
+bod_x <- data_tucnaci$delka_ploutve_mm[idx_bod]
+bod_y <- data_tucnaci$hmotnost_g[idx_bod]
 
-<br>
+odch_x <- round(bod_x - prumer_delka)
+odch_y <- round(bod_y - prumer_hmotnost)
 
-::: {.blockquote}
-Když se obě proměnné pohybují [stejným směrem od svého průměru]{.text-color-indigo_velvet .text-bold}, mělo by to zvyšovat souhrnné číslo vztahu.
+plot_bod_lupou <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_vline(
+    xintercept = prumer_delka,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_hmotnost,
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.25,
+    size = 1.5
+  ) +
+  ggplot2::annotate(
+    "point",
+    x = bod_x,
+    y = bod_y,
+    colour = col_highlight,
+    size = 5,
+    alpha = 1
+  ) +
+  ggplot2::annotate(
+    "segment",
+    x = prumer_delka,
+    xend = bod_x,
+    y = bod_y,
+    yend = bod_y,
+    colour = col_highlight,
+    linewidth = 1.4,
+    arrow = ggplot2::arrow(
+      length = ggplot2::unit(0.3, "cm"),
+      ends = "last"
+    )
+  ) +
+  ggplot2::annotate(
+    "segment",
+    x = bod_x,
+    xend = bod_x,
+    y = prumer_hmotnost,
+    yend = bod_y,
+    colour = col_highlight,
+    linewidth = 1.4,
+    arrow = ggplot2::arrow(
+      length = ggplot2::unit(0.3, "cm"),
+      ends = "last"
+    )
+  ) +
+  ggplot2::annotate(
+    "label",
+    x = (prumer_delka + bod_x) / 2,
+    y = bod_y + 210,
+    label = stringr::str_glue("+{odch_x} mm nad průměrem"),
+    colour = col_highlight,
+    size = 4.5,
+    fill = "white",
+    label.size = 0
+  ) +
+  ggplot2::annotate(
+    "label",
+    x = bod_x + 4,
+    y = (prumer_hmotnost + bod_y) / 2,
+    label = stringr::str_glue("+{odch_y} g nad průměrem"),
+    colour = col_highlight,
+    size = 4.5,
+    hjust = 0,
+    fill = "white",
+    label.size = 0
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(x_min, x_max),
+    ylim = c(y_min, y_max)
+  ) +
+  ggplot2::labs(
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_bod_lupou,
+  file = here::here(path_materials, "bod_lupou.png")
+)
+```
+
+```{r}
+#| label: vytvorit-kalibraci
+#| include: false
+#| message: false
+#| warning: false
+set.seed(42)
+
+n_kal <- 100
+
+generate_corr_data <- function(r, n) {
+  x <- stats::rnorm(n)
+  y <- r * x + sqrt(1 - r^2) * stats::rnorm(n)
+  tibble::tibble(x = x, y = y)
+}
+
+r_hodnoty <- c(0.20, 0.50, 0.80, 0.95)
+
+make_kal_plot <- function(r_val) {
+  d <-
+    generate_corr_data(r = r_val, n = n_kal)
+  label_txt <-
+    stringr::str_glue(
+      "r \u2248 {formatC(r_val, digits = 2, format = 'f', decimal.mark = ',')}"
+    )
+  ggplot2::ggplot(
+    data = d,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+    ggplot2::geom_point(
+      colour = col_data,
+      alpha = 0.65,
+      size = 2
+    ) +
+    ggplot2::labs(
+      title = label_txt,
+      x = NULL,
+      y = NULL
+    ) +
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(
+        hjust = 0.5,
+        size = 16,
+        face = "bold"
+      )
+    )
+}
+
+plots_kal <-
+  purrr::map(r_hodnoty, make_kal_plot)
+
+plot_kalibrace <-
+  cowplot::plot_grid(
+    plotlist = plots_kal,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1400,
+    height = 900,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kalibrace,
+  file = here::here(path_materials, "kalibrace_korelace.png")
+)
+```
+
+```{r}
+#| label: vytvorit-zapornou-korelaci
+#| include: false
+#| message: false
+#| warning: false
+data_nadmorska <-
+  tibble::tibble(
+    nadmorska_vyska_m = round(x_neg * 90 + 200),
+    prumerna_teplota_c = round(y_neg * 2.4 + 5.5, 1)
+  )
+
+pearson_nadmorska_txt <-
+  formatC(
+    cor(
+      x = data_nadmorska$nadmorska_vyska_m,
+      y = data_nadmorska$prumerna_teplota_c,
+      method = "pearson"
+    ),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+plot_zaporna_korelace <-
+  ggplot2::ggplot(
+    data = data_nadmorska,
+    mapping = ggplot2::aes(
+      x = nadmorska_vyska_m,
+      y = prumerna_teplota_c
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = col_data,
+    alpha = 0.75,
+    size = 2.5
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = col_secondary,
+    linewidth = 1.3
+  ) +
+  ggplot2::labs(
+    x = "Nadmořská výška (m)",
+    y = "Průměrná červencová teplota (°C)"
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_zaporna_korelace,
+  file = here::here(path_materials, "zaporna_korelace.png")
+)
+```
+
+## 
+
+::: {.blockquote .text-bold}
+Kdybychom chtěli jeden číselný souhrn pro celý oblak bodů — co by takové číslo muselo umět?
+:::
+
+Dokončete alespoň jednu větu:
+
+- „Muselo by rozlišovat, zda se proměnné pohybují [stejným nebo opačným]{.text-color-indigo_velvet .text-bold} směrem..."
+- „Nesmělo by záviset na [volbě jednotek]{.text-color-indigo_velvet .text-bold}..."
+
+::: {.panel-olive}
+[Řekněte sousedovi aspoň jednu vlastnost]{.panel-title}
+
+30 s každý — pak porovnejte, co jste vymysleli.
 :::
 
 ## Nejprve jen střed grafu
@@ -1154,9 +1405,19 @@ Když se obě proměnné pohybují [stejným směrem od svého průměru]{.text-
 include_local_figure("kovariance_stred.png")
 ```
 
-## Které části grafu pomáhají kladné kovarianci?
+## Jeden bod pod lupou
 
-Než něco vybarvíme, odhadněte:
+```{r}
+#| label: zobrazit-bod-lupou
+#| echo: false
+include_local_figure("bod_lupou.png")
+```
+
+Bod nad průměrem v obou proměnných — odchylky mají stejné znaménko, součin je **kladný**.
+
+## 
+
+Bod z předchozího snímku byl v pravém horním kvadrantu — obě odchylky kladné, součin kladný. Ve které **další** části grafu budou součiny také kladné?
 
 <br>
 
@@ -1164,25 +1425,25 @@ Než něco vybarvíme, odhadněte:
 
 ::: {.column width="32%"}
 ::: {.panel-question}
-[Vpravo nahoře a vlevo dole]{.panel-lead .rn-circle-orange}
+[I. a III. kvadrant]{.panel-lead .rn-circle-orange}
 
-Obě proměnné jsou tam na stejné straně od svého průměru.
+Vpravo nahoře a vlevo dole — obě odchylky mají vždy stejné znaménko.
 :::
 :::
 
 ::: {.column width="32%"}
 ::: {.panel-question}
-[Vlevo nahoře a vpravo dole]{.panel-lead}
+[II. a IV. kvadrant]{.panel-lead}
 
-Jedna proměnná je nad průměrem a druhá pod ním.
+Vlevo nahoře a vpravo dole — odchylky mají opačná znaménka.
 :::
 :::
 
 ::: {.column width="32%"}
 ::: {.panel-question}
-[Všechny stejně]{.panel-lead}
+[Všechny čtyři stejně]{.panel-lead}
 
-Na poloze bodů vůči středu by nezáleželo.
+Na poloze vůči středu nezáleží.
 :::
 :::
 
@@ -1191,10 +1452,10 @@ Na poloze bodů vůči středu by nezáleželo.
 <br>
 
 ::: {.takeaway-strip}
-Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
+Ukažte prstem na dvojici kvadrantů dřív, než vybarvíme.
 :::
 
-## Takto vypadá kladná kovariance
+## Takto to funguje
 
 ```{r}
 #| label: zobrazit-kovarianci-kvadranty
@@ -1202,24 +1463,62 @@ Když nehlasujeme: ukažte prstem do dvojice kvadrantů, které byste vybrali.
 include_local_figure("kovariance_kvadranty.png")
 ```
 
-## Proč samotná kovariance nestačí
+::: {.strip-indigo .strip-compact .fragment}
+[Takto pracuje kovariance:]{.text-color-indigo_velvet .text-bold} kladné součiny v I. a III. kvadrantu, záporné v II. a IV.
+:::
+
+## Projdeme čtyři tučňáky ručně
+
+:::: {.columns .align-top}
+
+::: {.column width="42%"}
+```{r}
+#| label: zobrazit-maly-bodik-kovariance
+#| echo: false
+#| out.width: "95%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+::: {.strip-olive .strip-compact}
+Průměry: 194,5 mm a 4 125 g
+:::
+:::
+
+::: {.column width="58%"}
+
+| Délka | Hm. | Odch. dl. | Odch. hm. | Součin |
+|---:|---:|---:|---:|---:|
+| 186 | 3 800 | −8,5 | −325 | **+2 762,5** |
+| 191 | 3 920 | −3,5 | −205 | **+717,5** |
+| 197 | 4 300 | +2,5 | +175 | **+437,5** |
+| 204 | 4 480 | +9,5 | +355 | **+3 372,5** |
+
+Součet = **+7 290** → kovariance = 7 290 / 3 = **2 430 mm·g**
+
+:::
+
+::::
+
+## Záleží na jednotkách?
+
+Jsou to stejní tučňáci. Záleží na tom, v jakých jednotkách délku a hmotnost měříme?
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-### V milimetrech a gramech
+::: {.strip-indigo .strip-compact}
+[V milimetrech a gramech]{.text-bold}
 
-Kovariance `r kovariance_mm_g_txt`
-
-Směr vztahu je kladný, ale číslo pořád závisí na použitých jednotkách.
+Kovariance: `r kovariance_mm_g_txt` mm·g
+:::
 :::
 
 ::: {.column width="50%"}
-### V centimetrech a kilogramech
+::: {.strip-orange .strip-compact}
+[V centimetrech a kilogramech]{.text-bold}
 
-Kovariance `r kovariance_cm_kg_txt`
-
-Biologický vztah je stejný, ale velikost čísla se po změně jednotek změní.
+Kovariance: `r kovariance_cm_kg_txt` cm·kg
+:::
 :::
 
 ::::
@@ -1227,39 +1526,174 @@ Biologický vztah je stejný, ale velikost čísla se po změně jednotek změn�
 <br>
 
 ::: {.takeaway-strip}
-Směr vztahu se nezměnil, ale velikost čísla ano. Proto chceme [bezrozměrný souhrn]{.text-color-indigo_velvet .text-bold}: korelaci.
+Směr vztahu se nezměnil, ale číslo ano. Proto chceme [bezrozměrný souhrn]{.text-color-indigo_velvet .text-bold}: korelaci.
 :::
 
 ## Dvě čísla, která budeme používat
 
-<br>
-
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.blockquote}
-**Lineární čtení vztahu**
+::: {.panel-result}
+[Pearsonova korelace]{.panel-title}
 
-- shrnuje hlavně lineární vztah
-- v našich datech vychází `r pearson_korelace_txt`
+- shrnuje lineární vztah
+- bezrozměrná, v rozsahu −1 až 1
+- v našich datech: **`r pearson_korelace_txt`**
+- `cor(..., method = "pearson")`
 :::
 :::
 
 ::: {.column width="50%"}
-::: {.blockquote}
-**Pořadí a monotónní směr**
+::: {.panel-result}
+[Spearmanova korelace]{.panel-title}
 
-- sleduje pořadí hodnot a monotónní vztah
-- v našich datech vychází `r spearman_korelace_txt`
+- sleduje pořadí hodnot (ranky)
+- odolnější vůči zakřivení a odlehlým bodům
+- v našich datech: **`r spearman_korelace_txt`**
+- `cor(..., method = "spearman")`
 :::
 :::
 
 ::::
 
-<br>
-
 ::: {.takeaway-strip}
 Obě čísla jsou [doplněk ke grafu]{.text-color-indigo_velvet .text-bold}, ne jeho náhrada.
+:::
+
+## Kalibrační galerie
+
+```{r}
+#| label: zobrazit-kalibraci
+#| echo: false
+include_local_figure("kalibrace_korelace.png")
+```
+
+::: {.takeaway-strip .fragment}
+Naše tučňáci: r = **`r pearson_korelace_txt`** — bližší panelu r ≈ 0,80 než r ≈ 0,95; vztah je silný, ale ne extrémní.
+:::
+
+## Záporná korelace
+
+```{r}
+#| label: zobrazit-zapornou-korelaci
+#| echo: false
+include_local_figure("zaporna_korelace.png")
+```
+
+::: {.strip-orange .strip-compact .fragment}
+Záporné r (= `r pearson_nadmorska_txt`): vyšší nadmořská výška → nižší průměrná teplota. Těsnost vztahu čteme z |r|.
+:::
+
+## Čtyři tučňáci v kódu
+
+:::: {.columns .align-top}
+
+::: {.column width="52%"}
+
+```{r}
+#| label: kod-male-korelace-v-r
+#| echo: true
+#| eval: false
+vec_delka_ploutve_mm <-
+  c(186, 191, 197, 204)
+
+vec_hmotnost_g <-
+  c(3800, 3920, 4300, 4480)
+
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "pearson"
+)
+
+cor(
+  x = vec_delka_ploutve_mm,
+  y = vec_hmotnost_g,
+  method = "spearman"
+)
+```
+
+:::
+
+::: {.column width="48%"}
+
+```{r}
+#| label: zobrazit-maly-bodovy-graf-pro-korelaci
+#| echo: false
+#| out.width: "84%"
+include_local_figure("maly_bodovy_graf.png")
+```
+
+::: {.panel-result}
+[Výstup]{.panel-title}
+
+Pearson: [1] `r pearson_maly_priklad_txt`\
+Spearman: [1] `r spearman_maly_priklad_txt`
+:::
+
+:::
+
+::::
+
+::: {.takeaway-strip .strip-compact}
+Pořadí i směr jdou v malém příkladu stejně — číslo jen shrne, co z grafu vidíme.
+:::
+
+## Všichni tučňáci v kódu
+
+:::: {.columns .align-top}
+
+::: {.column width="50%"}
+::: {.strip-indigo .strip-compact}
+[Pearsonova korelace]{.text-bold}
+:::
+
+```{r}
+#| label: kod-korelace-pearson-v-r
+#| echo: true
+#| eval: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "pearson"
+)
+```
+
+::: {.panel-result}
+[Výstup]{.panel-title}
+
+[1] `r pearson_korelace_txt`
+:::
+:::
+
+::: {.column width="50%"}
+::: {.strip-amethyst .strip-compact}
+[Spearmanova korelace]{.text-bold}
+:::
+
+```{r}
+#| label: kod-korelace-spearman-v-r
+#| echo: true
+#| eval: false
+cor(
+  x = data_tucnaci$delka_ploutve_mm,
+  y = data_tucnaci$hmotnost_g,
+  method = "spearman"
+)
+```
+
+::: {.panel-result}
+[Výstup]{.panel-title}
+
+[1] `r spearman_korelace_txt`
+:::
+:::
+
+::::
+
+::: {.takeaway-strip .strip-compact}
+Pearson zdůrazňuje linearitu, Spearman pořadí hodnot.
 :::
 
 ```{r}
@@ -1425,9 +1859,9 @@ ggview::save_ggplot(
 )
 ```
 
-## Odhad před odhalením
+## 
 
-Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
+Ve které ze čtyř situací by se hodnoty Pearsona a Spearmana lišily nejvíce?
 
 <br>
 
@@ -1437,7 +1871,7 @@ Ve které situaci by se Pearson a Spearman mohly rozejít nejvíc?
 ::: {.panel-question}
 [Silný lineární vztah]{.panel-lead}
 
-Bez zvláštních bodů.
+Obě čísla by se shodla — vztah je přímočarý.
 :::
 :::
 
@@ -1445,7 +1879,7 @@ Bez zvláštních bodů.
 ::: {.panel-question}
 [Žádná zřetelná souvislost]{.panel-lead}
 
-Obě čísla by měla být nízká.
+Obě čísla by byla nízká.
 :::
 :::
 
@@ -1453,7 +1887,7 @@ Obě čísla by měla být nízká.
 ::: {.panel-question}
 [Monotónní, ale zakřivený vztah]{.panel-lead .rn-circle-orange}
 
-Pořadí sedí, linearita už ne úplně.
+Pořadí sedí, ale linearita ne.
 :::
 :::
 
@@ -1462,10 +1896,10 @@ Pořadí sedí, linearita už ne úplně.
 <br>
 
 ::: {.takeaway-strip}
-Když nehlasujeme: napište si situaci, kterou byste vybrali, a krátce proč.
+Otočte se na souseda: kterou situaci byste vybrali a proč? (1 min)
 :::
 
-## Monotónní, ale zakřivený vztah
+## Zakřivený vztah — potvrzení
 
 ```{r}
 #| label: zobrazit-korelace-curve
@@ -1473,7 +1907,11 @@ Když nehlasujeme: napište si situaci, kterou byste vybrali, a krátce proč.
 include_local_figure("korelace_zakrivena.png")
 ```
 
-## Čtyři situace najednou
+::: {.takeaway-strip .fragment}
+Pearson: `r pearson_curve_txt` / Spearman: `r spearman_curve_txt` — pořadí sedí, ale linearita ne úplně.
+:::
+
+## Čtyři situace korelace
 
 ```{r}
 #| label: zobrazit-ctyri-situace-korelace
@@ -1484,188 +1922,31 @@ include_local_figure("ctyri_situace_korelace.png")
 
 ## Co nám to říká právě o tučňácích?
 
-<br>
+*Mají tučňáci s delší ploutví také vyšší tělesnou hmotnost?*
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-::: {.panel-result}
-[Obě korelace si tu rozumějí]{.panel-title}
+::: {.strip-indigo}
+Pearson i Spearman vyšly podobně
 
-- U tučňáků jsou Pearson i Spearman velmi podobné.
-- Celkový vztah je monotónní a zároveň docela blízký lineárnímu.
+- Pearson: `r pearson_korelace_txt`, Spearman: `r spearman_korelace_txt`.
+- Vztah je monotónní a blízký lineárnímu — obě čísla ho popisují dobře.
 :::
 :::
 
 ::: {.column width="50%"}
-::: {.panel-question}
-[Jedno číslo nestačí na celou biologii]{.panel-title}
+::: {.strip-orange}
+Korelace neřekne, odkud vztah pochází
 
-- Barva podle druhu ukazuje další strukturu.
-- Samotná korelace neřekne, odkud se vztah bere.
+- Část variability může plynout ze skupiny (druh).
+- Samotná korelace to neodliší.
 :::
 :::
 
 ::::
-
-## Nejdřív malý příklad korelace v R
-
-Použijeme stejný malý didaktický příklad, jen místo obrázku teď zkusíme spočítat číslo, které ten vztah shrne.
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-```{r}
-#| label: kod-male-korelace-v-r
-#| echo: true
-#| eval: false
-vec_delka_ploutve_mm <-
-  c(186, 191, 197, 204)
-
-vec_hmotnost_g <-
-  c(3800, 3920, 4300, 4480)
-
-cor(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  method = "pearson"
-)
-
-cor(
-  x = vec_delka_ploutve_mm,
-  y = vec_hmotnost_g,
-  method = "spearman"
-)
-```
-
-:::
-
-::: {.column width="50%"}
-
-```{r}
-#| label: zobrazit-maly-bodovy-graf-pro-korelaci
-#| echo: false
-#| out.width: "84%"
-include_local_figure("maly_bodovy_graf.png")
-```
-
-::: {.panel-result}
-[Výstup]{.panel-title}
-
-Pearson: [1] `r pearson_maly_priklad_txt`  
-Spearman: [1] `r spearman_maly_priklad_txt`
-:::
-
-:::
-
-::::
-
-::: {.takeaway-strip .strip-compact}
-Pořadí i směr jdou v tomto malém příkladu stejně, takže číslo jen shrne to, co už z těchto čtyř bodů vidíme.
-:::
-
-## A stejné příkazy pro všechny tučňáky
-
-:::: {.columns .align-top}
-
-::: {.column width="50%"}
-
-[Pearson]{.panel-title}
-
-```{r}
-#| label: kod-korelace-pearson-v-r
-#| echo: true
-#| eval: false
-cor(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  method = "pearson"
-)
-```
-
-::: {.panel-result}
-[Výstup]{.panel-title}
-
-[1] `r pearson_korelace_txt`
-:::
-
-:::
-
-::: {.column width="50%"}
-
-[Spearman]{.panel-title}
-
-```{r}
-#| label: kod-korelace-spearman-v-r
-#| echo: true
-#| eval: false
-cor(
-  x = data_tucnaci$delka_ploutve_mm,
-  y = data_tucnaci$hmotnost_g,
-  method = "spearman"
-)
-```
-
-::: {.panel-result}
-[Výstup]{.panel-title}
-
-[1] `r spearman_korelace_txt`
-:::
-
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip .strip-compact}
-Krátký výstup čteme takto: Pearson zdůrazňuje lineární vztah, Spearman pořadí hodnot.
-:::
-
-## Co z korelace ještě neplyne?
-
-Můžeme z tohoto vztahu tvrdit, že delší ploutev způsobuje vyšší hmotnost?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.panel-question}
-[Vysoká korelace už stačí]{.panel-lead}
-
-Ano, protože vysoká korelace sama ukazuje příčinný mechanismus.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.panel-question}
-[Asociace ano, kauzalita ne]{.panel-lead .rn-circle-orange}
-
-Vidíme asociaci, ale sama korelace neukazuje příčinný mechanismus.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.panel-question}
-[Shoda dvou koeficientů je důkaz]{.panel-lead}
-
-Ano, pokud jsou Pearson a Spearman podobné, máme kauzalitu potvrzenou.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
-:::
 
 ## Korelace ukazuje asociaci, ne příčinu
-
-<br>
 
 :::: {.columns}
 
@@ -1673,8 +1954,8 @@ Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
 ::: {.panel-result}
 [Společná změna dvou proměnných]{.panel-title}
 
-- Korelace popisuje, že se dvě proměnné mění společně.
-- Pomáhá shrnout směr a těsnost vztahu.
+- Korelace popisuje, zda se dvě proměnné mění společně.
+- Pomáhá kvantifikovat směr a těsnost vztahu.
 :::
 :::
 
@@ -1682,8 +1963,9 @@ Když nehlasujeme: zkuste jednou větou obhájit tvrzení, které byste vybrali.
 ::: {.panel-warning}
 [Sama neoddělí příčinu]{.panel-title .rn-box-red}
 
-- neoddělí příčinu od dalších proměnných nebo společného mechanismu
-- u tučňáků může část vztahu souviset i s druhem nebo celkovou velikostí těla
+- Korelace neodliší přímý efekt od sdílené příčiny.
+- Příklad: počet čápů a porodnost v Evropě korelují — obojí sdílí příčinu (venkovský charakter oblasti).
+- U tučňáků část vztahu může plynout z celkové velikosti těla — nejen z délky ploutve.
 :::
 :::
 
@@ -1793,28 +2075,31 @@ ggview::save_ggplot(
 )
 ```
 
-## Který první graf se hodí?
+## Jak vybrat první graf?
 
 :::: {.columns}
 
-::: {.column width="58%"}
-
-### Délka ploutve × hmotnost
+::: {.column width="55%"}
+::: {.strip-olive .strip-compact}
+[Délka ploutve × hmotnost]{.text-bold}
 
 Obě proměnné jsou numerické.
-
-### Druh × hmotnost
-
-Jedna proměnná tvoří skupiny, druhá je numerická.
-
-### Druh × ostrov
-
-Obě proměnné jsou kategoriální.
-
 :::
 
-::: {.column width="42%"}
+::: {.strip-indigo .strip-compact}
+[Druh × hmotnost]{.text-bold}
 
+Jedna proměnná tvoří skupiny, druhá je numerická.
+:::
+
+::: {.strip-amethyst .strip-compact}
+[Druh × ostrov]{.text-bold}
+
+Obě proměnné jsou kategoriální.
+:::
+:::
+
+::: {.column width="45%"}
 ::: {.blockquote}
 Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
 :::
@@ -1825,16 +2110,14 @@ Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
 - tabulka četností nebo dlaždicový graf
 :::
 
-:::
-
-::::
-
 ::: {.panel-question}
 [Co si řeknu jako první?]{.panel-title}
 
-- Jsou proměnné numerické, nebo kategoriální?
-- Co z jejich vztahu chci v grafu přečíst?
+Jsou proměnné numerické, nebo kategoriální?
 :::
+:::
+
+::::
 
 ## Tři rychlé příklady
 
@@ -1846,30 +2129,16 @@ include_local_figure("tri_rychle_priklady.png")
 
 ## Pravidlo pro první volbu grafu
 
-:::: {.columns}
+::: {.box-rule}
+[Jak vybrat první graf?]{.card-title}
 
-::: {.column width="32%"}
-### Bodový graf
-
-Chceme číst směr vztahu a rozptyl bodů.
+- Dvě numerické proměnné → **bodový graf**
+- Kategoriální + numerická → **boxplot** nebo body ve skupinách
+- Dvě kategoriální → **tabulka četností** nebo dlaždicový graf
 :::
-
-::: {.column width="32%"}
-### Boxplot nebo body ve skupinách
-
-Chceme porovnat rozdíly mezi skupinami.
-:::
-
-::: {.column width="32%"}
-### Tabulka četností nebo dlaždicový graf
-
-Chceme číst četnosti kombinací.
-:::
-
-::::
 
 ::: {.takeaway-strip}
-První volbu grafu neurčuje to, co vypadá nejhezčí, ale [typ dvojice proměnných a otázka, kterou chceme číst]{.text-color-indigo_velvet .text-bold}.
+Typ proměnných a otázka → první graf. Rozhodnutí trvá 10 sekund.
 :::
 
 ```{r}
@@ -1913,35 +2182,7 @@ ggview::save_ggplot(
 )
 ```
 
-## Co nám přidá model?
-
-:::: {.columns}
-
-::: {.column width="58%"}
-
-::: {.blockquote}
-Když do stejného bodového grafu přidáme přímku, co se dozvíme navíc oproti samotnému korelačnímu koeficientu?
-:::
-
-:::
-
-::: {.column width="42%"}
-::: {.panel-question}
-[Přímka by nám mohla ukázat...]{.panel-title}
-
-- směr a velikost změny
-- typický sklon vztahu
-- most od grafu k modelu
-:::
-:::
-
-::::
-
-::: {.takeaway-strip}
-Když nehlasujeme: zkuste si dopsat jednu větu začínající slovy „Přímka by nám mohla ukázat...“
-:::
-
-## Příště přidáme model
+## Co přidá model?
 
 ```{r}
 #| label: zobrazit-graf-s-primkou
@@ -1949,16 +2190,40 @@ Když nehlasujeme: zkuste si dopsat jednu větu začínající slovy „Přímka
 include_local_figure("bodovy_graf_s_primkou.png")
 ```
 
+::: {.blockquote .fragment}
+Přímka přidá [odhad efektu:]{.text-color-indigo_velvet .text-bold} o kolik gramů se typicky mění hmotnost na každý 1 mm délky ploutve? To bude L03.
+:::
+
 ## Shrnutí
 
 ::: {.blockquote}
+::: {.incremental}
 - Pro dvě numerické proměnné je první volbou bodový graf.
 - Z grafu čteme současně směr vztahu i šířku rozptylu.
 - Korelace vztah shrne číslem, ale nenahradí samotný graf.
 - Viditelný vzor ještě není důkaz efektu ani kauzality.
-- Další krok je model, který přidá odhad efektu a nejistotu.
+- Další krok je model, který přidá odhad efektu a interval spolehlivosti.
+:::
 :::
 
-## Závěrečná otázka
+## 
 
-Co ještě potřebujeme, abychom z viditelného vzoru v grafu přešli k přesnějšímu tvrzení o velikosti efektu a nejistotě?
+::: {.box-question}
+[Co ještě potřebujeme?]{.panel-title}
+
+Co nám schází k tomu, abychom z viditelného vzoru přešli k přesnějšímu tvrzení o velikosti efektu a nejistotě?
+
+<br>
+
+A) Větší dataset a více bodů v grafu.
+
+B) [Model, který přidá odhad efektu a interval spolehlivosti.]{.rn-circle-orange}
+
+C) Silnější korelaci, aby bylo číslo přesvědčivější.
+:::
+
+::: {.panel-olive}
+[Řekněte sousedovi jednou větou]{.panel-title}
+
+Co model přidá, co korelace neumí?
+:::
