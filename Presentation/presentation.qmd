@@ -37,6 +37,12 @@ library(ggview)
 path_materials <-
   "Presentation/Materials"
 
+source(
+  here::here(
+    "R/set_r_theme.R"
+  )
+)
+
 include_local_figure <- function(data_source) {
   knitr::include_graphics(
     path = here::here(
@@ -109,29 +115,26 @@ barvy_druhu <-
     "Gentoo" = "cyan4"
   )
 
-col_data <- "#8A8A8A"
-col_highlight <- "#F3A712"
-col_secondary <- "#5D2890"
+# biostat_cols["grey_olive"] <- "#8A8A8A"
+# biostat_cols["orange"] <- "#F3A712"
+# biostat_cols["indigo_velvet"] <- "#5D2890"
+# 
+# ggplot2::theme_set(
+#   ggplot2::theme_minimal() +
+#     ggplot2::theme(
+#       panel.grid.minor = ggplot2::element_blank(),
+#       strip.background = ggplot2::element_rect(
+#         fill = "#F0EDE8",
+#         color = "#8A8A8A"
+#       ),
+#       strip.text = ggplot2::element_text(
+#         face = "bold",
+#         colour = biostat_cols["grey_olive"]
+#       )
+#     )
+# )
 
-ggplot2::theme_set(
-  ggplot2::theme_minimal() +
-    ggplot2::theme(
-      panel.grid.minor = ggplot2::element_blank(),
-      strip.background = ggplot2::element_rect(
-        fill = "#F0EDE8",
-        color = "#8A8A8A"
-      ),
-      strip.text = ggplot2::element_text(
-        face = "bold",
-        colour = col_secondary
-      )
-    )
-)
 
-strip_delka_lwr <- 193
-strip_delka_upr <- 197
-strip_hmotnost_lwr <- 4100L
-strip_hmotnost_upr <- 4300L
 ```
 
 
@@ -164,23 +167,23 @@ Po dnešní přednášce budete schopni:
 
 ::: {.box-question}
 [Naše biologická otázka]{.panel-title}
-*Mají tučňáci s delší ploutví také vyšší tělesnou hmotnost?*
+[Mají tučňáci s delší ploutví také vyšší tělesnou hmotnost?]{.text-italic}
 :::
 
 :::: {.columns}
 
-::: {.column width="20%"}
+::: {.column width="10%"}
 :::
 
-::: {.column width="60%"}
+::: {.column width="80%"}
 ```{r}
 #| echo: false
-include_local_figure("lter_penguins.png")
+knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
 ```
 
 :::
 
-::: {.column width="20%"}
+::: {.column width="10%"}
 :::
 ::::
 
@@ -190,9 +193,14 @@ Ilustrace: [Allison Horst](https://allisonhorst.com/)
 
 ## Diskuze se sousedem {.text-center}
 
+::: {.box-question}
+[Naše biologická otázka]{.panel-title}
+[Mají tučňáci s delší ploutví také vyšší tělesnou hmotnost?]{.text-italic}
+:::
+
 <br>
 
-::: {.blockquote .text-bold}
+::: {.blockquote .text-bold .text-italic .text-size-large}
 Jak by podle vás mohl vypadat graf pro zodpovězení této otázky?
 :::
 
@@ -227,8 +235,7 @@ plot(
   y = vec_hmotnost_g,
   xlab = "Délka ploutve (mm)",
   ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = "darkorange"
+  pch = 16
 )
 ```
 
@@ -251,7 +258,7 @@ plot_dva_body <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 3.4,
     alpha = 0.9
   ) +
@@ -261,9 +268,9 @@ plot_dva_body <-
       label = paste0("Tučňák ", 1:2)
     ),
     nudge_x = 0.8,
-    nudge_y = -100,
-    size = 4,
-    colour = col_highlight
+    nudge_y = -80,
+    size = 3,
+    colour = biostat_cols["orange"]
   ) +
   ggplot2::labs(
     x = "Délka ploutve (mm)",
@@ -274,7 +281,7 @@ plot_dva_body <-
     ylim = c(3700, 4600)
   ) +
   ggview::canvas(
-    width = 1000,
+    width = 800,
     height = 800,
     units = "px"
   )
@@ -327,8 +334,7 @@ plot(
   y = vec_hmotnost_g,
   xlab = "Délka ploutve (mm)",
   ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = "darkorange"
+  pch = 16
 )
 ```
 
@@ -350,21 +356,20 @@ plot_maly_bodovy <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 3.4,
     alpha = 0.9
   ) +
   ggplot2::labs(
     x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "Čtyři konkrétní dvojice hodnot"
+    y = "Tělesná hmotnost (g)"
   ) +
   ggplot2::coord_cartesian(
     xlim = c(184, 206),
     ylim = c(3700, 4600)
   ) +
   ggview::canvas(
-    width = 1000,
+    width = 800,
     height = 800,
     units = "px"
   )
@@ -403,13 +408,7 @@ plot(
   y = data_tucnaci$hmotnost_g,
   xlab = "Délka ploutve (mm)",
   ylab = "Tělesná hmotnost (g)",
-  pch = 16,
-  col = rgb(
-    red = 0.54,
-    green = 0.54,
-    blue = 0.54,
-    alpha = 0.6
-  )
+  pch = 16
 )
 ```
 
@@ -431,7 +430,7 @@ plot_prvni_bodovy <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.72,
     size = 2
   ) +
@@ -504,7 +503,7 @@ plot_osy_dummy <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.7,
     size = 1.8
   ) +
@@ -516,36 +515,29 @@ plot_osy_dummy <-
     plot.subtitle = ggtext::element_markdown()
   )
 
-
 plot_standard_osy <-
   plot_osy_dummy +
-  ggplot2::labs(
-    subtitle = stringr::str_glue("<span style='color:{col_secondary}'>Délka ploutve</span> na ose x")
-  ) +
-  ggplot2::theme(
+   ggplot2::theme(
     axis.title.x = ggplot2::element_text(
       face = "bold",
-      colour = col_secondary
+      colour = biostat_cols["indigo_velvet"]
     ),
     axis.title.y = ggplot2::element_text(
-      colour = col_highlight
+      colour = biostat_cols["orange"]
     )
   )
 
 plot_prohozene_osy <-
   plot_osy_dummy +
   ggplot2::coord_flip() +
-  ggplot2::labs(
-    subtitle = stringr::str_glue("<span style='color:{col_highlight}'>Hmotnost</span> na ose x")
-  ) +
   ggplot2::theme(
     plot.subtitle = ggtext::element_markdown(),
     axis.title.y = ggplot2::element_text(
-      colour = col_secondary
+      colour = biostat_cols["indigo_velvet"]
     ),
     axis.title.x = ggplot2::element_text(
       face = "bold",
-      colour = col_highlight
+      colour = biostat_cols["orange"]
     )
   )
 
@@ -574,6 +566,18 @@ ggview::save_ggplot(
 include_local_figure("stejna_data_jine_osy.png")
 ```
 
+:::: {.columns .text-center}
+
+::: {.column width="50%"}
+[Délka ploutve]{.text-color-indigo_velvet} na ose x
+:::
+
+::: {.column width="50%"}
+[Hmotnost]{.text-color-orange} na ose x
+:::
+
+::::
+
 ## Rozptyl čteme ve dvou směrech
 
 ```{r}
@@ -581,6 +585,14 @@ include_local_figure("stejna_data_jine_osy.png")
 #| include: false
 #| message: false
 #| warning: false
+
+highlight_delka <- 190L
+highlight_hmotnost <- 4000L
+strip_delka_lwr <- highlight_delka - 2
+strip_delka_upr <- highlight_delka + 2
+strip_hmotnost_lwr <- highlight_hmotnost - 200L
+strip_hmotnost_upr <- highlight_hmotnost + 200L
+
 data_rozptyl <-
   data_tucnaci |>
   dplyr::mutate(
@@ -598,56 +610,59 @@ data_rozptyl <-
 #| warning: false
 plot_rozptyl_delka <-
   plot_osy_dummy +
+  ggplot2::geom_vline(
+    xintercept = highlight_delka,
+    colour = biostat_cols["orange"],
+    linetype = "dashed",
+  ) +
   ggplot2::annotate(
     "rect",
     xmin = strip_delka_lwr,
     xmax = strip_delka_upr,
     ymin = -Inf,
     ymax = Inf,
-    fill = col_highlight,
+    fill = biostat_cols["orange"],
     alpha = 0.15
   ) +
   ggplot2::geom_point(
     data = dplyr::filter(data_rozptyl, in_strip_delka),
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     alpha = 0.9,
     size = 2.4
   ) +
-  ggplot2::labs(
-    subtitle = stringr::str_glue("Podobná délka ploutve,<br>různá <span style='color:{col_highlight}'>hmotnost</span>")
-  ) +
   ggplot2::theme(
     axis.title.y = ggplot2::element_text(
-      colour = col_highlight
+      colour = biostat_cols["orange"]
     )
-  ) 
-
+  )
 
 plot_rozptyl_hmotnost <-
   plot_osy_dummy +
+  ggplot2::geom_hline(
+    yintercept = highlight_hmotnost,
+    colour = biostat_cols["indigo_velvet"],
+    linetype = "dashed",
+  ) +
   ggplot2::annotate(
     "rect",
     xmin = -Inf,
     xmax = Inf,
     ymin = strip_hmotnost_lwr,
     ymax = strip_hmotnost_upr,
-    fill = col_secondary,
+    fill = biostat_cols["indigo_velvet"],
     alpha = 0.15
   ) +
   ggplot2::geom_point(
     data = dplyr::filter(data_rozptyl, in_strip_hmotnost),
-    colour = col_secondary,
+    colour = biostat_cols["indigo_velvet"],
     alpha = 0.9,
     size = 2.4
   ) +
-  ggplot2::labs(
-    subtitle = stringr::str_glue("Podobná hmotnost,<br>různá <span style='color:{col_secondary}'>délka ploutve</span>")
-  ) +
   ggplot2::theme(
     axis.title.x = ggplot2::element_text(
-      colour = col_secondary
+      colour = biostat_cols["indigo_velvet"]
     )
-  ) 
+  )
 
 plot_rozptyl_highlight <-
   cowplot::plot_grid(
@@ -657,7 +672,7 @@ plot_rozptyl_highlight <-
   ) +
   ggview::canvas(
     width = 1600,
-    height = 800,
+    height = 600,
     units = "px"
   )
 
@@ -674,8 +689,20 @@ ggview::save_ggplot(
 include_local_figure("plot_rozptyl_highlight.png")
 ```
 
+:::: {.columns .text-center}
+
+::: {.column width="50%"}
+Podobná délka ploutve, různá [hmotnost]{.text-color-orange}
+:::
+
+::: {.column width="50%"}
+Podobná hmotnost, různá [délka ploutve]{.text-color-indigo_velvet}
+:::
+
+::::
+
 ::: {.takeaway-strip .strip-compact .fragment}
-Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-color-indigo_velvet .text-bold} i na to, jak široký oblak zůstává v obou směrech.
+Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-bold} i na to, jak široký oblak zůstává v obou směrech.
 :::
 
 ## Vracíme se k biologické otázce
@@ -757,10 +784,6 @@ plot_druhy <-
       colour = druh_tucnaka
     )
   ) +
-  ggplot2::geom_point(
-    alpha = 0.72,
-    size = 2
-  ) +
   ggplot2::scale_colour_manual(
     values = barvy_druhu,
     name = "Druh"
@@ -769,11 +792,18 @@ plot_druhy <-
     x = "Délka ploutve (mm)",
     y = "Tělesná hmotnost (g)"
   ) +
+  ggplot2::theme(
+    legend.position = "right"
+  ) +
+  ggplot2::geom_point(
+    alpha = 0.72,
+    size = 2
+  ) +
   ggview::canvas(
     width = 1600,
     height = 800,
     units = "px"
-  )
+  ) 
 
 ggview::save_ggplot(
   plot = plot_druhy,
@@ -790,27 +820,37 @@ include_local_figure("graf_podle_druhu.png")
 
 ## Co se po obarvení změnilo?
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="50%"}
-::: {.strip-indigo}
-Celkový vztah pořád dává smysl
+::: {.column width="60%"}
 
-- Směr oblaku zůstává kladný: větší tučňák má delší ploutev.
-- Biologická logika platí i po obarvení podle druhu.
-:::
+::: {.box-result}
+[Biologická logika platí i po obarvení podle druhu]{.panel-title}
+
+- [Směr]{.text-hgl-indigo_velvet} oblaku zůstává kladný
+   - *větší tučňák má delší ploutev*.
+- [Rozptyl]{.text-hgl-orange} má biologickou strukturu
+   - Část variability pochází z míchání více druhů
 :::
 
-::: {.column width="50%"}
-::: {.strip-orange}
-Rozptyl má biologickou strukturu
-
-- Část variability pochází z míchání více druhů v jednom grafu.
-- Jedno číslo pro všechny body může tuto strukturu skrýt.
 :::
+
+::: {.column width="40%"}
+
+<br>
+
+```{r}
+#| ref.label: "zobrazit-graf-podle-druhu"
+#| echo: false
+```
+
 :::
 
 ::::
+
+## 
 
 ```{r}
 #| label: pripravit-data-kovariance
@@ -1033,7 +1073,7 @@ plot_kovariance_stred <-
     linewidth = 0.8
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.62,
     size = 1.8
   ) +
@@ -1070,7 +1110,7 @@ plot_kovariance_kvadranty <-
     xmax = x_max,
     ymin = prumer_hmotnost,
     ymax = y_max,
-    fill = col_highlight,
+    fill = biostat_cols["orange"],
     alpha = 0.15
   ) +
   ggplot2::annotate(
@@ -1079,7 +1119,7 @@ plot_kovariance_kvadranty <-
     xmax = prumer_delka,
     ymin = y_min,
     ymax = prumer_hmotnost,
-    fill = col_highlight,
+    fill = biostat_cols["orange"],
     alpha = 0.15
   ) +
   ggplot2::annotate(
@@ -1088,7 +1128,7 @@ plot_kovariance_kvadranty <-
     xmax = x_max,
     ymin = y_min,
     ymax = prumer_hmotnost,
-    fill = col_secondary,
+    fill = biostat_cols["indigo_velvet"],
     alpha = 0.12
   ) +
   ggplot2::annotate(
@@ -1097,7 +1137,7 @@ plot_kovariance_kvadranty <-
     xmax = prumer_delka,
     ymin = prumer_hmotnost,
     ymax = y_max,
-    fill = col_secondary,
+    fill = biostat_cols["indigo_velvet"],
     alpha = 0.12
   ) +
   ggplot2::geom_vline(
@@ -1113,7 +1153,7 @@ plot_kovariance_kvadranty <-
     linewidth = 0.8
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.62,
     size = 1.8
   ) +
@@ -1175,7 +1215,7 @@ plot_bod_lupou <-
     linewidth = 0.8
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.25,
     size = 1.5
   ) +
@@ -1183,7 +1223,7 @@ plot_bod_lupou <-
     "point",
     x = bod_x,
     y = bod_y,
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     size = 5,
     alpha = 1
   ) +
@@ -1193,7 +1233,7 @@ plot_bod_lupou <-
     xend = bod_x,
     y = bod_y,
     yend = bod_y,
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     linewidth = 1.4,
     arrow = ggplot2::arrow(
       length = ggplot2::unit(0.3, "cm"),
@@ -1206,7 +1246,7 @@ plot_bod_lupou <-
     xend = bod_x,
     y = prumer_hmotnost,
     yend = bod_y,
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     linewidth = 1.4,
     arrow = ggplot2::arrow(
       length = ggplot2::unit(0.3, "cm"),
@@ -1218,7 +1258,7 @@ plot_bod_lupou <-
     x = (prumer_delka + bod_x) / 2,
     y = bod_y + 210,
     label = stringr::str_glue("+{odch_x} mm nad průměrem"),
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     size = 4.5,
     fill = "white",
     label.size = 0
@@ -1228,7 +1268,7 @@ plot_bod_lupou <-
     x = bod_x + 4,
     y = (prumer_hmotnost + bod_y) / 2,
     label = stringr::str_glue("+{odch_y} g nad průměrem"),
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     size = 4.5,
     hjust = 0,
     fill = "white",
@@ -1283,7 +1323,7 @@ make_kal_plot <- function(r_val) {
     mapping = ggplot2::aes(x = x, y = y)
   ) +
     ggplot2::geom_point(
-      colour = col_data,
+      colour = biostat_cols["grey_olive"],
       alpha = 0.65,
       size = 2
     ) +
@@ -1310,7 +1350,7 @@ plot_kalibrace <-
     ncol = 2
   ) +
   ggview::canvas(
-    width = 1400,
+    width = 1600,
     height = 900,
     units = "px"
   )
@@ -1353,7 +1393,7 @@ plot_zaporna_korelace <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.75,
     size = 2.5
   ) +
@@ -1361,7 +1401,7 @@ plot_zaporna_korelace <-
     method = "lm",
     formula = y ~ x,
     se = FALSE,
-    colour = col_secondary,
+    colour = biostat_cols["indigo_velvet"],
     linewidth = 1.3
   ) +
   ggplot2::labs(
@@ -1379,8 +1419,6 @@ ggview::save_ggplot(
   file = here::here(path_materials, "zaporna_korelace.png")
 )
 ```
-
-## 
 
 ::: {.blockquote .text-bold}
 Kdybychom chtěli jeden číselný souhrn pro celý oblak bodů — co by takové číslo muselo umět?
@@ -1719,7 +1757,7 @@ plot_linear <-
     mapping = ggplot2::aes(x = x, y = y)
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 2,
     alpha = 0.85
   ) +
@@ -1727,7 +1765,7 @@ plot_linear <-
     method = "lm",
     formula = y ~ x,
     se = FALSE,
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     linewidth = 1.1
   ) +
   ggplot2::labs(
@@ -1738,7 +1776,7 @@ plot_linear <-
     )
   ) +
   ggview::canvas(
-    width = 1000,
+    width = 800,
     height = 800,
     units = "px"
   )
@@ -1754,7 +1792,7 @@ plot_none <-
     mapping = ggplot2::aes(x = x, y = y)
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 2,
     alpha = 0.85
   ) +
@@ -1772,7 +1810,7 @@ plot_none <-
     )
   ) +
   ggview::canvas(
-    width = 1000,
+    width = 800,
     height = 800,
     units = "px"
   )
@@ -1788,7 +1826,7 @@ plot_neg <-
     mapping = ggplot2::aes(x = x, y = y)
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 2,
     alpha = 0.85
   ) +
@@ -1796,7 +1834,7 @@ plot_neg <-
     method = "lm",
     formula = y ~ x,
     se = FALSE,
-    colour = col_secondary,
+    colour = biostat_cols["indigo_velvet"],
     linewidth = 1.1
   ) +
   ggplot2::labs(
@@ -1813,12 +1851,12 @@ plot_curve <-
     mapping = ggplot2::aes(x = x, y = y)
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     size = 2,
     alpha = 0.85
   ) +
   ggplot2::geom_line(
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     linewidth = 1.1
   ) +
   ggplot2::labs(
@@ -1829,7 +1867,7 @@ plot_curve <-
     )
   ) +
   ggview::canvas(
-    width = 1000,
+    width = 1600,
     height = 800,
     units = "px"
   )
@@ -1989,7 +2027,7 @@ plot_scatter_priklad <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.65,
     size = 1.6
   ) +
@@ -2047,7 +2085,7 @@ plot_tile_priklad <-
   ) +
   ggplot2::scale_fill_gradient(
     low = "#D7E6F5",
-    high = col_secondary,
+    high = biostat_cols["indigo_velvet"],
     guide = "none"
   ) +
   ggplot2::labs(
@@ -2064,7 +2102,7 @@ plot_tri_priklady <-
     ncol = 3
   ) +
   ggview::canvas(
-    width = 1800,
+    width = 1600,
     height = 800,
     units = "px"
   )
@@ -2155,7 +2193,7 @@ plot_s_primkou <-
     )
   ) +
   ggplot2::geom_point(
-    colour = col_data,
+    colour = biostat_cols["grey_olive"],
     alpha = 0.55,
     size = 1.9
   ) +
@@ -2163,7 +2201,7 @@ plot_s_primkou <-
     method = "lm",
     formula = y ~ x,
     se = FALSE,
-    colour = col_highlight,
+    colour = biostat_cols["orange"],
     linewidth = 1.2
   ) +
   ggplot2::labs(
