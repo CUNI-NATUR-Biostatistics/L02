@@ -824,9 +824,9 @@ include_local_figure("graf_podle_druhu.png")
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="55%"}
 
-::: {.box-result}
+::: {.box-result .incremental}
 [Biologická logika platí i po obarvení podle druhu]{.panel-title}
 
 - [Směr]{.text-hgl-indigo_velvet} oblaku zůstává kladný
@@ -837,9 +837,7 @@ include_local_figure("graf_podle_druhu.png")
 
 :::
 
-::: {.column width="40%"}
-
-<br>
+::: {.column width="45%"}
 
 ```{r}
 #| ref.label: "zobrazit-graf-podle-druhu"
