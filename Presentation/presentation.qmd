@@ -118,7 +118,7 @@ barvy_druhu <-
 # biostat_cols["grey_olive"] <- "#8A8A8A"
 # biostat_cols["orange"] <- "#F3A712"
 # biostat_cols["indigo_velvet"] <- "#5D2890"
-# 
+#
 # ggplot2::theme_set(
 #   ggplot2::theme_minimal() +
 #     ggplot2::theme(
@@ -133,8 +133,6 @@ barvy_druhu <-
 #       )
 #     )
 # )
-
-
 ```
 
 
@@ -517,7 +515,7 @@ plot_osy_dummy <-
 
 plot_standard_osy <-
   plot_osy_dummy +
-   ggplot2::theme(
+  ggplot2::theme(
     axis.title.x = ggplot2::element_text(
       face = "bold",
       colour = biostat_cols["indigo_velvet"]
@@ -585,7 +583,6 @@ include_local_figure("stejna_data_jine_osy.png")
 #| include: false
 #| message: false
 #| warning: false
-
 highlight_delka <- 190L
 highlight_hmotnost <- 4000L
 strip_delka_lwr <- highlight_delka - 2
@@ -769,7 +766,6 @@ Než hlasujeme: přesvědčte souseda, proč jste vybrali svoji možnost.
 
 ## Stejná data, ale s druhem
 
-
 ```{r}
 #| label: vytvorit-scatter-druhy
 #| include: false
@@ -803,7 +799,7 @@ plot_druhy <-
     width = 1600,
     height = 800,
     units = "px"
-  ) 
+  )
 
 ggview::save_ggplot(
   plot = plot_druhy,
@@ -848,10 +844,27 @@ include_local_figure("graf_podle_druhu.png")
 
 ::::
 
-## 
+## Kdybychom chtěli jedno číslo pro souhrn všech dat?
+
+::: {.box-question .text-bold}
+[Co by takové číslo muselo umět?]{.panel-title}
+
+ - v závislosti na směru vztahu..
+ - v závislosti na rozptylu dat..
+ - v závislosti na volbě jednotek...
+
+:::
+
+::: {.panel-olive}
+[Řekněte sousedovi aspoň jednu vlastnost]{.panel-title}
+
+30 s každý — pak porovnejte, co jste vymysleli.
+:::
+
+## Nejprve průmery grafu {.text-center}
 
 ```{r}
-#| label: pripravit-data-kovariance
+#| label: vytvorit-kovariance
 #| include: false
 #| message: false
 #| warning: false
@@ -861,196 +874,7 @@ prumer_delka <-
 prumer_hmotnost <-
   mean(data_tucnaci$hmotnost_g)
 
-kovariance_mm_g <-
-  cov(
-    x = data_tucnaci$delka_ploutve_mm,
-    y = data_tucnaci$hmotnost_g
-  )
-
-kovariance_cm_kg <-
-  cov(
-    x = data_tucnaci$delka_ploutve_mm / 10,
-    y = data_tucnaci$hmotnost_g / 1000
-  )
-
-pearson_korelace <-
-  cor(
-    x = data_tucnaci$delka_ploutve_mm,
-    y = data_tucnaci$hmotnost_g,
-    method = "pearson"
-  )
-
-spearman_korelace <-
-  cor(
-    x = data_tucnaci$delka_ploutve_mm,
-    y = data_tucnaci$hmotnost_g,
-    method = "spearman"
-  )
-
-kovariance_mm_g_txt <-
-  formatC(
-    kovariance_mm_g,
-    format = "f",
-    digits = 0,
-    big.mark = " ",
-    decimal.mark = ","
-  )
-
-kovariance_cm_kg_txt <-
-  formatC(
-    kovariance_cm_kg,
-    format = "f",
-    digits = 3,
-    decimal.mark = ","
-  )
-
-pearson_korelace_txt <-
-  formatC(
-    pearson_korelace,
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_korelace_txt <-
-  formatC(
-    spearman_korelace,
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-pearson_maly_priklad_txt <-
-  formatC(
-    cor(
-      x = data_maly_priklad_vztahu$delka_ploutve_mm,
-      y = data_maly_priklad_vztahu$hmotnost_g,
-      method = "pearson"
-    ),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_maly_priklad_txt <-
-  formatC(
-    cor(
-      x = data_maly_priklad_vztahu$delka_ploutve_mm,
-      y = data_maly_priklad_vztahu$hmotnost_g,
-      method = "spearman"
-    ),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-x_linear <-
-  seq(1, 10, length.out = 12)
-
-y_linear <-
-  c(1.5, 1.7, 2.4, 2.9, 3.1, 3.8, 4.2, 4.7, 5.1, 5.3, 6.0, 6.2)
-
-x_none <-
-  seq(1, 10, length.out = 12)
-
-y_none <-
-  c(3.2, 4.8, 2.7, 5.1, 3.9, 4.4, 2.9, 5.0, 3.5, 4.1, 3.8, 4.6)
-
-x_neg <-
-  seq(1, 10, length.out = 12)
-
-y_neg <-
-  c(6.0, 5.8, 5.5, 5.2, 4.7, 4.5, 4.2, 3.9, 3.4, 3.2, 2.8, 2.5)
-
-x_curve <-
-  seq(1, 10, length.out = 12)
-
-y_curve <-
-  c(1.1, 1.6, 2.0, 2.5, 3.1, 3.7, 4.2, 4.6, 4.9, 5.1, 5.2, 5.3)
-
-pearson_linear_txt <-
-  formatC(
-    cor(x_linear, y_linear, method = "pearson"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_linear_txt <-
-  formatC(
-    cor(x_linear, y_linear, method = "spearman"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-pearson_none_txt <-
-  formatC(
-    cor(x_none, y_none, method = "pearson"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_none_txt <-
-  formatC(
-    cor(x_none, y_none, method = "spearman"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-pearson_neg_txt <-
-  formatC(
-    cor(x_neg, y_neg, method = "pearson"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_neg_txt <-
-  formatC(
-    cor(x_neg, y_neg, method = "spearman"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-pearson_curve_txt <-
-  formatC(
-    cor(x_curve, y_curve, method = "pearson"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-
-spearman_curve_txt <-
-  formatC(
-    cor(x_curve, y_curve, method = "spearman"),
-    format = "f",
-    digits = 2,
-    decimal.mark = ","
-  )
-```
-
-```{r}
-#| label: vytvorit-kovariance
-#| include: false
-#| message: false
-#| warning: false
-x_min <-
-  min(data_tucnaci$delka_ploutve_mm) - 3
-
-x_max <-
-  max(data_tucnaci$delka_ploutve_mm) + 3
-
-y_min <-
-  min(data_tucnaci$hmotnost_g) - 150
-
-y_max <-
-  max(data_tucnaci$hmotnost_g) + 150
-
-plot_kovariance_stred <-
+plot_kovariance_stred_prazdny <-
   ggplot2::ggplot(
     data = data_tucnaci,
     mapping = ggplot2::aes(
@@ -1070,15 +894,6 @@ plot_kovariance_stred <-
     colour = "gray50",
     linewidth = 0.8
   ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    alpha = 0.62,
-    size = 1.8
-  ) +
-  ggplot2::coord_cartesian(
-    xlim = c(x_min, x_max),
-    ylim = c(y_min, y_max)
-  ) +
   ggplot2::labs(
     x = "Délka ploutve (mm)",
     y = "Tělesná hmotnost (g)"
@@ -1087,93 +902,31 @@ plot_kovariance_stred <-
     width = 1600,
     height = 800,
     units = "px"
+  )
+
+plot_kovariance_stred <-
+  plot_kovariance_stred_prazdny +
+  ggplot2::geom_point(
+    colour = biostat_cols["grey_olive"],
+    alpha = 0.62,
+    size = 1.8
   )
 
 ggview::save_ggplot(
   plot = plot_kovariance_stred,
   file = here::here(path_materials, "kovariance_stred.png")
 )
-
-plot_kovariance_kvadranty <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = prumer_delka,
-    xmax = x_max,
-    ymin = prumer_hmotnost,
-    ymax = y_max,
-    fill = biostat_cols["orange"],
-    alpha = 0.15
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = x_min,
-    xmax = prumer_delka,
-    ymin = y_min,
-    ymax = prumer_hmotnost,
-    fill = biostat_cols["orange"],
-    alpha = 0.15
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = prumer_delka,
-    xmax = x_max,
-    ymin = y_min,
-    ymax = prumer_hmotnost,
-    fill = biostat_cols["indigo_velvet"],
-    alpha = 0.12
-  ) +
-  ggplot2::annotate(
-    "rect",
-    xmin = x_min,
-    xmax = prumer_delka,
-    ymin = prumer_hmotnost,
-    ymax = y_max,
-    fill = biostat_cols["indigo_velvet"],
-    alpha = 0.12
-  ) +
-  ggplot2::geom_vline(
-    xintercept = prumer_delka,
-    linetype = "dashed",
-    colour = "gray50",
-    linewidth = 0.8
-  ) +
-  ggplot2::geom_hline(
-    yintercept = prumer_hmotnost,
-    linetype = "dashed",
-    colour = "gray50",
-    linewidth = 0.8
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    alpha = 0.62,
-    size = 1.8
-  ) +
-  ggplot2::coord_cartesian(
-    xlim = c(x_min, x_max),
-    ylim = c(y_min, y_max)
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_kovariance_kvadranty,
-  file = here::here(path_materials, "kovariance_kvadranty.png")
-)
 ```
+
+```{r}
+#| label: zobrazit-kovarianci-stred
+#| echo: false
+include_local_figure("kovariance_stred.png")
+```
+
+Průmer pro délku ploutve je `r round(prumer_delka,2)` mm, průmer pro hmotnost je `r round(prumer_hmotnost,2)` g.
+
+## Jeden bod pod lupou {.text-center}
 
 ```{r}
 #| label: vytvorit-bod-lupou
@@ -1193,38 +946,7 @@ odch_x <- round(bod_x - prumer_delka)
 odch_y <- round(bod_y - prumer_hmotnost)
 
 plot_bod_lupou <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_vline(
-    xintercept = prumer_delka,
-    linetype = "dashed",
-    colour = "gray50",
-    linewidth = 0.8
-  ) +
-  ggplot2::geom_hline(
-    yintercept = prumer_hmotnost,
-    linetype = "dashed",
-    colour = "gray50",
-    linewidth = 0.8
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    alpha = 0.25,
-    size = 1.5
-  ) +
-  ggplot2::annotate(
-    "point",
-    x = bod_x,
-    y = bod_y,
-    colour = biostat_cols["orange"],
-    size = 5,
-    alpha = 1
-  ) +
+  plot_kovariance_stred +
   ggplot2::annotate(
     "segment",
     x = prumer_delka,
@@ -1232,11 +954,7 @@ plot_bod_lupou <-
     y = bod_y,
     yend = bod_y,
     colour = biostat_cols["orange"],
-    linewidth = 1.4,
-    arrow = ggplot2::arrow(
-      length = ggplot2::unit(0.3, "cm"),
-      ends = "last"
-    )
+    linewidth = 1
   ) +
   ggplot2::annotate(
     "segment",
@@ -1245,45 +963,15 @@ plot_bod_lupou <-
     y = prumer_hmotnost,
     yend = bod_y,
     colour = biostat_cols["orange"],
-    linewidth = 1.4,
-    arrow = ggplot2::arrow(
-      length = ggplot2::unit(0.3, "cm"),
-      ends = "last"
-    )
+    linewidth = 1
   ) +
   ggplot2::annotate(
-    "label",
-    x = (prumer_delka + bod_x) / 2,
-    y = bod_y + 210,
-    label = stringr::str_glue("+{odch_x} mm nad průměrem"),
-    colour = biostat_cols["orange"],
-    size = 4.5,
-    fill = "white",
-    label.size = 0
-  ) +
-  ggplot2::annotate(
-    "label",
-    x = bod_x + 4,
-    y = (prumer_hmotnost + bod_y) / 2,
-    label = stringr::str_glue("+{odch_y} g nad průměrem"),
-    colour = biostat_cols["orange"],
-    size = 4.5,
-    hjust = 0,
-    fill = "white",
-    label.size = 0
-  ) +
-  ggplot2::coord_cartesian(
-    xlim = c(x_min, x_max),
-    ylim = c(y_min, y_max)
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)"
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
+    "point",
+    x = bod_x,
+    y = bod_y,
+    colour = biostat_cols["indigo_velvet"],
+    size = 2,
+    alpha = 1
   )
 
 ggview::save_ggplot(
@@ -1291,6 +979,405 @@ ggview::save_ggplot(
   file = here::here(path_materials, "bod_lupou.png")
 )
 ```
+
+
+```{r}
+#| label: zobrazit-bod-lupou
+#| echo: false
+include_local_figure("bod_lupou.png")
+```
+
+::: {.box-result}
+[Bod nad průměrem v obou proměnných]{.panel-title}
+
+Odchylky mají stejné znaménko (+)*(+) -> součin je **kladný**
+
+:::
+
+
+## 
+
+```{r}
+#| label: vytvorit-kovariance-kvadraty
+#| include: false
+#| message: false
+#| warning: false
+x_min <- min(data_tucnaci$delka_ploutve_mm) - 2
+x_max <- max(data_tucnaci$delka_ploutve_mm) + 2
+y_min <- min(data_tucnaci$hmotnost_g) - 200
+y_max <- max(data_tucnaci$hmotnost_g) + 200
+
+x_one_third <- (x_min + prumer_delka) / 2
+x_two_third <- (x_max + prumer_delka) / 2
+y_one_third <- (y_min + prumer_hmotnost) / 2
+y_two_third <- (y_max + prumer_hmotnost) / 2
+
+plot_kovariance_kvadranty <-
+  plot_kovariance_stred_prazdny +
+  ggplot2::theme(
+    axis.text = ggplot2::element_blank(),
+    axis.ticks = ggplot2::element_blank()
+  ) +
+  ggplot2::annotate(
+    "text",
+    x = x_one_third,
+    y = y_two_third,
+    label = "I.",
+    fill = biostat_cols["grey_olive"],
+  ) +
+  ggplot2::annotate(
+    "text",
+    x = x_two_third,
+    y = y_two_third,
+    label = "II.",
+    fill = biostat_cols["grey_olive"],
+  ) +
+  ggplot2::annotate(
+    "text",
+    x = x_one_third,
+    y = y_one_third,
+    label = "III.",
+    fill = biostat_cols["grey_olive"],
+  ) +
+  ggplot2::annotate(
+    "text",
+    x = x_two_third,
+    y = y_one_third,
+    label = "IV.",
+    fill = biostat_cols["grey_olive"],
+  )
+
+ggview::save_ggplot(
+  plot = plot_kovariance_kvadranty,
+  file = here::here(path_materials, "kovariance_kvadranty.png")
+)
+```
+
+```{r}
+#| label: zobrazit-kovarianci-kvadranty
+#| echo: false
+include_local_figure("kovariance_kvadranty.png")
+```
+
+
+Bod z předchozího snímku byl v pravém horním kvadrantu (II) 
+
+
+## Ve které další části grafu budou součiny také kladné? {.text-center}
+
+```{r}
+#| ref.label: "zobrazit-kovarianci-kvadranty"
+#| echo: false
+```
+
+:::: {.columns}
+
+::: {.column width="32%"}
+::: {.box-question .rn-circle-indigo}
+[II. a III. kvadrant]{.panel-lead }
+
+Vpravo nahoře a vlevo dole — obě odchylky mají vždy stejné znaménko.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.box-question}
+[I. a IV. kvadrant]{.panel-lead}
+
+Vlevo nahoře a vpravo dole — odchylky mají opačná znaménka.
+:::
+:::
+
+::: {.column width="32%"}
+::: {.box-question}
+[Všechny čtyři stejně]{.panel-lead}
+
+Na poloze vůči středu nezáleží.
+:::
+:::
+
+::::
+
+
+
+## Projdeme čtyři tučňáky ručně
+
+:::: {.columns .align-top}
+
+::: {.column width="35%"}
+```{r}
+#| ref.label: "zobrazit-ctyri-body"
+#| echo: false
+```
+
+::: {.strip-olive .strip-compact}
+Průměry: 
+
+Délka ploutve: **`r mean(data_maly_priklad_vztahu$delka_ploutve_mm)`** mm 
+
+Hmotnost: **`r mean(data_maly_priklad_vztahu$hmotnost_g)`** g
+:::
+:::
+
+::: {.column width="58%"}
+
+```{r}
+#| label: tabulka-data-kovariance
+#| include: true
+#| message: false
+#| warning: false
+data_maly_priklad_vztahu_kovariance <-
+  data_maly_priklad_vztahu |>
+  dplyr::mutate(
+    odchylka_delka = delka_ploutve_mm - mean(data_maly_priklad_vztahu$delka_ploutve_mm),
+    odchylka_hmotnost = hmotnost_g - mean(data_maly_priklad_vztahu$hmotnost_g),
+    soucin = odchylka_delka * odchylka_hmotnost
+  ) |>
+  dplyr::mutate(
+    dplyr::across(
+      dplyr::everything(),
+      ~ round(.x, 2)
+    )
+  )
+
+data_maly_priklad_vztahu_kovariance |>
+  dplyr::select(-soucin) |>
+  rlang::set_names(
+    nm = c(
+      "Délka",
+      "Hmotnost",
+      "Délka \nodch.",
+      "Hmotnost \nodch."
+    )
+  ) |>
+  tinytable::tt()
+```
+
+
+
+:::
+
+::::
+
+## Kovariance je "průměr součinů odchylek"
+
+```{r}
+#| label: pripravit-data-kovariance-maly-priklad
+#| include: false
+#| message: false
+#| warning: false
+
+vec_soucin <- sum(data_maly_priklad_vztahu_kovariance$soucin)
+vec_pocet_pozorovani_minus_one <- nrow(data_maly_priklad_vztahu) -1
+vec_kovariance <- vec_soucin / vec_pocet_pozorovani_minus_one
+
+vec_kovariance_fc <-
+  cov(
+    x = data_maly_priklad_vztahu_kovariance$delka_ploutve_mm,
+    y = data_maly_priklad_vztahu_kovariance$hmotnost_g
+  )
+```
+
+kovariance = **součet součinů odchylek**  / (**počet pozorování** - 1) 
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+```{r}
+#| label: tabulka-data-kovariance-soucin
+#| include: true
+#| message: false
+#| warning: false
+data_maly_priklad_vztahu_kovariance |>
+dplyr::select(-c(delka_ploutve_mm, hmotnost_g)) |>
+  rlang::set_names(
+    nm = c(
+      "Délka \nodch.",
+      "Hmotnost \nodch.",
+      "Součin"
+    )
+  ) |>
+  tinytable::tt()
+```
+
+
+:::
+
+::: {.column width="2%"}
+
+:::
+
+::: {.column width="53%"}
+
+<br>
+
+[součet součinů odchylek = `r vec_soucin`]{.fragment}
+
+[počet pozorování - 1 = `r vec_pocet_pozorovani_minus_one`]{.fragment}
+
+:::
+
+::::
+
+[kovariance = `r vec_soucin` / `r vec_pocet_pozorovani_minus_one` = **`r round(vec_kovariance, 2)` mm·g**]{.fragment}
+
+## Prakticky stejné číslo nám dá funkce `cov()`.
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: kovariance-maly-priklad-manualne
+#| echo: true
+#| eval: false
+soucin <- sum(
+  data_priklad_vztahu_kovariance$soucin_odchylek
+)
+pocet_pozorovani_minus_one <-
+  nrow(data_priklad_vztahu_kovariance) - 1
+kovariance <-
+  vec_soucin / pocet_pozorovani_minus_one
+kovariance
+```
+
+::: {.strip-olive}
+[1] `r round(vec_kovariance, 2)` 
+:::
+
+:::
+
+
+::: {.column width="50%" .fragment}
+```{r}
+#| label: kovariance-maly-priklad-funkce
+#| echo: true
+#| eval: false
+kovariance <- cov(
+  x = data_priklad_vztahu_kovariance$delka_ploutve_mm,
+  y = data_priklad_vztahu_kovariance$hmotnost_g
+)
+kovariance
+```
+
+::: {.strip-olive}
+[1] `r round(vec_kovariance_fc, 2)` 
+:::
+
+:::
+
+::::
+
+## Záleží na jednotkách?
+
+```{r}
+#| label: pripravit-kovariance-jednotky
+#| include: false
+#| message: false
+#| warning: false
+kovariance_mm_g <-
+  cov(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g
+  )
+
+kovariance_cm_kg <-
+  cov(
+    x = data_tucnaci$delka_ploutve_mm / 10,
+    y = data_tucnaci$hmotnost_g / 1000
+  )
+
+kovariance_mm_g_txt <-
+  formatC(
+    kovariance_mm_g,
+    format = "f",
+    digits = 0,
+    big.mark = " ",
+    decimal.mark = ","
+  )
+
+kovariance_cm_kg_txt <-
+  formatC(
+    kovariance_cm_kg,
+    format = "f",
+    digits = 3,
+    decimal.mark = ","
+  )
+```
+
+Jsou to stejní tučňáci. Záleží na tom, v jakých jednotkách délku a hmotnost měříme?
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.strip-indigo .strip-compact}
+[V milimetrech a gramech]{.text-bold}
+
+Kovariance: `r kovariance_mm_g_txt` (mm·g)
+:::
+:::
+
+::: {.column width="50%"}
+::: {.strip-orange .strip-compact}
+[V centimetrech a kilogramech]{.text-bold}
+
+Kovariance: `r kovariance_cm_kg_txt` (cm·kg)
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip .fragment}
+Směr vztahu se nezměnil, ale číslo ano. Proto chceme [bezrozměrný souhrn]{.text-color-indigo_velvet .text-bold}: korelaci.
+:::
+
+# Korelace
+
+## Dvě čísla, která budeme používat
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="48%"}
+::: {.panel-result}
+[Pearsonova korelace]{.panel-title}
+
+- shrnuje lineární vztah
+- bezrozměrná, v rozsahu −1 až 1
+- `cor(..., method = "pearson")`
+:::
+:::
+
+::: {.column width="4%"}
+:::
+
+::: {.column width="48%" .fragment}
+::: {.panel-result}
+[Spearmanova korelace]{.panel-title}
+
+- sleduje pořadí hodnot (rank)
+- odolnější vůči zakřivení a odlehlým bodům
+- `cor(..., method = "spearman")`
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip .fragment}
+Obě čísla jsou [doplněk ke grafu]{.text-color-indigo_velvet .text-bold}, ne jeho náhrada.
+:::
+
+## Kalibrační galerie {.text-center}
 
 ```{r}
 #| label: vytvorit-kalibraci
@@ -1360,13 +1447,79 @@ ggview::save_ggplot(
 ```
 
 ```{r}
+#| label: zobrazit-kalibraci
+#| echo: false
+include_local_figure("kalibrace_korelace.png")
+```
+
+```{r}
+#| label: pripravit-korelace-tucnaci
+#| include: false
+#| message: false
+#| warning: false
+pearson_korelace <-
+  cor(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g,
+    method = "pearson"
+  )
+
+spearman_korelace <-
+  cor(
+    x = data_tucnaci$delka_ploutve_mm,
+    y = data_tucnaci$hmotnost_g,
+    method = "spearman"
+  )
+
+pearson_korelace_txt <-
+  formatC(
+    pearson_korelace,
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_korelace_txt <-
+  formatC(
+    spearman_korelace,
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+```
+
+::: {.takeaway-strip .fragment}
+Naše tučňáci: r = **`r pearson_korelace_txt`**
+:::
+
+## Záporná korelace
+
+```{r}
+#| label: pripravit-vektory-zaporna-korelace
+#| include: false
+#| message: false
+#| warning: false
+x_neg <-
+  seq(1, 10, length.out = 12)
+
+y_neg <-
+  c(6.0, 5.8, 5.5, 5.2, 4.7, 4.5, 4.2, 3.9, 3.4, 3.2, 2.8, 2.5)
+```
+
+```{r}
 #| label: vytvorit-zapornou-korelaci
 #| include: false
 #| message: false
 #| warning: false
+set.seed(900723)
+vec_noise <- rnorm(
+  length(x_neg),
+  mean = 0, sd = 1
+)
+
 data_nadmorska <-
   tibble::tibble(
-    nadmorska_vyska_m = round(x_neg * 90 + 200),
+    nadmorska_vyska_m = round((x_neg + vec_noise) * 90 + 200),
     prumerna_teplota_c = round(y_neg * 2.4 + 5.5, 1)
   )
 
@@ -1404,7 +1557,7 @@ plot_zaporna_korelace <-
   ) +
   ggplot2::labs(
     x = "Nadmořská výška (m)",
-    y = "Průměrná červencová teplota (°C)"
+    y = "Průměrná teplota (°C)"
   ) +
   ggview::canvas(
     width = 1600,
@@ -1418,199 +1571,6 @@ ggview::save_ggplot(
 )
 ```
 
-::: {.blockquote .text-bold}
-Kdybychom chtěli jeden číselný souhrn pro celý oblak bodů — co by takové číslo muselo umět?
-:::
-
-Dokončete alespoň jednu větu:
-
-- „Muselo by rozlišovat, zda se proměnné pohybují [stejným nebo opačným]{.text-color-indigo_velvet .text-bold} směrem..."
-- „Nesmělo by záviset na [volbě jednotek]{.text-color-indigo_velvet .text-bold}..."
-
-::: {.panel-olive}
-[Řekněte sousedovi aspoň jednu vlastnost]{.panel-title}
-
-30 s každý — pak porovnejte, co jste vymysleli.
-:::
-
-## Nejprve jen střed grafu
-
-```{r}
-#| label: zobrazit-kovarianci-stred
-#| echo: false
-include_local_figure("kovariance_stred.png")
-```
-
-## Jeden bod pod lupou
-
-```{r}
-#| label: zobrazit-bod-lupou
-#| echo: false
-include_local_figure("bod_lupou.png")
-```
-
-Bod nad průměrem v obou proměnných — odchylky mají stejné znaménko, součin je **kladný**.
-
-## 
-
-Bod z předchozího snímku byl v pravém horním kvadrantu — obě odchylky kladné, součin kladný. Ve které **další** části grafu budou součiny také kladné?
-
-<br>
-
-:::: {.columns}
-
-::: {.column width="32%"}
-::: {.panel-question}
-[I. a III. kvadrant]{.panel-lead .rn-circle-orange}
-
-Vpravo nahoře a vlevo dole — obě odchylky mají vždy stejné znaménko.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.panel-question}
-[II. a IV. kvadrant]{.panel-lead}
-
-Vlevo nahoře a vpravo dole — odchylky mají opačná znaménka.
-:::
-:::
-
-::: {.column width="32%"}
-::: {.panel-question}
-[Všechny čtyři stejně]{.panel-lead}
-
-Na poloze vůči středu nezáleží.
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Ukažte prstem na dvojici kvadrantů dřív, než vybarvíme.
-:::
-
-## Takto to funguje
-
-```{r}
-#| label: zobrazit-kovarianci-kvadranty
-#| echo: false
-include_local_figure("kovariance_kvadranty.png")
-```
-
-::: {.strip-indigo .strip-compact .fragment}
-[Takto pracuje kovariance:]{.text-color-indigo_velvet .text-bold} kladné součiny v I. a III. kvadrantu, záporné v II. a IV.
-:::
-
-## Projdeme čtyři tučňáky ručně
-
-:::: {.columns .align-top}
-
-::: {.column width="42%"}
-```{r}
-#| label: zobrazit-maly-bodik-kovariance
-#| echo: false
-#| out.width: "95%"
-include_local_figure("maly_bodovy_graf.png")
-```
-
-::: {.strip-olive .strip-compact}
-Průměry: 194,5 mm a 4 125 g
-:::
-:::
-
-::: {.column width="58%"}
-
-| Délka | Hm. | Odch. dl. | Odch. hm. | Součin |
-|---:|---:|---:|---:|---:|
-| 186 | 3 800 | −8,5 | −325 | **+2 762,5** |
-| 191 | 3 920 | −3,5 | −205 | **+717,5** |
-| 197 | 4 300 | +2,5 | +175 | **+437,5** |
-| 204 | 4 480 | +9,5 | +355 | **+3 372,5** |
-
-Součet = **+7 290** → kovariance = 7 290 / 3 = **2 430 mm·g**
-
-:::
-
-::::
-
-## Záleží na jednotkách?
-
-Jsou to stejní tučňáci. Záleží na tom, v jakých jednotkách délku a hmotnost měříme?
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.strip-indigo .strip-compact}
-[V milimetrech a gramech]{.text-bold}
-
-Kovariance: `r kovariance_mm_g_txt` mm·g
-:::
-:::
-
-::: {.column width="50%"}
-::: {.strip-orange .strip-compact}
-[V centimetrech a kilogramech]{.text-bold}
-
-Kovariance: `r kovariance_cm_kg_txt` cm·kg
-:::
-:::
-
-::::
-
-<br>
-
-::: {.takeaway-strip}
-Směr vztahu se nezměnil, ale číslo ano. Proto chceme [bezrozměrný souhrn]{.text-color-indigo_velvet .text-bold}: korelaci.
-:::
-
-## Dvě čísla, která budeme používat
-
-:::: {.columns}
-
-::: {.column width="50%"}
-::: {.panel-result}
-[Pearsonova korelace]{.panel-title}
-
-- shrnuje lineární vztah
-- bezrozměrná, v rozsahu −1 až 1
-- v našich datech: **`r pearson_korelace_txt`**
-- `cor(..., method = "pearson")`
-:::
-:::
-
-::: {.column width="50%"}
-::: {.panel-result}
-[Spearmanova korelace]{.panel-title}
-
-- sleduje pořadí hodnot (ranky)
-- odolnější vůči zakřivení a odlehlým bodům
-- v našich datech: **`r spearman_korelace_txt`**
-- `cor(..., method = "spearman")`
-:::
-:::
-
-::::
-
-::: {.takeaway-strip}
-Obě čísla jsou [doplněk ke grafu]{.text-color-indigo_velvet .text-bold}, ne jeho náhrada.
-:::
-
-## Kalibrační galerie
-
-```{r}
-#| label: zobrazit-kalibraci
-#| echo: false
-include_local_figure("kalibrace_korelace.png")
-```
-
-::: {.takeaway-strip .fragment}
-Naše tučňáci: r = **`r pearson_korelace_txt`** — bližší panelu r ≈ 0,80 než r ≈ 0,95; vztah je silný, ale ne extrémní.
-:::
-
-## Záporná korelace
-
 ```{r}
 #| label: zobrazit-zapornou-korelaci
 #| echo: false
@@ -1618,8 +1578,38 @@ include_local_figure("zaporna_korelace.png")
 ```
 
 ::: {.strip-orange .strip-compact .fragment}
-Záporné r (= `r pearson_nadmorska_txt`): vyšší nadmořská výška → nižší průměrná teplota. Těsnost vztahu čteme z |r|.
+Záporné r (`r pearson_nadmorska_txt`) | vyšší nadmořská výška → nižší průměrná teplota.
 :::
+
+```{r}
+#| label: pripravit-korelace-maly-priklad
+#| include: false
+#| message: false
+#| warning: false
+pearson_maly_priklad_txt <-
+  formatC(
+    cor(
+      x = data_maly_priklad_vztahu$delka_ploutve_mm,
+      y = data_maly_priklad_vztahu$hmotnost_g,
+      method = "pearson"
+    ),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_maly_priklad_txt <-
+  formatC(
+    cor(
+      x = data_maly_priklad_vztahu$delka_ploutve_mm,
+      y = data_maly_priklad_vztahu$hmotnost_g,
+      method = "spearman"
+    ),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+```
 
 ## Čtyři tučňáci v kódu
 
@@ -1661,20 +1651,17 @@ cor(
 include_local_figure("maly_bodovy_graf.png")
 ```
 
-::: {.panel-result}
+:::
+
+::::
+
+::: {.panel-result .fragment}
 [Výstup]{.panel-title}
 
 Pearson: [1] `r pearson_maly_priklad_txt`\
 Spearman: [1] `r spearman_maly_priklad_txt`
 :::
 
-:::
-
-::::
-
-::: {.takeaway-strip .strip-compact}
-Pořadí i směr jdou v malém příkladu stejně — číslo jen shrne, co z grafu vidíme.
-:::
 
 ## Všichni tučňáci v kódu
 
@@ -1728,174 +1715,14 @@ cor(
 
 ::::
 
-::: {.takeaway-strip .strip-compact}
+<br>
+<br>
+
+::: {.takeaway-strip .fragment}
 Pearson zdůrazňuje linearitu, Spearman pořadí hodnot.
 :::
 
-```{r}
-#| label: vytvorit-korelace-situace
-#| include: false
-#| message: false
-#| warning: false
-data_linear <-
-  tibble::tibble(x = x_linear, y = y_linear)
-
-data_none <-
-  tibble::tibble(x = x_none, y = y_none)
-
-data_neg <-
-  tibble::tibble(x = x_neg, y = y_neg)
-
-data_curve <-
-  tibble::tibble(x = x_curve, y = y_curve)
-
-plot_linear <-
-  ggplot2::ggplot(
-    data = data_linear,
-    mapping = ggplot2::aes(x = x, y = y)
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    size = 2,
-    alpha = 0.85
-  ) +
-  ggplot2::geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    se = FALSE,
-    colour = biostat_cols["orange"],
-    linewidth = 1.1
-  ) +
-  ggplot2::labs(
-    x = "X",
-    y = "Y",
-    subtitle = stringr::str_glue(
-      "Silná kladná lineární\nP {pearson_linear_txt} | S {spearman_linear_txt}"
-    )
-  ) +
-  ggview::canvas(
-    width = 800,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_linear,
-  file = here::here(path_materials, "korelace_linear.png")
-)
-
-plot_none <-
-  ggplot2::ggplot(
-    data = data_none,
-    mapping = ggplot2::aes(x = x, y = y)
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    size = 2,
-    alpha = 0.85
-  ) +
-  ggplot2::geom_hline(
-    yintercept = mean(data_none$y),
-    linetype = "dashed",
-    colour = "gray50",
-    linewidth = 0.8
-  ) +
-  ggplot2::labs(
-    x = "X",
-    y = "Y",
-    subtitle = stringr::str_glue(
-      "Žádná zřetelná souvislost\nP {pearson_none_txt} | S {spearman_none_txt}"
-    )
-  ) +
-  ggview::canvas(
-    width = 800,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_none,
-  file = here::here(path_materials, "korelace_bez_vztahu.png")
-)
-
-plot_neg <-
-  ggplot2::ggplot(
-    data = data_neg,
-    mapping = ggplot2::aes(x = x, y = y)
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    size = 2,
-    alpha = 0.85
-  ) +
-  ggplot2::geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    se = FALSE,
-    colour = biostat_cols["indigo_velvet"],
-    linewidth = 1.1
-  ) +
-  ggplot2::labs(
-    x = "X",
-    y = "Y",
-    subtitle = stringr::str_glue(
-      "Silná záporná lineární\nP {pearson_neg_txt} | S {spearman_neg_txt}"
-    )
-  )
-
-plot_curve <-
-  ggplot2::ggplot(
-    data = data_curve,
-    mapping = ggplot2::aes(x = x, y = y)
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    size = 2,
-    alpha = 0.85
-  ) +
-  ggplot2::geom_line(
-    colour = biostat_cols["orange"],
-    linewidth = 1.1
-  ) +
-  ggplot2::labs(
-    x = "X",
-    y = "Y",
-    subtitle = stringr::str_glue(
-      "Monotónní, ale zakřivený\nP {pearson_curve_txt} | S {spearman_curve_txt}"
-    )
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 800,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_curve,
-  file = here::here(path_materials, "korelace_zakrivena.png")
-)
-
-plot_ctyri_situace_korelace <-
-  cowplot::plot_grid(
-    plot_linear,
-    plot_none,
-    plot_neg,
-    plot_curve,
-    ncol = 2
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 1050,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_ctyri_situace_korelace,
-  file = here::here(path_materials, "ctyri_situace_korelace.png")
-)
-```
-
-## 
+## {.text-center}
 
 Ve které ze čtyř situací by se hodnoty Pearsona a Spearmana lišily nejvíce?
 
@@ -1935,7 +1762,98 @@ Pořadí sedí, ale linearita ne.
 Otočte se na souseda: kterou situaci byste vybrali a proč? (1 min)
 :::
 
-## Zakřivený vztah — potvrzení
+## Příklad
+
+```{r}
+#| label: pripravit-vektory-zakriveny
+#| include: false
+#| message: false
+#| warning: false
+x_curve_n <- 120
+
+set.seed(900723)
+x_curve <-
+  sort(runif(x_curve_n, min = 1, max = 10))
+
+signal_curve <-
+  (3 * log(x_curve)) + (0.35 * sqrt(x_curve))
+
+noise_curve <-
+  rnorm(x_curve_n, mean = 0, sd = 0.5)
+
+y_curve <-
+  signal_curve + noise_curve
+
+outlier_idx <-
+  seq(0.3, 0.8, by = 0.05) * x_curve_n |>
+   round() |>
+   unique()
+
+
+y_curve[outlier_idx] <-
+  y_curve[outlier_idx] + (y_curve[outlier_idx] * 1.2)
+
+pearson_curve_txt <-
+  formatC(
+    cor(x_curve, y_curve, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_curve_txt <-
+  formatC(
+    cor(x_curve, y_curve, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+```
+
+```{r}
+#| label: vytvorit-korelace-zakrivena
+#| include: false
+#| message: false
+#| warning: false
+data_curve <-
+  tibble::tibble(x = x_curve, y = y_curve)
+
+plot_curve <-
+  ggplot2::ggplot(
+    data = data_curve,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = biostat_cols["grey_olive"],
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = biostat_cols["orange"],
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Monotónní, zakřivený s outliery"
+    )
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_curve,
+  file = here::here(path_materials, "korelace_zakrivena.png")
+)
+```
+
 
 ```{r}
 #| label: zobrazit-korelace-curve
@@ -1948,6 +1866,158 @@ Pearson: `r pearson_curve_txt` / Spearman: `r spearman_curve_txt` — pořadí s
 :::
 
 ## Čtyři situace korelace
+
+
+
+```{r}
+#| label: pripravit-vektory-situace
+#| include: false
+#| message: false
+#| warning: false
+# pearson_korelace_txt / spearman_korelace_txt (tučňáci, kladná) — defined in chunk pripravit-korelace-tucnaci
+# plot_prvni_bodovy (tučňáci scatter) — defined in chunk vytvorit-prvni_bodovy_graf
+# pearson_nadmorska_txt (záporná) — defined in chunk vytvorit-zapornou-korelaci
+# plot_zaporna_korelace — defined in chunk vytvorit-zapornou-korelaci
+# x_curve / y_curve (120-pt, log signal + outliers) — defined in chunk pripravit-vektory-zakriveny
+# pearson_curve_txt / spearman_curve_txt — defined in chunk pripravit-vektory-zakriveny
+# plot_curve (loess) — defined in chunk vytvorit-korelace-zakrivena
+
+x_none <-
+  seq(1, 10, length.out = 12)
+
+y_none <-
+  c(3.2, 4.8, 2.7, 5.1, 3.9, 4.4, 2.9, 5.0, 3.5, 4.1, 3.8, 4.6)
+
+pearson_none_txt <-
+  formatC(
+    cor(x_none, y_none, method = "pearson"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_none_txt <-
+  formatC(
+    cor(x_none, y_none, method = "spearman"),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+
+spearman_nadmorska_txt <-
+  formatC(
+    cor(
+      x = data_nadmorska$nadmorska_vyska_m,
+      y = data_nadmorska$prumerna_teplota_c,
+      method = "spearman"
+    ),
+    format = "f",
+    digits = 2,
+    decimal.mark = ","
+  )
+```
+
+```{r}
+#| label: vytvorit-korelace-situace
+#| include: false
+#| message: false
+#| warning: false
+# Positive: reuse plot_prvni_bodovy (tučňáci) — add trend line + subtitle
+# Negative: reuse plot_zaporna_korelace (elevation) — override subtitle
+# Curve: reuse plot_curve — override subtitle
+# None: new synthetic data (no real-world equivalent)
+
+data_none <-
+  tibble::tibble(x = x_none, y = y_none)
+
+# Positive correlation — tučňáci, add lm trend line and P | S subtitle
+plot_tucnaci_situace <-
+  plot_prvni_bodovy +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = biostat_cols["orange"],
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    subtitle = stringr::str_glue(
+      "Silná kladná lineární\nP {pearson_korelace_txt} | S {spearman_korelace_txt}"
+    )
+  )
+
+plot_none <-
+  ggplot2::ggplot(
+    data = data_none,
+    mapping = ggplot2::aes(x = x, y = y)
+  ) +
+  ggplot2::geom_point(
+    colour = biostat_cols["grey_olive"],
+    size = 2,
+    alpha = 0.85
+  ) +
+  ggplot2::geom_hline(
+    yintercept = mean(data_none$y),
+    linetype = "dashed",
+    colour = "gray50",
+    linewidth = 0.8
+  ) +
+  ggplot2::labs(
+    x = "X",
+    y = "Y",
+    subtitle = stringr::str_glue(
+      "Žádná zřetelná souvislost\nP {pearson_none_txt} | S {spearman_none_txt}"
+    )
+  ) +
+  ggview::canvas(
+    width = 800,
+    height = 800,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_none,
+  file = here::here(path_materials, "korelace_bez_vztahu.png")
+)
+
+# Negative correlation — elevation, override subtitle to consistent P | S format
+plot_neg_situace <-
+  plot_zaporna_korelace +
+  ggplot2::labs(
+    subtitle = stringr::str_glue(
+      "Silná záporná lineární\nP {pearson_nadmorska_txt} | S {spearman_nadmorska_txt}"
+    )
+  )
+
+# Curve — override subtitle to consistent P | S format
+plot_curve_situace <-
+  plot_curve +
+  ggplot2::labs(
+    subtitle = stringr::str_glue(
+      "Monotónní, ale zakřivený\nP {pearson_curve_txt} | S {spearman_curve_txt}"
+    )
+  )
+
+plot_ctyri_situace_korelace <-
+  cowplot::plot_grid(
+    plot_tucnaci_situace,
+    plot_none,
+    plot_neg_situace,
+    plot_curve_situace,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 1050,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_ctyri_situace_korelace,
+  file = here::here(path_materials, "ctyri_situace_korelace.png")
+)
+```
+
 
 ```{r}
 #| label: zobrazit-ctyri-situace-korelace
@@ -1981,6 +2051,12 @@ Korelace neřekne, odkud vztah pochází
 :::
 
 ::::
+
+## Korelace není kauzalita
+
+```{r}
+include_local_figure("korelace_neni_kauzalita.png")
+```
 
 ## Korelace ukazuje asociaci, ne příčinu
 
@@ -2263,3 +2339,7 @@ C) Silnější korelaci, aby bylo číslo přesvědčivější.
 
 Co model přidá, co korelace neumí?
 :::
+
+
+
+
