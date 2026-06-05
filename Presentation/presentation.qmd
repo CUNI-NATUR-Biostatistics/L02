@@ -2214,230 +2214,35 @@ data_ctetnosti_podil <-
   ) |>
   dplyr::ungroup()
 
-plot_kv_kv_body <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    alpha = 0.55,
-    size = 1.7
-  ) +
-  ggplot2::labs(
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "body"
-  )
-
-plot_kv_kv_smer <-
-  plot_kv_kv_body +
-  ggplot2::geom_density_2d(
-    colour = biostat_cols["indigo_velvet"],
-    alpha = 0.55,
-    linewidth = 0.45
-  ) +
-  ggplot2::geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    se = FALSE,
-    colour = biostat_cols["orange"],
-    linewidth = 1
-  ) +
-  ggplot2::labs(
-    subtitle = "směr + hustota"
-  )
-
-plot_kv_kv_galerie <-
-  cowplot::plot_grid(
-    plot_kv_kv_body,
-    plot_kv_kv_smer,
-    ncol = 2
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 760,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_kv_kv_galerie,
-  file = here::here(path_materials, "galerie_kv_kv.png")
-)
-
-plot_kv_kat_body <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = druh_tucnaka,
-      y = hmotnost_g,
-      colour = druh_tucnaka
-    )
-  ) +
-  ggplot2::geom_jitter(
-    width = 0.12,
-    alpha = 0.45,
-    size = 1.4
-  ) +
-  ggplot2::scale_colour_manual(
-    values = barvy_druhu,
-    guide = "none"
-  ) +
-  ggplot2::labs(
-    x = "Druh tučňáka",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "body ve skupinách"
-  )
-
-plot_kv_kat_rozlozeni <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = druh_tucnaka,
-      y = hmotnost_g,
-      fill = druh_tucnaka
-    )
-  ) +
-  ggplot2::geom_violin(
-    alpha = 0.25,
-    colour = NA,
-    trim = FALSE
-  ) +
-  ggplot2::geom_boxplot(
-    width = 0.18,
-    outlier.shape = NA,
-    alpha = 0.75,
-    colour = biostat_cols["graphite"]
-  ) +
-  ggplot2::geom_jitter(
-    mapping = ggplot2::aes(colour = druh_tucnaka),
-    width = 0.06,
-    alpha = 0.28,
-    size = 1
-  ) +
-  ggplot2::scale_fill_manual(
-    values = barvy_druhu,
-    guide = "none"
-  ) +
-  ggplot2::scale_colour_manual(
-    values = barvy_druhu,
-    guide = "none"
-  ) +
-  ggplot2::labs(
-    x = "Druh tučňáka",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "rozložení ve skupinách"
-  )
-
-plot_kv_kat_galerie <-
-  cowplot::plot_grid(
-    plot_kv_kat_body,
-    plot_kv_kat_rozlozeni,
-    ncol = 2
-  ) +
-  ggview::canvas(
-    width = 1600,
-    height = 760,
-    units = "px"
-  )
-
-ggview::save_ggplot(
-  plot = plot_kv_kat_galerie,
-  file = here::here(path_materials, "galerie_kv_kat.png")
-)
-
-plot_kat_kat_pocet <-
-  ggplot2::ggplot(
-    data = data_ctetnosti,
-    mapping = ggplot2::aes(
-      x = ostrov,
-      y = druh_tucnaka,
-      fill = n
-    )
-  ) +
-  ggplot2::geom_tile(
-    colour = "white",
-    linewidth = 1.1
-  ) +
-  ggplot2::geom_text(
-    mapping = ggplot2::aes(label = n),
-    colour = "white",
-    fontface = "bold"
-  ) +
-  ggplot2::scale_fill_gradient(
-    low = "#D7E6F5",
-    high = biostat_cols["indigo_velvet"],
-    guide = "none"
-  ) +
-  ggplot2::labs(
-    x = "Ostrov",
-    y = "Druh tučňáka",
-    subtitle = "počty"
-  ) +
+theme_gallery <- function() {
   ggplot2::theme(
-    axis.text.x = ggplot2::element_text(
-      size = 12,
-      angle = 25,
-      hjust = 1
-    )
+    plot.title = ggplot2::element_text(
+      face = "bold",
+      size = 17,
+      colour = biostat_cols["graphite"]
+    ),
+    plot.subtitle = ggplot2::element_text(
+      size = 11,
+      colour = biostat_cols["grey_olive"]
+    ),
+    axis.title = ggplot2::element_text(size = 12),
+    axis.text = ggplot2::element_text(size = 10),
+    legend.text = ggplot2::element_text(size = 10),
+    legend.title = ggplot2::element_blank(),
+    legend.position = "none",
+    panel.grid.minor = ggplot2::element_blank()
   )
+}
 
-plot_kat_kat_podil <-
-  ggplot2::ggplot(
-    data = data_ctetnosti_podil,
-    mapping = ggplot2::aes(
-      x = ostrov,
-      y = podil,
-      fill = druh_tucnaka
-    )
-  ) +
-  ggplot2::geom_col(
-    width = 0.72,
-    colour = "white"
-  ) +
-  ggplot2::scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1)
-  ) +
-  ggplot2::scale_fill_manual(
-    values = barvy_druhu,
-    name = NULL,
-    guide = ggplot2::guide_legend(nrow = 2, byrow = TRUE)
-  ) +
-  ggplot2::labs(
-    x = "Ostrov",
-    y = "Podíl",
-    subtitle = "podíly"
-  ) +
-  ggplot2::theme(
-    legend.position = "bottom",
-    legend.text = ggplot2::element_text(size = 8),
-    legend.key.size = grid::unit(0.25, "cm"),
-    axis.text.x = ggplot2::element_text(
-      size = 12,
-      angle = 25,
-      hjust = 1
-    )
-  )
-
-plot_kat_kat_galerie <-
-  cowplot::plot_grid(
-    plot_kat_kat_pocet,
-    plot_kat_kat_podil,
-    ncol = 2
-  ) +
-  ggview::canvas(
+save_gallery_plot <- function(plot, file_name) {
+  ggview::save_ggplot(
+    plot = plot ,
     width = 1600,
-    height = 840,
-    units = "px"
+    height = 860,
+    units = "px",
+    file = here::here(path_materials, file_name)
   )
-
-ggview::save_ggplot(
-  plot = plot_kat_kat_galerie,
-  file = here::here(path_materials, "galerie_kat_kat.png")
-)
+}
 ```
 
 :::: {.columns}
@@ -2476,12 +2281,53 @@ Ke každé dvojici přiřaďte první graf a připravte si jedno zdůvodnění.
 Aktivní cíl: studenti nemají opisovat pravidlo, ale rozhodnout podle typu proměnných. Nechám je ve skupině přiřadit první graf pro každou dvojici. Zatím jim nedávám seznam možností; chci slyšet, jestli spontánně rozliší numerickou a kategoriální proměnnou.
 :::
 
-## Dvě kvantitativní proměnné
+## Kvantitativní × kvantitativní
+
+::: {.blockquote}
+[Délka ploutve × hmotnost]{.text-color-indigo_velvet .text-bold}
+
+Obě proměnné mají číselnou osu. Každý jedinec může být jedním bodem v rovině.
+:::
+
+::: {.notes}
+Tady explicitně pojmenuji první typ dvojice proměnných. Všechny následující slidy používají stejná data: délku ploutve a tělesnou hmotnost tučňáků. Mění se jen způsob zobrazení.
+:::
+
+## K×K: body
 
 ```{r}
-#| label: zobrazit-galerii-kv-kv
+#| label: vytvorit-kv-kv-body
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kv_body <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = biostat_cols["grey_olive"],
+    alpha = 0.55,
+    size = 1.7
+  ) +
+  ggplot2::labs(
+    title = "Body",
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "každý tučňák je jeden bod"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kv_body, "kv_kv_body.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kv-body
 #| echo: false
-include_local_figure("galerie_kv_kv.png")
+include_local_figure("kv_kv_body.png")
 ```
 
 ::: {.takeaway-strip .fragment}
@@ -2489,23 +2335,491 @@ Když mají obě proměnné číselné hodnoty, první volbou je bodový graf.
 :::
 
 ::: {.notes}
-Tady explicitně navazuji na hlavní část přednášky: délka ploutve i hmotnost jsou kvantitativní proměnné, takže každý tučňák může být jedním bodem. Doplňky jako přímka, hustota nebo barva jsou až druhý krok; první graf je stále bodový graf.
+Nechám studenty číst jen směr a rozptyl. Neříkám zatím korelace ani model. Tohle je nejčistší "první graf" pro dvě kvantitativní proměnné.
 :::
 
-## Když jedna proměnná tvoří skupiny
+## K×K: přidáme kategorii barvou
 
 ```{r}
-#| label: zobrazit-galerii-kv-kat
+#| label: vytvorit-kv-kv-barva
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kv_barva <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_point(
+    alpha = 0.62,
+    size = 1.7
+  ) +
+  ggplot2::scale_colour_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Barva",
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "stejné body, přidaný druh"
+  ) +
+  theme_gallery() +
+  ggplot2::theme(legend.position = "bottom")
+
+save_gallery_plot(plot_kv_kv_barva, "kv_kv_barva.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kv-barva
 #| echo: false
-include_local_figure("galerie_kv_kat.png")
+include_local_figure("kv_kv_barva.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-U kategoriální a kvantitativní proměnné porovnáváme rozložení hodnot mezi skupinami.
+Barva nepřidala novou osu. Přidala otázku: je vztah stejný ve všech skupinách?
 :::
 
 ::: {.notes}
-Druh je kategoriální proměnná, hmotnost je kvantitativní. Proto už nechceme bodový graf ve smyslu x-y vztahu dvou číselných os. Chceme porovnat rozdělení hmotností mezi druhy. Body ve skupinách jsou dobré pro začátek, boxplot nebo violin pomáhají shrnout tvar rozložení.
+Tady ukazuji sílu ggplotu: stejný bodový graf, ale jedna estetika navíc změní otázku. Studenti mají vidět, že barva je třetí proměnná, ne dekorace.
+:::
+
+## K×K: přidáme směr
+
+```{r}
+#| label: vytvorit-kv-kv-smer
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kv_smer <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::geom_point(
+    colour = biostat_cols["grey_olive"],
+    alpha = 0.35,
+    size = 1.5
+  ) +
+  ggplot2::geom_density_2d(
+    colour = biostat_cols["indigo_velvet"],
+    alpha = 0.45,
+    linewidth = 0.45
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = biostat_cols["orange"],
+    linewidth = 1
+  ) +
+  ggplot2::labs(
+    title = "Směr",
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "přímka a kontury hustoty"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kv_smer, "kv_kv_smer.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kv-smer
+#| echo: false
+include_local_figure("kv_kv_smer.png")
+```
+
+::: {.takeaway-strip .fragment}
+Přímka pomůže oku, ale nemá nahradit samotný oblak bodů.
+:::
+
+::: {.notes}
+Připomenu, že přímka je už modelový prvek. V L02 ji používám jen jako vizuální pomoc, plný model přijde v L03.
+:::
+
+## K×K: když se body překrývají
+
+```{r}
+#| label: vytvorit-kv-kv-hustota
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kv_hustota <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = delka_ploutve_mm,
+      y = hmotnost_g
+    )
+  ) +
+  ggplot2::stat_density_2d(
+    mapping = ggplot2::aes(fill = ggplot2::after_stat(level)),
+    geom = "polygon",
+    bins = 7,
+    alpha = 0.75,
+    colour = "white",
+    linewidth = 0.18
+  ) +
+  ggplot2::geom_point(
+    colour = "white",
+    alpha = 0.55,
+    size = 0.7
+  ) +
+  ggplot2::scale_fill_gradient(
+    low = "#D7E6F5",
+    high = biostat_cols["indigo_velvet"]
+  ) +
+  ggplot2::labs(
+    title = "Hustota",
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "kde se body nejvíc hromadí"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kv_hustota, "kv_kv_hustota.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kv-hustota
+#| echo: false
+include_local_figure("kv_kv_hustota.png")
+```
+
+::: {.takeaway-strip .fragment}
+Hustota odpovídá na jinou otázku: kde je dat nejvíc?
+:::
+
+::: {.notes}
+Toto je inspirované 2D density/hexbin logikou z R Graph Gallery. U tučňáků není překryv dramatický, ale pedagogicky ukazuje, co bychom udělali u mnohem větších dat.
+:::
+
+## K×K: zvolte první graf
+
+:::: {.columns}
+
+::: {.column width="33%"}
+::: {.panel-question}
+[První čtení]{.panel-title}
+
+Co ukážu, když chci vztah nejdřív jen vidět?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Skupiny]{.panel-title}
+
+Co přidám, když podezírám rozdíly mezi druhy?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Překryv]{.panel-title}
+
+Co změním, když mám tisíce bodů?
+:::
+:::
+
+::::
+
+::: {.notes}
+Aktivní kontrola po galerii: nechám studenty přiřadit situaci ke grafu. Pokud není čas, udělám jen rychlé hlasování rukou.
+:::
+
+## Kvantitativní × kategoriální
+
+::: {.blockquote}
+[Hmotnost × druh]{.text-color-indigo_velvet .text-bold}
+
+Jedna proměnná je číslo, druhá vytváří skupiny. Už nečteme oblak bodů ve dvou číselných osách.
+:::
+
+::: {.notes}
+Přechod: druh je kategoriální proměnná, hmotnost kvantitativní. Hlavní otázka se změní z "jak spolu dvě čísla rostou" na "jak se liší rozložení mezi skupinami".
+:::
+
+## K×Kat: body ve skupinách
+
+```{r}
+#| label: vytvorit-kv-kat-body
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kat_body <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = druh_tucnaka,
+      y = hmotnost_g,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_jitter(
+    width = 0.12,
+    alpha = 0.45,
+    size = 1.4
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    title = "Body ve skupinách",
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "neztrácíme jednotlivá pozorování"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kat_body, "kv_kat_body.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kat-body
+#| echo: false
+include_local_figure("kv_kat_body.png")
+```
+
+::: {.takeaway-strip .fragment}
+Body ve skupinách jsou často nejlepší první graf, protože nic neskrývají.
+:::
+
+::: {.notes}
+Tento graf je pro začátečníky velmi dobrý: vidí počet pozorování, extrémy i překryv skupin. Nevýhoda je, že typická hodnota není tak rychle čitelná.
+:::
+
+## K×Kat: boxplot + body
+
+```{r}
+#| label: vytvorit-kv-kat-boxplot
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kat_boxplot <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = druh_tucnaka,
+      y = hmotnost_g,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.55,
+    alpha = 0.55,
+    outlier.shape = NA,
+    colour = biostat_cols["graphite"]
+  ) +
+  ggplot2::geom_jitter(
+    mapping = ggplot2::aes(colour = druh_tucnaka),
+    width = 0.08,
+    alpha = 0.28,
+    size = 0.9
+  ) +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::scale_colour_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Boxplot + body",
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "rychlý souhrn a kontrola dat"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kat_boxplot, "kv_kat_boxplot.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kat-boxplot
+#| echo: false
+include_local_figure("kv_kat_boxplot.png")
+```
+
+::: {.takeaway-strip .fragment}
+Boxplot je rychlý souhrn, ale samotný boxplot může skrýt tvar dat.
+:::
+
+::: {.notes}
+Navážu na varování R Graph Gallery: boxplot je běžný, ale schová rozložení. Proto ho tady nechávám s body.
+:::
+
+## K×Kat: violin + boxplot
+
+```{r}
+#| label: vytvorit-kv-kat-violin
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kat_rozlozeni <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = druh_tucnaka,
+      y = hmotnost_g,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_violin(
+    alpha = 0.25,
+    colour = NA,
+    trim = FALSE
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.18,
+    outlier.shape = NA,
+    alpha = 0.75,
+    colour = biostat_cols["graphite"]
+  ) +
+  ggplot2::geom_jitter(
+    mapping = ggplot2::aes(colour = druh_tucnaka),
+    width = 0.06,
+    alpha = 0.28,
+    size = 1
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    title = "Violin + boxplot",
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "tvar rozložení mezi skupinami"
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kv_kat_rozlozeni, "kv_kat_violin.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kat-violin
+#| echo: false
+include_local_figure("kv_kat_violin.png")
+```
+
+::: {.takeaway-strip .fragment}
+Violin ukáže tvar rozložení; boxplot uvnitř dá rychlý souhrn.
+:::
+
+::: {.notes}
+Tady už ukazujeme pokročilejší dataviz, ale pořád se stejnou otázkou. Nechci rozebírat kernel density; stačí říct, že šířka violin ukazuje, kde je hodnot víc.
+:::
+
+## K×Kat: histogram
+
+```{r}
+#| label: vytvorit-kv-kat-histogram
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kat_histogram <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = hmotnost_g,
+      fill = druh_tucnaka,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_histogram(
+    binwidth = 250,
+    boundary = 2500,
+    alpha = 0.55,
+    position = "identity",
+    linewidth = 0.35,
+    colour = "white"
+  ) +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::scale_colour_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Histogram",
+    x = "Tělesná hmotnost (g)",
+    y = "Počet tučňáků",
+    subtitle = "skutečné počty v intervalech hmotnosti"
+  ) +
+  theme_gallery() +
+  ggplot2::theme(legend.position = "bottom")
+
+save_gallery_plot(plot_kv_kat_histogram, "kv_kat_histogram.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kat-histogram
+#| echo: false
+include_local_figure("kv_kat_histogram.png")
+```
+
+::: {.takeaway-strip .fragment}
+Histogram ukazuje skutečné počty tučňáků v intervalech hmotnosti.
+:::
+
+::: {.notes}
+Tady se vyhýbám nejasnosti kolem osy Y u hustoty. Pokud chci skutečné počty pozorování, histogram je poctivější graf: každý sloupec říká, kolik tučňáků spadá do daného intervalu hmotnosti.
+:::
+
+## K×Kat: skládaná hustota
+
+```{r}
+#| label: vytvorit-kv-kat-skladana-hustota
+#| include: false
+#| message: false
+#| warning: false
+plot_kv_kat_skladana_hustota <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = hmotnost_g,
+      fill = druh_tucnaka,
+      colour = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_density(
+    alpha = 0.75,
+    adjust = 1.25,
+    position = "fill",
+    linewidth = 0.35
+  ) +
+  ggplot2::scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0, 0.5, 1)
+  ) +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::scale_colour_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Skládaná hustota",
+    x = "Tělesná hmotnost (g)",
+    y = "Relativní složení",
+    subtitle = "který druh převažuje při dané hmotnosti"
+  ) +
+  theme_gallery() +
+  ggplot2::theme(legend.position = "bottom")
+
+save_gallery_plot(plot_kv_kat_skladana_hustota, "kv_kat_skladana_hustota.png")
+```
+
+```{r}
+#| label: zobrazit-kv-kat-skladana-hustota
+#| echo: false
+include_local_figure("kv_kat_skladana_hustota.png")
+```
+
+::: {.takeaway-strip .fragment}
+Skládaná hustota neukazuje počty. Ukazuje relativní složení druhů podél hmotnosti.
+:::
+
+::: {.notes}
+Tohle je varianta inspirovaná R Graph Gallery stacked density. Je dobrá na otázku "který druh v dané části osy převažuje", ale hůř se z ní čte rozložení jednotlivého druhu, zejména když není dole.
 :::
 
 ## Který graf byste ukázali jako první?
@@ -2520,11 +2834,19 @@ Vidíme každého tučňáka.
 :::
 :::
 
-::: {.column width="50%"}
+::: {.column width="25%"}
 ::: {.panel-question}
-[Boxplot / violin]{.panel-lead}
+[Boxplot]{.panel-lead}
 
 Rychleji čteme typickou hodnotu a rozptyl.
+:::
+:::
+
+::: {.column width="25%"}
+::: {.panel-question}
+[Violin / histogram]{.panel-lead}
+
+Lépe čteme tvar nebo počty v intervalech.
 :::
 :::
 
@@ -2538,20 +2860,297 @@ Ve dvojici: zvolte první graf pro začátečníka a řekněte proč. (1 min)
 Tady nejde o jednu správnou odpověď. Pokud chci studenty učit číst data, často začnu body ve skupinách. Pokud chci rychle porovnat skupiny, použiji boxplot. Smyslem aktivity je přimět je formulovat, co má graf ukázat.
 :::
 
-## Dvě kategoriální proměnné
+## Kategoriální × kategoriální
 
-```{r}
-#| label: zobrazit-galerii-kat-kat
-#| echo: false
-include_local_figure("galerie_kat_kat.png")
-```
+::: {.blockquote}
+[Druh × ostrov]{.text-color-indigo_velvet .text-bold}
 
-::: {.takeaway-strip .fragment}
-U dvou kategorií většinou čteme počty nebo podíly v kombinacích kategorií.
+Obě proměnné jsou skupiny. Teď čteme počty nebo podíly v kombinacích kategorií.
 :::
 
 ::: {.notes}
-Ostrov i druh jsou kategoriální proměnné. Jednotlivý bod zde nedává stejný smysl jako u dvou číselných os. První otázka je, kolik případů připadá na kombinaci kategorií, případně jaké je složení v procentech. Proto tabulka četností, dlaždicový graf nebo skládaný sloupcový graf.
+Ostrov i druh jsou kategoriální proměnné. Jednotlivý bod zde nedává stejný smysl jako u dvou číselných os. První otázka je, kolik případů připadá na kombinaci kategorií, případně jaké je složení v procentech.
+:::
+
+## Kat×Kat: waffle plot
+
+```{r}
+#| label: vytvorit-kat-kat-waffle
+#| include: false
+#| message: false
+#| warning: false
+data_waffle <-
+  data_ctetnosti |>
+  tidyr::uncount(weights = n, .id = "jedinec") |>
+  dplyr::group_by(ostrov) |>
+  dplyr::mutate(
+    poradi = dplyr::row_number(),
+    x = (poradi - 1) %% 14,
+    y = (poradi - 1) %/% 14
+  ) |>
+  dplyr::ungroup()
+
+plot_kat_kat_waffle <-
+  ggplot2::ggplot(
+    data = data_waffle,
+    mapping = ggplot2::aes(
+      x = x,
+      y = y,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_tile(
+    width = 0.9,
+    height = 0.9,
+    colour = "white",
+    linewidth = 0.18
+  ) +
+  ggplot2::facet_wrap(~ ostrov, nrow = 1) +
+  ggplot2::coord_equal() +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Waffle plot",
+    x = NULL,
+    y = NULL,
+    subtitle = "každý čtvereček je jeden tučňák"
+  ) +
+  theme_gallery() +
+  ggplot2::theme(
+    legend.position = "bottom",
+    axis.text = ggplot2::element_blank(),
+    axis.ticks = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_blank(),
+    strip.text = ggplot2::element_text(
+      face = "bold",
+      size = 13,
+      colour = biostat_cols["graphite"]
+    )
+  )
+
+save_gallery_plot(plot_kat_kat_waffle, "kat_kat_waffle.png")
+```
+
+```{r}
+#| label: zobrazit-kat-kat-waffle
+#| echo: false
+include_local_figure("kat_kat_waffle.png")
+```
+
+::: {.takeaway-strip .fragment}
+Waffle plot ukáže počty jako jednotky: vidíme složení i velikost skupin.
+:::
+
+::: {.notes}
+Každý čtvereček je jeden tučňák. Facety oddělují ostrovy, barva druhy. Je to vizuálně silnější než tabulka četností, ale na přesné odečítání hodnot se pořád lépe hodí tabulka nebo sloupce.
+:::
+
+## Kat×Kat: skupinové sloupce
+
+```{r}
+#| label: vytvorit-kat-kat-sloupce
+#| include: false
+#| message: false
+#| warning: false
+plot_kat_kat_sloupce <-
+  ggplot2::ggplot(
+    data = data_ctetnosti,
+    mapping = ggplot2::aes(
+      x = ostrov,
+      y = n,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_col(
+    position = ggplot2::position_dodge(width = 0.78),
+    width = 0.72,
+    colour = "white"
+  ) +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Skupinové sloupce",
+    x = "Ostrov",
+    y = "Počet",
+    subtitle = "porovnání absolutních počtů"
+  ) +
+  ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
+      size = 12,
+      angle = 25,
+      hjust = 1
+    )
+  ) +
+  theme_gallery() +
+  ggplot2::theme(legend.position = "bottom")
+
+save_gallery_plot(plot_kat_kat_sloupce, "kat_kat_sloupce.png")
+```
+
+```{r}
+#| label: zobrazit-kat-kat-sloupce
+#| echo: false
+include_local_figure("kat_kat_sloupce.png")
+```
+
+::: {.takeaway-strip .fragment}
+Skupinové sloupce usnadní porovnání absolutních počtů mezi ostrovy.
+:::
+
+::: {.notes}
+Tady je užitečné ptát se, co je snazší číst než u dlaždic: srovnání výšek. Co je horší: přehled celé kontingenční tabulky.
+:::
+
+## Kat×Kat: skládané podíly
+
+```{r}
+#| label: vytvorit-kat-kat-podily
+#| include: false
+#| message: false
+#| warning: false
+plot_kat_kat_podil <-
+  ggplot2::ggplot(
+    data = data_ctetnosti_podil,
+    mapping = ggplot2::aes(
+      x = ostrov,
+      y = podil,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_col(
+    width = 0.72,
+    colour = "white"
+  ) +
+  ggplot2::scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0, 0.5, 1)
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = NULL,
+    guide = ggplot2::guide_legend(nrow = 2, byrow = TRUE)
+  ) +
+  ggplot2::labs(
+    title = "Skládané podíly",
+    x = "Ostrov",
+    y = "Podíl",
+    subtitle = "složení každého ostrova"
+  ) +
+  ggplot2::theme(
+    legend.position = "bottom",
+    legend.text = ggplot2::element_text(size = 8),
+    legend.key.size = grid::unit(0.25, "cm"),
+    axis.text.x = ggplot2::element_text(
+      size = 12,
+      angle = 25,
+      hjust = 1
+    )
+  ) +
+  theme_gallery() +
+  ggplot2::theme(legend.position = "bottom")
+
+save_gallery_plot(plot_kat_kat_podil, "kat_kat_podily.png")
+```
+
+```{r}
+#| label: zobrazit-kat-kat-podily
+#| echo: false
+include_local_figure("kat_kat_podily.png")
+```
+
+::: {.takeaway-strip .fragment}
+Podíly odpovídají na otázku složení, ne na otázku velikosti vzorku.
+:::
+
+::: {.notes}
+Tohle je důležité: po přepočtu na procenta ztratíme informaci o celkovém počtu tučňáků na ostrově. To je krásný moment pro aktivní otázku.
+:::
+
+## Kat×Kat: bublinové počty
+
+```{r}
+#| label: vytvorit-kat-kat-bubliny
+#| include: false
+#| message: false
+#| warning: false
+plot_kat_kat_bubliny <-
+  ggplot2::ggplot(
+    data = data_ctetnosti,
+    mapping = ggplot2::aes(
+      x = ostrov,
+      y = druh_tucnaka,
+      size = n,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_point(
+    shape = 21,
+    alpha = 0.75,
+    colour = "white",
+    stroke = 0.9
+  ) +
+  ggplot2::geom_text(
+    mapping = ggplot2::aes(label = n),
+    colour = "white",
+    fontface = "bold",
+    size = 3
+  ) +
+  ggplot2::scale_size_area(max_size = 18, guide = "none") +
+  ggplot2::scale_fill_manual(values = barvy_druhu) +
+  ggplot2::labs(
+    title = "Bublinové počty",
+    x = "Ostrov",
+    y = "Druh tučňáka",
+    subtitle = "stejná tabulka jako plocha"
+  ) +
+  ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
+      size = 12,
+      angle = 25,
+      hjust = 1
+    )
+  ) +
+  theme_gallery()
+
+save_gallery_plot(plot_kat_kat_bubliny, "kat_kat_bubliny.png")
+```
+
+```{r}
+#| label: zobrazit-kat-kat-bubliny
+#| echo: false
+include_local_figure("kat_kat_bubliny.png")
+```
+
+::: {.takeaway-strip .fragment}
+Bubliny jsou efektní, ale přesné porovnávání ploch je pro oko těžší než porovnávání délek.
+:::
+
+::: {.notes}
+Tento graf je schválně trochu "cool dataviz" a zároveň příležitost k opatrnosti. Ukážu, že hezký graf nemusí být nejlepší pro přesné čtení.
+:::
+
+## Kat×Kat: počty nebo podíly?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.panel-question}
+[Počty]{.panel-title}
+
+Kdy potřebujeme vědět, kolik pozorování opravdu máme?
+:::
+:::
+
+::: {.column width="50%"}
+::: {.panel-question}
+[Podíly]{.panel-title}
+
+Kdy nás zajímá složení skupiny bez ohledu na její velikost?
+:::
+:::
+
+::::
+
+::: {.notes}
+Aktivní otázka: studenti mají říct jednu situaci, kdy by vybrali počty, a jednu, kdy podíly. Cíl je odlišit absolutní a relativní četnost.
 :::
 
 ## Co rozhoduje?
@@ -2598,7 +3197,7 @@ Toto je konceptuální účetnictví po třech ukázkách. Nechávám studentům
 |---|---|---|
 | kvantitativní | kvantitativní | bodový graf; bodový graf s barvou, přímkou nebo hustotou |
 | kvantitativní | kategoriální | body ve skupinách; boxplot; violin plot |
-| kategoriální | kategoriální | tabulka četností; dlaždicový graf; skládaný sloupcový graf |
+| kategoriální | kategoriální | tabulka četností; waffle plot; skupinové nebo skládané sloupce |
 
 ::: {.notes}
 Tato tabulka je závěr sekce. Záměrně říkám "možné typy grafu", ne "jediný správný graf". V praktiku se mohou studenti vracet k prvnímu sloupci: jaký typ mají proměnné, které chci porovnat?
@@ -2701,10 +3300,6 @@ C) Silnější korelaci, aby bylo číslo přesvědčivější.
 [Řekněte sousedovi jednou větou]{.panel-title}
 
 Co model přidá, co korelace neumí?
-:::
-
-::: {.takeaway-strip}
-Když nehlasujeme: napište jednu větu ve tvaru "Korelace umí..., model přidá...".
 :::
 
 ::: {.notes}
