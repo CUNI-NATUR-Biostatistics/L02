@@ -165,6 +165,8 @@ Po dnešní přednášce budete schopni:
 Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
 :::
 
+# Naše biologická otázka
+
 ##
 
 ::: {.box-question}
@@ -891,6 +893,8 @@ include_local_figure("graf_podle_druhu.png")
 ::: {.notes}
 Toto je aktivní přechod od grafu k číslu. Neptám se ještě na název "korelace". Ptám se, jaké vlastnosti by dobrý souhrn musel mít: zachytit směr, reagovat na rozptyl a nedávat úplně jiné měřítko jen proto, že délku přepočítáme z milimetrů na centimetry.
 :::
+
+# Kovariace
 
 ## Nejprve průmery grafu {.text-center}
 
@@ -2189,14 +2193,12 @@ Korelace sama neodliší přímý efekt od sdílené příčiny.
 Příklad s čápy nechávám mluveně, protože jako odlehčená ilustrace zabere na slidu příliš mnoho místa. Řeknu: počet čápů a porodnost v Evropě mohou korelovat, ale společným vysvětlením může být venkovský charakter oblasti. U tučňáků podobně: část vztahu mezi ploutví a hmotností může plynout z celkové velikosti těla nebo druhu.
 :::
 
-<!-- This whole section needsto be fully redone and restructured --->
-
 # Jak vybrat první graf?
 
-## Jak vybrat první graf?
+## Tři dvojice proměnných
 
 ```{r}
-#| label: vytvorit-tri-priklady
+#| label: vytvorit-priklady-vizualizaci
 #| include: false
 #| message: false
 #| warning: false
@@ -2204,7 +2206,15 @@ data_ctetnosti <-
   data_tucnaci |>
   dplyr::count(druh_tucnaka, ostrov)
 
-plot_scatter_priklad <-
+data_ctetnosti_podil <-
+  data_ctetnosti |>
+  dplyr::group_by(ostrov) |>
+  dplyr::mutate(
+    podil = n / sum(n)
+  ) |>
+  dplyr::ungroup()
+
+plot_kv_kv_body <-
   ggplot2::ggplot(
     data = data_tucnaci,
     mapping = ggplot2::aes(
@@ -2214,16 +2224,51 @@ plot_scatter_priklad <-
   ) +
   ggplot2::geom_point(
     colour = biostat_cols["grey_olive"],
-    alpha = 0.65,
-    size = 1.6
+    alpha = 0.55,
+    size = 1.7
   ) +
   ggplot2::labs(
-    x = "Délka ploutve",
-    y = "Hmotnost",
-    subtitle = "Dvě numerické"
+    x = "Délka ploutve (mm)",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "body"
   )
 
-plot_box_priklad <-
+plot_kv_kv_smer <-
+  plot_kv_kv_body +
+  ggplot2::geom_density_2d(
+    colour = biostat_cols["indigo_velvet"],
+    alpha = 0.55,
+    linewidth = 0.45
+  ) +
+  ggplot2::geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    colour = biostat_cols["orange"],
+    linewidth = 1
+  ) +
+  ggplot2::labs(
+    subtitle = "směr + hustota"
+  )
+
+plot_kv_kv_galerie <-
+  cowplot::plot_grid(
+    plot_kv_kv_body,
+    plot_kv_kv_smer,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 760,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kv_kv_galerie,
+  file = here::here(path_materials, "galerie_kv_kv.png")
+)
+
+plot_kv_kat_body <-
   ggplot2::ggplot(
     data = data_tucnaci,
     mapping = ggplot2::aes(
@@ -2232,27 +2277,79 @@ plot_box_priklad <-
       colour = druh_tucnaka
     )
   ) +
-  ggplot2::geom_boxplot(
-    outlier.shape = NA,
-    width = 0.55,
-    alpha = 0.25
-  ) +
   ggplot2::geom_jitter(
-    width = 0.10,
-    alpha = 0.35,
-    size = 1.2
+    width = 0.12,
+    alpha = 0.45,
+    size = 1.4
   ) +
   ggplot2::scale_colour_manual(
     values = barvy_druhu,
     guide = "none"
   ) +
   ggplot2::labs(
-    x = "Druh",
-    y = "Hmotnost",
-    subtitle = "Kategoriální + numerická"
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "body ve skupinách"
   )
 
-plot_tile_priklad <-
+plot_kv_kat_rozlozeni <-
+  ggplot2::ggplot(
+    data = data_tucnaci,
+    mapping = ggplot2::aes(
+      x = druh_tucnaka,
+      y = hmotnost_g,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_violin(
+    alpha = 0.25,
+    colour = NA,
+    trim = FALSE
+  ) +
+  ggplot2::geom_boxplot(
+    width = 0.18,
+    outlier.shape = NA,
+    alpha = 0.75,
+    colour = biostat_cols["graphite"]
+  ) +
+  ggplot2::geom_jitter(
+    mapping = ggplot2::aes(colour = druh_tucnaka),
+    width = 0.06,
+    alpha = 0.28,
+    size = 1
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::scale_colour_manual(
+    values = barvy_druhu,
+    guide = "none"
+  ) +
+  ggplot2::labs(
+    x = "Druh tučňáka",
+    y = "Tělesná hmotnost (g)",
+    subtitle = "rozložení ve skupinách"
+  )
+
+plot_kv_kat_galerie <-
+  cowplot::plot_grid(
+    plot_kv_kat_body,
+    plot_kv_kat_rozlozeni,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 760,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kv_kat_galerie,
+  file = here::here(path_materials, "galerie_kv_kat.png")
+)
+
+plot_kat_kat_pocet <-
   ggplot2::ggplot(
     data = data_ctetnosti,
     mapping = ggplot2::aes(
@@ -2262,7 +2359,8 @@ plot_tile_priklad <-
     )
   ) +
   ggplot2::geom_tile(
-    colour = "white"
+    colour = "white",
+    linewidth = 1.1
   ) +
   ggplot2::geom_text(
     mapping = ggplot2::aes(label = n),
@@ -2276,26 +2374,69 @@ plot_tile_priklad <-
   ) +
   ggplot2::labs(
     x = "Ostrov",
-    y = "Druh",
-    subtitle = "Dvě kategoriální"
+    y = "Druh tučňáka",
+    subtitle = "počty"
+  ) +
+  ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
+      size = 12,
+      angle = 25,
+      hjust = 1
+    )
   )
 
-plot_tri_priklady <-
+plot_kat_kat_podil <-
+  ggplot2::ggplot(
+    data = data_ctetnosti_podil,
+    mapping = ggplot2::aes(
+      x = ostrov,
+      y = podil,
+      fill = druh_tucnaka
+    )
+  ) +
+  ggplot2::geom_col(
+    width = 0.72,
+    colour = "white"
+  ) +
+  ggplot2::scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  ggplot2::scale_fill_manual(
+    values = barvy_druhu,
+    name = NULL,
+    guide = ggplot2::guide_legend(nrow = 2, byrow = TRUE)
+  ) +
+  ggplot2::labs(
+    x = "Ostrov",
+    y = "Podíl",
+    subtitle = "podíly"
+  ) +
+  ggplot2::theme(
+    legend.position = "bottom",
+    legend.text = ggplot2::element_text(size = 8),
+    legend.key.size = grid::unit(0.25, "cm"),
+    axis.text.x = ggplot2::element_text(
+      size = 12,
+      angle = 25,
+      hjust = 1
+    )
+  )
+
+plot_kat_kat_galerie <-
   cowplot::plot_grid(
-    plot_scatter_priklad,
-    plot_box_priklad,
-    plot_tile_priklad,
-    ncol = 3
+    plot_kat_kat_pocet,
+    plot_kat_kat_podil,
+    ncol = 2
   ) +
   ggview::canvas(
     width = 1600,
-    height = 800,
+    height = 840,
     units = "px"
   )
 
 ggview::save_ggplot(
-  plot = plot_tri_priklady,
-  file = here::here(path_materials, "tri_rychle_priklady.png")
+  plot = plot_kat_kat_galerie,
+  file = here::here(path_materials, "galerie_kat_kat.png")
 )
 ```
 
@@ -2332,36 +2473,140 @@ Ke každé dvojici přiřaďte první graf a připravte si jedno zdůvodnění.
 ::::
 
 ::: {.notes}
-Aktivní cíl: studenti nemají opisovat pravidlo, ale rozhodnout podle typu proměnných. Nechám je ve skupině přiřadit: délka ploutve x hmotnost -> bodový graf; druh x hmotnost -> boxplot nebo body ve skupinách; druh x ostrov -> tabulka četností nebo dlaždicový graf.
+Aktivní cíl: studenti nemají opisovat pravidlo, ale rozhodnout podle typu proměnných. Nechám je ve skupině přiřadit první graf pro každou dvojici. Zatím jim nedávám seznam možností; chci slyšet, jestli spontánně rozliší numerickou a kategoriální proměnnou.
 :::
 
-## Tři rychlé příklady
+## Dvě kvantitativní proměnné
 
 ```{r}
-#| label: zobrazit-tri-rychle-priklady
+#| label: zobrazit-galerii-kv-kv
 #| echo: false
-include_local_figure("tri_rychle_priklady.png")
+include_local_figure("galerie_kv_kv.png")
 ```
 
-## Pravidlo pro první volbu grafu
-
-::: {.box-rule}
-[Jak vybrat první graf?]{.card-title}
-
-Dvě numerické -> **bodový graf**
-
-Kategoriální + numerická -> **boxplot** nebo body ve skupinách
-
-Dvě kategoriální -> **tabulka četností** nebo dlaždicový graf
-:::
-
-::: {.takeaway-strip}
-Typ proměnných a otázka → první graf. Rozhodnutí trvá 10 sekund.
+::: {.takeaway-strip .fragment}
+Když mají obě proměnné číselné hodnoty, první volbou je bodový graf.
 :::
 
 ::: {.notes}
-Toto je reveal po skupinové aktivitě. Upozorním, že pravidlo je první volba, ne absolutní zákon. V praktiku se k tomu vrátí při skutečné práci s daty.
+Tady explicitně navazuji na hlavní část přednášky: délka ploutve i hmotnost jsou kvantitativní proměnné, takže každý tučňák může být jedním bodem. Doplňky jako přímka, hustota nebo barva jsou až druhý krok; první graf je stále bodový graf.
 :::
+
+## Když jedna proměnná tvoří skupiny
+
+```{r}
+#| label: zobrazit-galerii-kv-kat
+#| echo: false
+include_local_figure("galerie_kv_kat.png")
+```
+
+::: {.takeaway-strip .fragment}
+U kategoriální a kvantitativní proměnné porovnáváme rozložení hodnot mezi skupinami.
+:::
+
+::: {.notes}
+Druh je kategoriální proměnná, hmotnost je kvantitativní. Proto už nechceme bodový graf ve smyslu x-y vztahu dvou číselných os. Chceme porovnat rozdělení hmotností mezi druhy. Body ve skupinách jsou dobré pro začátek, boxplot nebo violin pomáhají shrnout tvar rozložení.
+:::
+
+## Který graf byste ukázali jako první?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.panel-question}
+[Body ve skupinách]{.panel-lead}
+
+Vidíme každého tučňáka.
+:::
+:::
+
+::: {.column width="50%"}
+::: {.panel-question}
+[Boxplot / violin]{.panel-lead}
+
+Rychleji čteme typickou hodnotu a rozptyl.
+:::
+:::
+
+::::
+
+::: {.panel-olive}
+Ve dvojici: zvolte první graf pro začátečníka a řekněte proč. (1 min)
+:::
+
+::: {.notes}
+Tady nejde o jednu správnou odpověď. Pokud chci studenty učit číst data, často začnu body ve skupinách. Pokud chci rychle porovnat skupiny, použiji boxplot. Smyslem aktivity je přimět je formulovat, co má graf ukázat.
+:::
+
+## Dvě kategoriální proměnné
+
+```{r}
+#| label: zobrazit-galerii-kat-kat
+#| echo: false
+include_local_figure("galerie_kat_kat.png")
+```
+
+::: {.takeaway-strip .fragment}
+U dvou kategorií většinou čteme počty nebo podíly v kombinacích kategorií.
+:::
+
+::: {.notes}
+Ostrov i druh jsou kategoriální proměnné. Jednotlivý bod zde nedává stejný smysl jako u dvou číselných os. První otázka je, kolik případů připadá na kombinaci kategorií, případně jaké je složení v procentech. Proto tabulka četností, dlaždicový graf nebo skládaný sloupcový graf.
+:::
+
+## Co rozhoduje?
+
+:::: {.columns .align-top}
+
+::: {.column width="33%"}
+::: {.strip-olive .strip-compact}
+[Číselná osa]{.text-bold}
+
+Chceme číst vztah dvou hodnot.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.strip-indigo .strip-compact}
+[Skupiny]{.text-bold}
+
+Chceme porovnat rozložení mezi kategoriemi.
+:::
+:::
+
+::: {.column width="33%"}
+::: {.strip-amethyst .strip-compact}
+[Kombinace kategorií]{.text-bold}
+
+Chceme počty nebo podíly.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Nejdřív se zeptejte: jakého typu je proměnná A a jakého typu je proměnná B?
+:::
+
+::: {.notes}
+Toto je konceptuální účetnictví po třech ukázkách. Nechávám studentům jednu větu, kterou si mohou odnést do praktika: nejdřív typ proměnných, potom otázka, potom první graf.
+:::
+
+## Shrnutí základních vizualizací
+
+| Proměnná A | Proměnná B | Možné typy grafu |
+|---|---|---|
+| kvantitativní | kvantitativní | bodový graf; bodový graf s barvou, přímkou nebo hustotou |
+| kvantitativní | kategoriální | body ve skupinách; boxplot; violin plot |
+| kategoriální | kategoriální | tabulka četností; dlaždicový graf; skládaný sloupcový graf |
+
+::: {.notes}
+Tato tabulka je závěr sekce. Záměrně říkám "možné typy grafu", ne "jediný správný graf". V praktiku se mohou studenti vracet k prvnímu sloupci: jaký typ mají proměnné, které chci porovnat?
+:::
+
+# Co dál?
+
+## Co přidá model?
 
 ```{r}
 #| label: vytvorit-s-primkou
@@ -2403,8 +2648,6 @@ ggview::save_ggplot(
   file = here::here(path_materials, "bodovy_graf_s_primkou.png")
 )
 ```
-
-## Co přidá model?
 
 ```{r}
 #| label: zobrazit-graf-s-primkou
