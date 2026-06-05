@@ -1166,9 +1166,8 @@ data_maly_priklad_vztahu_kovariance |>
 #| include: false
 #| message: false
 #| warning: false
-
 vec_soucin <- sum(data_maly_priklad_vztahu_kovariance$soucin)
-vec_pocet_pozorovani_minus_one <- nrow(data_maly_priklad_vztahu) -1
+vec_pocet_pozorovani_minus_one <- nrow(data_maly_priklad_vztahu) - 1
 vec_kovariance <- vec_soucin / vec_pocet_pozorovani_minus_one
 
 vec_kovariance_fc <-
@@ -1190,7 +1189,7 @@ kovariance = **součet součinů odchylek**  / (**počet pozorování** - 1)
 #| message: false
 #| warning: false
 data_maly_priklad_vztahu_kovariance |>
-dplyr::select(-c(delka_ploutve_mm, hmotnost_g)) |>
+  dplyr::select(-c(delka_ploutve_mm, hmotnost_g)) |>
   rlang::set_names(
     nm = c(
       "Délka \nodch.",
@@ -1786,8 +1785,8 @@ y_curve <-
 
 outlier_idx <-
   seq(0.3, 0.8, by = 0.05) * x_curve_n |>
-   round() |>
-   unique()
+    round() |>
+    unique()
 
 
 y_curve[outlier_idx] <-
