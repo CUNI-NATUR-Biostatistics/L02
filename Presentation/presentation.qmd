@@ -161,6 +161,10 @@ Po dnešní přednášce budete schopni:
 - rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
 :::
 
+::: {.notes}
+Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
+:::
+
 ##
 
 ::: {.box-question}
@@ -205,6 +209,10 @@ Jak by podle vás mohl vypadat graf pro zodpovězení této otázky?
 <br>
 
 *30 s přemýšlení — pak sdílejte svůj odhad se sousedem.*
+
+::: {.notes}
+Nechám studenty nejdřív opravdu odhadnout tvar grafu. Cíl není správná terminologie, ale představa: osa pro délku ploutve, osa pro hmotnost, každý tučňák jeden bod. Po dvojicích nechám zaznít dvě až tři odpovědi a teprve potom přejdu k jednoduchým datům.
+:::
 
 ## Naše data
 
@@ -473,17 +481,28 @@ include_local_figure("prvni_bodovy_graf.png")
 
 <br>
 
-:::{.box-result}
+:::{.box-result .incremental}
 
-- Body **nejsou** rozeseté náhodně.
-- Hlavní směr oblaku je **rostoucí**.
-- Vztah **není** dokonale těsný.
-- Při podobné délce ploutve pořád vidíme různou hmotnost.
+- [Směr]{.text-hgl-indigo_velvet}: rostoucí
+
+<br>
+
+- [Rozptyl]{.text-hgl-orange}: pořád široký
+
+<br>
+
+- [Závěr]{.text-bold}: vzor vidíme, efekt zatím netvrdíme
 
 :::
 :::
 
 ::::
+
+::: {.notes}
+Tady zpomalím čtení grafu. Nejdřív se ptám: vypadají body náhodně, nebo mají směr? Potom: jak těsný je vztah? Důležité je, aby studenti neodcházeli jen s větou "je tam pozitivní korelace", ale s vizuální představou oblaku bodů.
+
+Mluvené rozvinutí: body nejsou rozházené náhodně, hlavní směr oblaku je rostoucí, ale vztah není dokonale těsný. Při podobné délce ploutve pořád vidíme různou hmotnost. To je první kontakt s variabilitou ve vztahu dvou proměnných.
+:::
 
 ## Stejná data, jiné osy
 
@@ -702,6 +721,10 @@ Podobná hmotnost, různá [délka ploutve]{.text-color-indigo_velvet}
 Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-bold} i na to, jak široký oblak zůstává v obou směrech.
 :::
 
+::: {.notes}
+Tento slide je interpretace evidence, ne nový pojem. Vysvětlím, že rozptyl v bodovém grafu jde číst dvěma praktickými otázkami: když je délka ploutve podobná, jak moc se liší hmotnost? A když je hmotnost podobná, jak moc se liší délka ploutve?
+:::
+
 ## Vracíme se k biologické otázce
 
 ::: {.box-question}
@@ -716,8 +739,7 @@ Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-bold} 
 ::: {.strip-indigo}
 [Signál]{.text-hgl-indigo_velvet}
 
-- Delší ploutve **bývají spojeny** s vyšší hmotností.
-- Celkový **směr** je zřetelně **rostoucí**.
+Delší ploutve **bývají spojeny** s vyšší hmotností.
 :::
 :::
 
@@ -725,8 +747,7 @@ Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-bold} 
 ::: {.strip-orange}
 [Rozptyl]{.text-hgl-orange}
 
-- Vztah **není** dokonale těsný.
-- Rozptyl čteme ve dvou směrech: při podobné ploutvi i při podobné hmotnosti.
+Vztah **není** dokonale těsný.
 :::
 :::
 
@@ -736,7 +757,11 @@ Když čteme bodový graf, díváme se současně na [směr vztahu]{.text-bold} 
 
 ::: {.box-warning .fragment}
 [POZOR]{.card-title}
-Už máme [biologicky smysluplný vzor]{.text-color-indigo_velvet .text-bold}, ale nikoliv **model**, ani odhad **efektu**, ani **nejistotu**.
+Vzor v grafu ještě není model, efekt ani nejistota.
+:::
+
+::: {.notes}
+Mluvený závěr: na biologickou otázku už umíme odpovědět opatrně. Ano, v datech je biologicky smysluplný rostoucí vzor. Ne, ještě jsme neodhadli efekt a neřekli nic o nejistotě. Tím připravuji půdu pro korelaci jako souhrn a pro L03 jako modelový krok.
 :::
 
 ## 
@@ -753,15 +778,16 @@ Která formulace je v této chvíli nejlepší?
 A) V grafu je vidět vztah, takže jsme prokázali efekt.
 B) [V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.]{.rn-box-indigo}
 C) Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
-
-<br>
-
 :::
 
 <br>
 
 ::: {.panel-olive}
 Než hlasujeme: přesvědčte souseda, proč jste vybrali svoji možnost.
+:::
+
+::: {.notes}
+Správná odpověď je B. Důležité je nepředznačit ji dřív, než studenti stihnou volbu obhájit. Pokud nepoužiju hlasování, použiju fallback: každý si doplní větu a pak ji porovná se sousedem.
 :::
 
 ## Stejná data, ale s druhem
@@ -846,19 +872,24 @@ include_local_figure("graf_podle_druhu.png")
 
 ## Kdybychom chtěli jedno číslo pro souhrn všech dat?
 
+<br>
+
 ::: {.box-question .text-bold}
 [Co by takové číslo muselo umět?]{.panel-title}
 
- - v závislosti na směru vztahu..
- - v závislosti na rozptylu dat..
- - v závislosti na volbě jednotek...
-
+[Směr]{.text-hgl-indigo_velvet} + [těsnost]{.text-hgl-orange} + stejné měřítko pro různé jednotky
 :::
+
+<br>
 
 ::: {.panel-olive}
 [Řekněte sousedovi aspoň jednu vlastnost]{.panel-title}
 
 30 s každý — pak porovnejte, co jste vymysleli.
+:::
+
+::: {.notes}
+Toto je aktivní přechod od grafu k číslu. Neptám se ještě na název "korelace". Ptám se, jaké vlastnosti by dobrý souhrn musel mít: zachytit směr, reagovat na rozptyl a nedávat úplně jiné měřítko jen proto, že délku přepočítáme z milimetrů na centimetry.
 :::
 
 ## Nejprve průmery grafu {.text-center}
@@ -924,7 +955,13 @@ ggview::save_ggplot(
 include_local_figure("kovariance_stred.png")
 ```
 
-Průmer pro délku ploutve je `r round(prumer_delka,2)` mm, průmer pro hmotnost je `r round(prumer_hmotnost,2)` g.
+::: {.takeaway-strip .strip-compact}
+Střed grafu určíme dvěma průměry: délka `r round(prumer_delka, 1)` mm, hmotnost `r round(prumer_hmotnost, 0)` g.
+:::
+
+::: {.notes}
+Tady nechci odvozovat vzorec, jen ukázat geometrický nápad. Průměr délky a průměr hmotnosti rozdělí graf na čtyři části. Poloha bodu vůči středu říká, jestli je jedinec nad nebo pod průměrem v obou proměnných.
+:::
 
 ## Jeden bod pod lupou {.text-center}
 
@@ -990,8 +1027,12 @@ include_local_figure("bod_lupou.png")
 ::: {.box-result}
 [Bod nad průměrem v obou proměnných]{.panel-title}
 
-Odchylky mají stejné znaménko (+)*(+) -> součin je **kladný**
+Stejné znaménko odchylek -> **kladný** příspěvek.
 
+:::
+
+::: {.notes}
+Mluveně doplním aritmetiku: tento tučňák má delší ploutev než průměr a vyšší hmotnost než průměr. Obě odchylky jsou kladné, takže jejich součin je kladný. Nemusím na slide dávat celý výpočet; jde o znaménko a směr příspěvku.
 :::
 
 
@@ -1060,7 +1101,10 @@ include_local_figure("kovariance_kvadranty.png")
 ```
 
 
-Bod z předchozího snímku byl v pravém horním kvadrantu (II) 
+
+::: {.notes}
+Bod z předchozího snímku byl v pravém horním kvadrantu. Teď nechám studenty doplnit, která další část grafu bude mít stejnou logiku. Chci, aby si nejdřív představili znaménka, ne aby memorovali vzorec.
+:::
 
 
 ## Ve které další části grafu budou součiny také kladné? {.text-center}
@@ -1098,6 +1142,14 @@ Na poloze vůči středu nezáleží.
 
 ::::
 
+::: {.panel-olive}
+Než hlasujeme: vysvětlete sousedovi znaménka obou odchylek v jedné možnosti.
+:::
+
+::: {.notes}
+Správně je II. a III. kvadrant. Nechám je obhájit znaménka: vpravo nahoře je délka nad průměrem a hmotnost nad průměrem; vlevo dole jsou obě pod průměrem. V obou případech je součin kladný.
+:::
+
 
 
 ## Projdeme čtyři tučňáky ručně
@@ -1110,7 +1162,7 @@ Na poloze vůči středu nezáleží.
 #| echo: false
 ```
 
-::: {.strip-olive .strip-compact}
+::: {.strip-olive .strip-compact .fragment}
 Průměry: 
 
 Délka ploutve: **`r mean(data_maly_priklad_vztahu$delka_ploutve_mm)`** mm 
@@ -1119,7 +1171,7 @@ Hmotnost: **`r mean(data_maly_priklad_vztahu$hmotnost_g)`** g
 :::
 :::
 
-::: {.column width="58%"}
+::: {.column width="58%" .fragment}
 
 ```{r}
 #| label: tabulka-data-kovariance
@@ -1177,11 +1229,19 @@ vec_kovariance_fc <-
   )
 ```
 
-kovariance = **součet součinů odchylek**  / (**počet pozorování** - 1) 
+<br>
+
+::: {.takeaway-strip .strip-compact .fragment}
+kovariance = **součet součinů odchylek**  / (**počet pozorování** - 1)
+
+Kovariance sčítá, jestli body leží převážně v kladných nebo záporných částech grafu.
+:::
+
+<br>
 
 :::: {.columns}
 
-::: {.column width="45%"}
+::: {.column width="45%" .fragment}
 
 ```{r}
 #| label: tabulka-data-kovariance-soucin
@@ -1207,7 +1267,7 @@ data_maly_priklad_vztahu_kovariance |>
 
 :::
 
-::: {.column width="53%"}
+::: {.column width="53%" .fragment}
 
 <br>
 
@@ -1219,7 +1279,13 @@ data_maly_priklad_vztahu_kovariance |>
 
 ::::
 
-[kovariance = `r vec_soucin` / `r vec_pocet_pozorovani_minus_one` = **`r round(vec_kovariance, 2)` mm·g**]{.fragment}
+::: {.fragment}
+kovariance = `r vec_soucin` / `r vec_pocet_pozorovani_minus_one` = **`r round(vec_kovariance, 2)` mm·g**
+:::
+
+::: {.notes}
+Vzorec říkám mluveně: součet součinů odchylek dělený počtem pozorování minus jedna. Na slidu nechávám hlavně tabulku a výsledné číslo. Cíl je pochopit znaménko a logiku, ne mechanicky opisovat kovarianci.
+:::
 
 ## Prakticky stejné číslo nám dá funkce `cov()`.
 
@@ -1227,8 +1293,9 @@ data_maly_priklad_vztahu_kovariance |>
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="50%" }
 
+::: {.fragment}
 ```{r}
 #| label: kovariance-maly-priklad-manualne
 #| echo: true
@@ -1242,8 +1309,9 @@ kovariance <-
   vec_soucin / pocet_pozorovani_minus_one
 kovariance
 ```
+:::
 
-::: {.strip-olive}
+::: {.strip-olive .fragment}
 [1] `r round(vec_kovariance, 2)` 
 :::
 
@@ -1269,6 +1337,10 @@ kovariance
 :::
 
 ::::
+
+::: {.notes}
+Tenhle slide je most do R: ruční výpočet a `cov()` dávají totéž. Při živé výuce bych ho ukázal rychle, ne jako samostatnou minilekci o kovarianci. Pokud bude málo času, stačí říct, že funkce automatizuje stejný součet příspěvků, a přejít na problém jednotek.
+:::
 
 ## Záleží na jednotkách?
 
@@ -1307,7 +1379,7 @@ kovariance_cm_kg_txt <-
   )
 ```
 
-Jsou to stejní tučňáci. Záleží na tom, v jakých jednotkách délku a hmotnost měříme?
+Stejní tučňáci. Jiná jednotka.
 
 <br>
 
@@ -1335,6 +1407,10 @@ Kovariance: `r kovariance_cm_kg_txt` (cm·kg)
 
 ::: {.takeaway-strip .fragment}
 Směr vztahu se nezměnil, ale číslo ano. Proto chceme [bezrozměrný souhrn]{.text-color-indigo_velvet .text-bold}: korelaci.
+:::
+
+::: {.notes}
+Tady je pointa kovariance: i když biologický vztah zůstává stejný, hodnota kovariance se mění s jednotkami. To je pro začátečníky důležitější než samotný vzorec. Tím přirozeně vzniká potřeba korelace jako bezrozměrného souhrnu.
 :::
 
 # Korelace
@@ -1374,6 +1450,10 @@ Směr vztahu se nezměnil, ale číslo ano. Proto chceme [bezrozměrný souhrn]{
 
 ::: {.takeaway-strip .fragment}
 Obě čísla jsou [doplněk ke grafu]{.text-color-indigo_velvet .text-bold}, ne jeho náhrada.
+:::
+
+::: {.notes}
+Tady stačí základní rozdíl. Pearson čte lineární vztah v původních hodnotách, Spearman čte monotónní vztah přes pořadí hodnot. Obě korelace jsou bezrozměrné a leží mezi -1 a 1. Plné vysvětlení nechávám do mluveného komentáře a skript.
 :::
 
 ## Kalibrační galerie {.text-center}
@@ -1667,9 +1747,12 @@ Spearman: [1] `r spearman_maly_priklad_txt`
 :::: {.columns .align-top}
 
 ::: {.column width="50%"}
+
 ::: {.strip-indigo .strip-compact}
 [Pearsonova korelace]{.text-bold}
 :::
+
+::: {.fragment} 
 
 ```{r}
 #| label: kod-korelace-pearson-v-r
@@ -1682,17 +1765,22 @@ cor(
 )
 ```
 
-::: {.panel-result}
+:::
+
+::: {.panel-result .fragment}
 [Výstup]{.panel-title}
 
 [1] `r pearson_korelace_txt`
 :::
+
 :::
 
 ::: {.column width="50%"}
 ::: {.strip-amethyst .strip-compact}
 [Spearmanova korelace]{.text-bold}
 :::
+
+::: {.fragment}
 
 ```{r}
 #| label: kod-korelace-spearman-v-r
@@ -1705,7 +1793,9 @@ cor(
 )
 ```
 
-::: {.panel-result}
+:::
+
+::: {.panel-result .fragment}
 [Výstup]{.panel-title}
 
 [1] `r spearman_korelace_txt`
@@ -1757,8 +1847,12 @@ Pořadí sedí, ale linearita ne.
 
 <br>
 
-::: {.takeaway-strip}
-Otočte se na souseda: kterou situaci byste vybrali a proč? (1 min)
+::: {.panel-olive}
+Než hlasujeme: přesvědčte souseda, která situace nejvíc rozdělí Pearsona a Spearmana.
+:::
+
+::: {.notes}
+Správná odpověď je monotónní, ale zakřivený vztah. Důvod: Spearman sleduje pořadí, takže mu monotónnost stačí; Pearson chce lineární tvar. Odpověď neukazuji před diskusí.
 :::
 
 ## Příklad
@@ -2031,25 +2125,35 @@ include_local_figure("ctyri_situace_korelace.png")
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="50%" .fragment}
 ::: {.strip-indigo}
 Pearson i Spearman vyšly podobně
 
-- Pearson: `r pearson_korelace_txt`, Spearman: `r spearman_korelace_txt`.
-- Vztah je monotónní a blízký lineárnímu — obě čísla ho popisují dobře.
+<br>
+
+Pearson: `r pearson_korelace_txt`, Spearman: `r spearman_korelace_txt`.
+
+<br>
+
+Vztah je rostoucí a dobře shrnutelný jedním číslem.
 :::
 :::
 
-::: {.column width="50%"}
+::: {.column width="50%" .fragment}
 ::: {.strip-orange}
 Korelace neřekne, odkud vztah pochází
 
-- Část variability může plynout ze skupiny (druh).
-- Samotná korelace to neodliší.
+<br>
+
+Část vztahu může souviset s druhem nebo celkovou velikostí těla.
 :::
 :::
 
 ::::
+
+::: {.notes}
+Tady vracím korelaci k biologické otázce. Obě hodnoty vyšly podobně, takže vztah je monotónní a blízký lineárnímu. To je důvod, proč korelace u těchto dat dává smysl. Hned ale dodám limit: korelace sama neřekne, jestli délka ploutve přímo "způsobuje" vyšší hmotnost, nebo jestli obě proměnné souvisí s velikostí těla a druhem.
+:::
 
 ## Korelace není kauzalita
 
@@ -2059,28 +2163,37 @@ include_local_figure("korelace_neni_kauzalita.png")
 
 ## Korelace ukazuje asociaci, ne příčinu
 
+<br>
+
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="50%" .fragment}
 ::: {.panel-result}
 [Společná změna dvou proměnných]{.panel-title}
 
-- Korelace popisuje, zda se dvě proměnné mění společně.
-- Pomáhá kvantifikovat směr a těsnost vztahu.
+Korelace popisuje, zda se dvě proměnné mění společně.
 :::
 :::
 
-::: {.column width="50%"}
+::: {.column width="50%" .fragment}
 ::: {.panel-warning}
 [Sama neoddělí příčinu]{.panel-title .rn-box-red}
 
-- Korelace neodliší přímý efekt od sdílené příčiny.
-- Příklad: počet čápů a porodnost v Evropě korelují — obojí sdílí příčinu (venkovský charakter oblasti).
-- U tučňáků část vztahu může plynout z celkové velikosti těla — nejen z délky ploutve.
+Korelace sama neodliší přímý efekt od sdílené příčiny.
 :::
 :::
 
 ::::
+
+::: {.notes}
+Příklad s čápy nechávám mluveně, protože jako odlehčená ilustrace zabere na slidu příliš mnoho místa. Řeknu: počet čápů a porodnost v Evropě mohou korelovat, ale společným vysvětlením může být venkovský charakter oblasti. U tučňáků podobně: část vztahu mezi ploutví a hmotností může plynout z celkové velikosti těla nebo druhu.
+:::
+
+<!-- This whole section needsto be fully redone and restructured --->
+
+# Jak vybrat první graf?
+
+## Jak vybrat první graf?
 
 ```{r}
 #| label: vytvorit-tri-priklady
@@ -2186,8 +2299,6 @@ ggview::save_ggplot(
 )
 ```
 
-## Jak vybrat první graf?
-
 :::: {.columns}
 
 ::: {.column width="55%"}
@@ -2211,24 +2322,18 @@ Obě proměnné jsou kategoriální.
 :::
 
 ::: {.column width="45%"}
-::: {.blockquote}
-Ke každé dvojici si přiřaďte první graf, po kterém byste sáhli.
-:::
-
-::: {.incremental}
-- bodový graf
-- boxplot nebo body ve skupinách
-- tabulka četností nebo dlaždicový graf
-:::
-
 ::: {.panel-question}
-[Co si řeknu jako první?]{.panel-title}
+[Skupinka 3-4 - 2 min]{.panel-title}
 
-Jsou proměnné numerické, nebo kategoriální?
+Ke každé dvojici přiřaďte první graf a připravte si jedno zdůvodnění.
 :::
 :::
 
 ::::
+
+::: {.notes}
+Aktivní cíl: studenti nemají opisovat pravidlo, ale rozhodnout podle typu proměnných. Nechám je ve skupině přiřadit: délka ploutve x hmotnost -> bodový graf; druh x hmotnost -> boxplot nebo body ve skupinách; druh x ostrov -> tabulka četností nebo dlaždicový graf.
+:::
 
 ## Tři rychlé příklady
 
@@ -2243,13 +2348,19 @@ include_local_figure("tri_rychle_priklady.png")
 ::: {.box-rule}
 [Jak vybrat první graf?]{.card-title}
 
-- Dvě numerické proměnné → **bodový graf**
-- Kategoriální + numerická → **boxplot** nebo body ve skupinách
-- Dvě kategoriální → **tabulka četností** nebo dlaždicový graf
+Dvě numerické -> **bodový graf**
+
+Kategoriální + numerická -> **boxplot** nebo body ve skupinách
+
+Dvě kategoriální -> **tabulka četností** nebo dlaždicový graf
 :::
 
 ::: {.takeaway-strip}
 Typ proměnných a otázka → první graf. Rozhodnutí trvá 10 sekund.
+:::
+
+::: {.notes}
+Toto je reveal po skupinové aktivitě. Upozorním, že pravidlo je první volba, ne absolutní zákon. V praktiku se k tomu vrátí při skutečné práci s daty.
 :::
 
 ```{r}
@@ -2305,6 +2416,10 @@ include_local_figure("bodovy_graf_s_primkou.png")
 Přímka přidá [odhad efektu:]{.text-color-indigo_velvet .text-bold} o kolik gramů se typicky mění hmotnost na každý 1 mm délky ploutve? To bude L03.
 :::
 
+::: {.notes}
+Tady výslovně zavírám L02 a otevírám L03. Graf a korelace nám řekly, že vztah existuje jako vzor a že je relativně těsný. Model přidá odhad efektu a později nejistotu. Nezabíhám do lineárního modelu, jen nastavím otázku.
+:::
+
 ## Shrnutí
 
 ::: {.blockquote}
@@ -2312,9 +2427,13 @@ Přímka přidá [odhad efektu:]{.text-color-indigo_velvet .text-bold} o kolik g
 - Pro dvě numerické proměnné je první volbou bodový graf.
 - Z grafu čteme současně směr vztahu i šířku rozptylu.
 - Korelace vztah shrne číslem, ale nenahradí samotný graf.
-- Viditelný vzor ještě není důkaz efektu ani kauzality.
-- Další krok je model, který přidá odhad efektu a interval spolehlivosti.
+- Viditelný vzor ještě není důkaz efektu.
+- Model přidá velikost efektu a nejistotu.
 :::
+:::
+
+::: {.notes}
+Závěrečné shrnutí musí podle pravidel zůstat 3-5 bodů. Držím ho krátké a navázané na learning outcomes. Pokud dochází čas, stačí přečíst první a poslední bod a nechat studenty doplnit prostřední logiku ve dvojicích na dalším slidu.
 :::
 
 ## 
@@ -2333,10 +2452,20 @@ B) [Model, který přidá odhad efektu a interval spolehlivosti.]{.rn-circle-ora
 C) Silnější korelaci, aby bylo číslo přesvědčivější.
 :::
 
+<br>
+
 ::: {.panel-olive}
 [Řekněte sousedovi jednou větou]{.panel-title}
 
 Co model přidá, co korelace neumí?
+:::
+
+::: {.takeaway-strip}
+Když nehlasujeme: napište jednu větu ve tvaru "Korelace umí..., model přidá...".
+:::
+
+::: {.notes}
+Správná odpověď je B. Tohle je závěrečná konceptuální otázka, takže nechám studenty nejdřív obhájit odpověď sousedovi. Pokud nepoužiju hlasování, fallback věta nutí rozlišit korelaci a model: korelace shrne směr a těsnost, model přidá odhad efektu a nejistotu.
 :::
 
 
