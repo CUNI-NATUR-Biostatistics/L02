@@ -2250,28 +2250,32 @@ save_gallery_plot <- function(plot, file_name) {
 ::: {.column width="55%"}
 ::: {.strip-olive .strip-compact}
 [Délka ploutve × hmotnost]{.text-bold}
-
-Obě proměnné jsou numerické.
 :::
 
-::: {.strip-indigo .strip-compact}
-[Druh × hmotnost]{.text-bold}
+<br>
+<br>
 
-Jedna proměnná tvoří skupiny, druhá je numerická.
+::: {.strip-olive .strip-compact}
+[Druh tučnáka × hmotnost]{.text-bold}
 :::
 
-::: {.strip-amethyst .strip-compact}
-[Druh × ostrov]{.text-bold}
+<br>
+<br>
 
-Obě proměnné jsou kategoriální.
+::: {.strip-olive .strip-compact}
+[Druh tučnáka × ostrov (habitat)]{.text-bold}
 :::
 :::
 
 ::: {.column width="45%"}
-::: {.panel-question}
+
+<br>
+<br>
+
+::: {.panel-question .fragment}
 [Skupinka 3-4 - 2 min]{.panel-title}
 
-Ke každé dvojici přiřaďte první graf a připravte si jedno zdůvodnění.
+Ke každé dvojici přiřaďte graf a připravte si jedno zdůvodnění.
 :::
 :::
 
@@ -2286,7 +2290,7 @@ Aktivní cíl: studenti nemají opisovat pravidlo, ale rozhodnout podle typu pro
 ::: {.blockquote}
 [Délka ploutve × hmotnost]{.text-color-indigo_velvet .text-bold}
 
-Obě proměnné mají číselnou osu. Každý jedinec může být jedním bodem v rovině.
+Obě proměnné mají číselnou osu. Každý jedinec může být jedním bodem.
 :::
 
 ::: {.notes}
@@ -2385,63 +2389,6 @@ Barva nepřidala novou osu. Přidala otázku: je vztah stejný ve všech skupin�
 Tady ukazuji sílu ggplotu: stejný bodový graf, ale jedna estetika navíc změní otázku. Studenti mají vidět, že barva je třetí proměnná, ne dekorace.
 :::
 
-## K×K: přidáme směr
-
-```{r}
-#| label: vytvorit-kv-kv-smer
-#| include: false
-#| message: false
-#| warning: false
-plot_kv_kv_smer <-
-  ggplot2::ggplot(
-    data = data_tucnaci,
-    mapping = ggplot2::aes(
-      x = delka_ploutve_mm,
-      y = hmotnost_g
-    )
-  ) +
-  ggplot2::geom_point(
-    colour = biostat_cols["grey_olive"],
-    alpha = 0.35,
-    size = 1.5
-  ) +
-  ggplot2::geom_density_2d(
-    colour = biostat_cols["indigo_velvet"],
-    alpha = 0.45,
-    linewidth = 0.45
-  ) +
-  ggplot2::geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    se = FALSE,
-    colour = biostat_cols["orange"],
-    linewidth = 1
-  ) +
-  ggplot2::labs(
-    title = "Směr",
-    x = "Délka ploutve (mm)",
-    y = "Tělesná hmotnost (g)",
-    subtitle = "přímka a kontury hustoty"
-  ) +
-  theme_gallery()
-
-save_gallery_plot(plot_kv_kv_smer, "kv_kv_smer.png")
-```
-
-```{r}
-#| label: zobrazit-kv-kv-smer
-#| echo: false
-include_local_figure("kv_kv_smer.png")
-```
-
-::: {.takeaway-strip .fragment}
-Přímka pomůže oku, ale nemá nahradit samotný oblak bodů.
-:::
-
-::: {.notes}
-Připomenu, že přímka je už modelový prvek. V L02 ji používám jen jako vizuální pomoc, plný model přijde v L03.
-:::
-
 ## K×K: když se body překrývají
 
 ```{r}
@@ -2464,11 +2411,6 @@ plot_kv_kv_hustota <-
     alpha = 0.75,
     colour = "white",
     linewidth = 0.18
-  ) +
-  ggplot2::geom_point(
-    colour = "white",
-    alpha = 0.55,
-    size = 0.7
   ) +
   ggplot2::scale_fill_gradient(
     low = "#D7E6F5",
@@ -2677,12 +2619,6 @@ plot_kv_kat_rozlozeni <-
     alpha = 0.75,
     colour = biostat_cols["graphite"]
   ) +
-  ggplot2::geom_jitter(
-    mapping = ggplot2::aes(colour = druh_tucnaka),
-    width = 0.06,
-    alpha = 0.28,
-    size = 1
-  ) +
   ggplot2::scale_fill_manual(
     values = barvy_druhu,
     guide = "none"
@@ -2736,7 +2672,7 @@ plot_kv_kat_histogram <-
     binwidth = 250,
     boundary = 2500,
     alpha = 0.55,
-    position = "identity",
+    position = "stack",
     linewidth = 0.35,
     colour = "white"
   ) +
@@ -2822,11 +2758,11 @@ Skládaná hustota neukazuje počty. Ukazuje relativní složení druhů podél 
 Tohle je varianta inspirovaná R Graph Gallery stacked density. Je dobrá na otázku "který druh v dané části osy převažuje", ale hůř se z ní čte rozložení jednotlivého druhu, zejména když není dole.
 :::
 
-## Který graf byste ukázali jako první?
+## Který graf byste udělali jako první?
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="33%"}
 ::: {.panel-question}
 [Body ve skupinách]{.panel-lead}
 
@@ -2834,7 +2770,7 @@ Vidíme každého tučňáka.
 :::
 :::
 
-::: {.column width="25%"}
+::: {.column width="33%"}
 ::: {.panel-question}
 [Boxplot]{.panel-lead}
 
@@ -2842,7 +2778,7 @@ Rychleji čteme typickou hodnotu a rozptyl.
 :::
 :::
 
-::: {.column width="25%"}
+::: {.column width="33%"}
 ::: {.panel-question}
 [Violin / histogram]{.panel-lead}
 
@@ -2852,12 +2788,8 @@ Lépe čteme tvar nebo počty v intervalech.
 
 ::::
 
-::: {.panel-olive}
-Ve dvojici: zvolte první graf pro začátečníka a řekněte proč. (1 min)
-:::
-
 ::: {.notes}
-Tady nejde o jednu správnou odpověď. Pokud chci studenty učit číst data, často začnu body ve skupinách. Pokud chci rychle porovnat skupiny, použiji boxplot. Smyslem aktivity je přimět je formulovat, co má graf ukázat.
+Tady nejde o jednu správnou odpověď. Pokud chci studenty učit číst data, často začnu body ve skupinách. Pokud chci rychle porovnat skupiny, použiji boxplot. Smyslem aktivity je přimět je formulovat, co má graf ukázat.;
 :::
 
 ## Kategoriální × kategoriální
@@ -2916,7 +2848,7 @@ plot_kat_kat_waffle <-
   ) +
   theme_gallery() +
   ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     axis.text = ggplot2::element_blank(),
     axis.ticks = ggplot2::element_blank(),
     panel.grid = ggplot2::element_blank(),
@@ -2980,7 +2912,7 @@ plot_kat_kat_sloupce <-
     )
   ) +
   theme_gallery() +
-  ggplot2::theme(legend.position = "bottom")
+  ggplot2::theme(legend.position = "right")
 
 save_gallery_plot(plot_kat_kat_sloupce, "kat_kat_sloupce.png")
 ```
@@ -3035,7 +2967,7 @@ plot_kat_kat_podil <-
     subtitle = "složení každého ostrova"
   ) +
   ggplot2::theme(
-    legend.position = "bottom",
+    legend.position = "right",
     legend.text = ggplot2::element_text(size = 8),
     legend.key.size = grid::unit(0.25, "cm"),
     axis.text.x = ggplot2::element_text(
