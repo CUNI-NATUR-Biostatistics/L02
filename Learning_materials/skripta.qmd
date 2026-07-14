@@ -974,6 +974,28 @@ Když body tvoří přibližně rostoucí oblak bez výrazně zvláštních bod�
 
 V této lekci je důležité hlavně to, že obě čísla mají podpůrnou roli. Nenahrazují graf ani biologickou interpretaci. Pomáhají jen stručně vyjádřit, že delší ploutve bývají spojeny s vyšší hmotností a že tento vztah je v datech zřetelný i po převodu do číselné podoby.
 
+## Korelace není kauzalita
+
+V této chvíli už umíme vztah dvou `r render_glossary_term("numericka-promenna", display = "číselných proměnných")` dobře popsat slovně i číslem. Je ale důležité nepřekročit hranici toho, co nám korelace opravdu říká. Korelace popisuje, že se dvě proměnné mění společně, ale sama o sobě ještě neukazuje, která proměnná je příčinou druhé.
+
+U tučňáků tedy můžeme bezpečně říct, že delší ploutev bývá spojena s vyšší hmotností. Nemůžeme ale jen z korelace uzavřít, že změna délky ploutve přímo způsobuje změnu hmotnosti. Část vztahu může vznikat i tím, že obě proměnné souvisejí s celkovou velikostí těla nebo s druhem.
+
+To je důvod, proč po vizualizaci a korelaci obvykle následuje modelování. Až model nám pomáhá oddělit, co je společný vzor v datech, co je `r render_glossary_term("efekt", display = "efekt")` konkrétní proměnné a jak velká je `r render_glossary_term("nejistota", display = "nejistota")` kolem tohoto odhadu.
+
+::: {.callout-important}
+## Co je správná interpretace?
+
+- **A:** Kladná korelace znamená, že jsme prokázali příčinný vztah.
+- **B:** Kladná korelace znamená, že proměnné spolu souvisejí, ale příčinu musíme řešit opatrněji.
+- **C:** Korelace je jen technické číslo bez biologického významu.
+:::
+
+::: {.callout-note collapse="true"}
+## Odpověď
+
+Správně je **B**. Korelace je biologicky užitečný souhrn společného vzoru v datech, ale sama ještě nerozlišuje přímou příčinu od dalších možných vysvětlení.
+:::
+
 ## Stejný graf, ale s viditelnými druhy
 
 Teď se můžeme vrátit ke stejnému bodovému grafu a odkrýt ještě jednu informaci: druh tučňáka. Původní šedý oblak bodů se rozpadne na několik podskupin, které se částečně překrývají, ale zároveň mají vlastní polohu a vlastní `r render_glossary_term("rozptyl", display = "rozptyl")`.
