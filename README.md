@@ -8,6 +8,10 @@ Repozitář je výchozí kostra pro tři propojené výstupy:
 - podkladová skripta v `Learning_materials/`
 - pomocné R skripty pro renderování, téma a sdílené funkce v `R/`
 
+## Doporučený pracovní prostor
+
+Tento repozitář je určený pro práci v multi-root workspace `CUNI-NATUR-Biostatistics`. Sdílený kontext kurzu a kanonické instrukce pro AI asistenty spravuje soukromý repozitář `_internal`; doporučené nastavení je popsané v `_internal/workspace-setup.md`. Při samostatném otevření tohoto repozitáře nemusí mít AI asistent k dispozici úplný kontext kurzu.
+
 ---
 
 ## Rámec lekce
@@ -144,8 +148,8 @@ Poznámka: `presentation.qmd` i `skripta.qmd` načítají aktivní theme soubory
 ## Jak začít pracovat s tímto repozitářem
 
 1. Otevřete projekt v RStudiu nebo VS Code a obnovte závislosti příkazem `renv::restore()`. Lokální pracovní soubory RStudia, Quarto cache a dočasné debug soubory se necommitují díky `.gitignore`.
-2. Doplňte obsah do `Learning_materials/skripta.qmd`, `Presentation/presentation.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `.github/instructions/lesson-authoring.instructions.md`: nejdřív výstupy z učení a dataset, potom strukturální draft skript, potom development pass skript, teprve pak lidská revize a prezentace.
-3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do `Learning_materials/images/`. Krátké reprodukční debug skripty ukládejte do `Temp/` podle `.github/instructions/debugging.instructions.md`.
+2. Doplňte obsah do `Learning_materials/skripta.qmd`, `Presentation/presentation.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `_internal/.ai/authoring/lesson-workflow.md`: nejdřív výstupy z učení a dataset, potom strukturální draft skript, potom development pass skript, teprve pak lidská revize a prezentace.
+3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do `Learning_materials/images/`. Krátké reprodukční debug skripty ukládejte do `Temp/` podle `_internal/.ai/core/debugging.md`.
 4. Spusťte renderovací pipeline a commitněte aktualizované výstupy.
 
 ---
