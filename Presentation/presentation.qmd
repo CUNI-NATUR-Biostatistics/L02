@@ -150,24 +150,7 @@ barvy_druhu <-
 
 [Moodle](https://dl2.cuni.cz/course/view.php?id=106)
 
-## Výsledky učení
-
-Po dnešní přednášce budete schopni:
-
-::: {.incremental}
-- přečíst první bodový [graf pro dvě numerické proměnné]{.text-hgl-graphite}
-- vysvětlit, co nám ukáže [rozptyl]{.text-hgl-orange} a co přidá [korelace]{.text-hgl-indigo_velvet}
-- zvolit vhodný první graf podle typu dvojice proměnných
-- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
-:::
-
-::: {.notes}
-Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
-:::
-
-# Naše biologická otázka
-
-##
+## Pomůže nám druhá proměnná?
 
 ::: {.box-question}
 [Naše biologická otázka]{.panel-title}
@@ -184,7 +167,6 @@ Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném �
 #| echo: false
 knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
 ```
-
 :::
 
 ::: {.column width="10%"}
@@ -193,6 +175,49 @@ knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference
 
 ::: {.footer}
 Ilustrace: [Allison Horst](https://allisonhorst.com/)
+:::
+
+## Výsledky učení
+
+Po dnešní přednášce budete schopni:
+
+::: {.incremental}
+- přečíst první bodový [graf pro dvě numerické proměnné]{.text-hgl-graphite}
+- vysvětlit, co nám ukáže [rozptyl]{.text-hgl-orange} a co přidá [korelace]{.text-hgl-indigo_velvet}
+- zvolit vhodný první graf podle typu dvojice proměnných
+- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
+:::
+
+::: {.notes}
+Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
+:::
+
+## Co si neseme z L01?
+
+:::: {.columns .align-top}
+
+::: {.column width="48%"}
+::: {.panel-note}
+[Jedna proměnná]{.panel-title}
+
+Umíme určit její typ, popsat rozdělení a zvolit graf, který nic podstatného
+neskrývá.
+:::
+:::
+
+::: {.column width="48%"}
+::: {.panel-question .fragment}
+[Dnes přidáme druhou]{.panel-title}
+
+Jak poznáme směr, těsnost a biologicky důležitou strukturu vztahu?
+:::
+:::
+
+::::
+
+::: {.notes}
+Callback používá pouze rozhodnutí z L01: jednotka pozorování, typ proměnné,
+jednorozměrný graf a popis rozdělení. Korelaci ani model zde nepředjímám.
 :::
 
 ## Diskuze se sousedem {.text-center}
@@ -2195,6 +2220,108 @@ Příklad s čápy nechávám mluveně, protože jako odlehčená ilustrace zabe
 
 # Jak vybrat první graf?
 
+## Tři dvojice, tři různé otázky
+
+:::: {.columns .align-top}
+
+::: {.column width="58%"}
+::: {.strip-olive .strip-compact}
+[Délka ploutve × hmotnost]{.text-bold}
+:::
+
+::: {.strip-indigo .strip-compact}
+[Druh tučňáka × hmotnost]{.text-bold}
+:::
+
+::: {.strip-amethyst .strip-compact}
+[Druh tučňáka × ostrov]{.text-bold}
+:::
+:::
+
+::: {.column width="38%"}
+::: {.panel-question}
+[Skupinka 3–4 · 2 min]{.panel-title}
+
+Ke každé dvojici navrhněte první graf a jednou větou zdůvodněte, co z něj
+chcete přečíst.
+:::
+:::
+
+::::
+
+::: {.notes}
+Studenti nejprve rozhodují bez katalogu možností. Při sdílení se ptám na typ
+obou proměnných a na otázku, kterou má graf zodpovědět.
+:::
+
+## Rozhodovací mapa
+
+| Proměnná A | Proměnná B | První poctivý pohled | Co z něj čteme |
+|---|---|---|---|
+| kvantitativní | kvantitativní | bodový graf | směr, tvar, těsnost, odlehlé body |
+| kvantitativní | kategoriální | body ve skupinách; boxplot + body | rozdíly a překryv rozdělení |
+| kategoriální | kategoriální | tabulka nebo sloupce počtů/podílů | složení kombinací kategorií |
+
+::: {.takeaway-strip .fragment}
+[Typy proměnných]{.text-hgl-indigo_velvet} zúží možnosti.
+[Biologická otázka]{.text-hgl-orange} rozhodne, co má graf zvýraznit.
+:::
+
+::: {.notes}
+Toto je kompaktní mapa, ne testový strom. „První pohled“ není jediný povolený
+graf a jednotlivá pozorování nemáme skrývat bez důvodu.
+:::
+
+## Tři první pohledy
+
+:::: {.columns}
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Dvě hodnoty]{.panel-title}
+
+**Body:** jaký je směr, tvar a rozptyl?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Hodnota a skupina]{.panel-title}
+
+**Body + souhrn:** jak se skupiny liší a překrývají?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Dvě skupiny]{.panel-title}
+
+**Počty nebo podíly:** kterou informaci potřebujeme?
+:::
+:::
+
+::::
+
+::: {.panel-warning .fragment}
+[Co nesmíme skrýt?]{.panel-title}
+
+Boxplot může skrýt tvar a velikost vzorku. Podíly mohou skrýt počty. Hezčí
+graf proto není automaticky poctivější první graf.
+:::
+
+::: {.notes}
+Sekci uzavřu větou: typy proměnných omezují graf, ale finální volbu určuje
+otázka a informace, kterou nesmíme skrýt. Podrobnější galerie zůstává ve
+skriptech jako materiál pro samostudium.
+:::
+
+<!--
+Legacy long-form presentation gallery retained temporarily during the
+coherence branch for source comparison. It is excluded from the rendered
+deck and will be removed after the compact decision map passes human review.
+
+# Jak vybrat první graf?
+
 ## Tři dvojice proměnných
 
 ```{r}
@@ -3135,6 +3262,8 @@ Toto je konceptuální účetnictví po třech ukázkách. Nechávám studentům
 Tato tabulka je závěr sekce. Záměrně říkám "možné typy grafu", ne "jediný správný graf". V praktiku se mohou studenti vracet k prvnímu sloupci: jaký typ mají proměnné, které chci porovnat?
 :::
 
+-->
+
 # Co dál?
 
 ## Co přidá model?
@@ -3221,7 +3350,7 @@ Co nám schází k tomu, abychom z viditelného vzoru přešli k přesnějšímu
 
 A) Větší dataset a více bodů v grafu.
 
-B) [Model, který přidá odhad efektu a interval spolehlivosti.]{.rn-circle-orange}
+B) [Model: v L03 přidá odhad efektu, v L04 jeho interval spolehlivosti.]{.rn-circle-orange}
 
 C) Silnější korelaci, aby bylo číslo přesvědčivější.
 :::

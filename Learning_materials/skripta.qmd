@@ -1,5 +1,5 @@
 ---
-title: "Vztahy dvou proměnných, vizualizace, pravděpodobnost"
+title: "Vztahy dvou proměnných a vizualizace"
 subtitle: "Podkladové čtenářské materiály k přednášce"
 lang: cs
 format:
@@ -186,6 +186,11 @@ col_median_line <- "#5D2890"
 ```
 
 ## Úvod
+
+V L01 jsme se naučili nejprve určit, co představuje jeden řádek, rozpoznat
+typ jedné proměnné a zvolit pro ni poctivý souhrn a graf. Teď položíme druhou
+proměnnou vedle první. Stejná pravidla stále platí, ale otázka se mění:
+nehledáme už jen tvar jednoho rozdělení, nýbrž vztah mezi dvěma znaky.
 
 U živočichů často čekáme, že větší tělo bude souviset s většími orgány nebo končetinami. U tučňáků si proto můžeme položit jednoduchou otázku: mají jedinci s delší ploutví také větší tělesnou hmotnost? Tato otázka je vhodná pro první krok do světa vztahů dvou proměnných, protože nás nutí přemýšlet nejen o tvaru vzoru, ale i o `r render_glossary_term("variabilita", display = "variabilitě")` dat.
 
@@ -2011,7 +2016,9 @@ knitr::include_graphics(
 - Doplňková `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` může odhalit, že část původního rozptylu souvisí se skutečnou strukturou dat.
 - Typ grafu vybíráme podle dvojice proměnných: pro numerická data často bodový graf, pro kategoriální a numerickou proměnnou často `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do skupin.
 - V grafu můžeme rozpoznat směr vztahu, ale ještě tím neprokazujeme `r render_glossary_term("efekt", display = "efekt")`.
-- L02 připravuje půdu pro další krok: přesnější popis vztahu a `r render_glossary_term("nejistota", display = "nejistoty")` pomocí modelu.
+- L02 připravuje půdu pro dva další kroky: L03 přidá modelový odhad velikosti
+  vztahu a L04 potom vyjádří `r render_glossary_term("nejistota", display = "nejistotu")`
+  tohoto odhadu pomocí intervalu spolehlivosti.
 
 ## Slovníček pojmů {.unnumbered}
 
