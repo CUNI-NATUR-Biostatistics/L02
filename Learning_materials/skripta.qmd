@@ -20,6 +20,7 @@ format:
     number-sections: true
     output-file: "skripta_raw.pdf"
     include-in-header: "skripta_theme.typ"
+    date: last-modified
 date: 2026/02/26
 date-format: long
 date-modified: last-modified
@@ -187,7 +188,7 @@ col_median_line <- "#5D2890"
 
 ## Úvod
 
-V L01 jsme se naučili nejprve určit, co představuje jeden řádek, rozpoznat
+V minulé lekci jsme se naučili nejprve určit, co představuje jeden řádek, rozpoznat
 typ jedné proměnné a zvolit pro ni poctivý souhrn a graf. Teď položíme druhou
 proměnnou vedle první. Stejná pravidla stále platí, ale otázka se mění:
 nehledáme už jen tvar jednoho rozdělení, nýbrž vztah mezi dvěma znaky.
@@ -275,10 +276,12 @@ Než si podobný graf nakreslíme sami, je užitečné v R rychle zkontrolovat p
 #| echo: true
 #| eval: true
 head(
+  # Prvních šest délek ploutve — hodnoty na ose x
   x = data_tucnaci$delka_ploutve_mm
 )
 
 head(
+  # Prvních šest hmotností — hodnoty na ose y
   x = data_tucnaci$hmotnost_g
 )
 ```
@@ -290,10 +293,13 @@ Jakmile víme, které dvě proměnné chceme porovnat, můžeme tentýž první 
 #| echo: true
 #| eval: true
 plot(
+  # Každý řádek dat vytvoří jeden bod se dvěma souřadnicemi
   x = data_tucnaci$delka_ploutve_mm,
   y = data_tucnaci$hmotnost_g,
+  # Popisky připomínají význam a jednotky obou os
   xlab = "Délka ploutve (mm)",
   ylab = "Tělesná hmotnost (g)",
+  # Plné, průhledné body omezí překrývání
   pch = 16,
   col = rgb(red = 0.54, green = 0.54, blue = 0.54, alpha = 0.6)
 )
@@ -321,9 +327,9 @@ Základní odpověď je tato: celkový směr vztahu je zřetelně rostoucí, ale
 
 Po prvním pohledu na graf se teď vyplatí pojmenovat, co jsme vlastně zobrazili. Pracujeme se dvěma `r render_glossary_term("numericka-promenna", display = "numerickými proměnnými")`:
 
-- **osa x**: délka ploutve v milimetrech (`flipper_length_mm`)
-- **osa y**: tělesná hmotnost v gramech (`body_mass_g`)
-- doplňkově `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` druh tučňáka (`species`)
+- **osa x**: délka ploutve (anglicky *flipper length*) v milimetrech (`flipper_length_mm`)
+- **osa y**: tělesná hmotnost (anglicky *body mass*) v gramech (`body_mass_g`)
+- doplňkově `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` druh tučňáka (anglicky *species*; `species`)
 
 Přiřazení os je při popisu korelace libovolné. Kdybychom osy prohodili — délku svisle a hmotnost vodorovně — bodový mrak by vypadal jinak, ale síla vztahu by zůstala naprosto stejná. Pojmy *`r render_glossary_term("prediktor", display = "prediktor")`* a *`r render_glossary_term("odezva", display = "odezva")`*, které popisují asymetrii os (jedna proměnná „vysvětluje" druhou), patří k regresním modelům; ty si ukážeme v pozdějších lekcích.
 
@@ -364,11 +370,9 @@ Bodový graf nám umožňuje podívat se současně na směr vztahu i na to, jak
 
 Když ale sledujeme vztah dvou proměnných obecněji, typ grafu vybíráme podle toho, jaké proměnné máme k dispozici:
 
-| Dvojice proměnných | Co chceme na první pohled vidět | Dobrá první volba |
-| --- | --- | --- |
-| dvě numerické proměnné | směr vztahu a rozptyl bodů | bodový graf |
-| `r render_glossary_term("kategoricka-promenna", display = "kategoriální")` + `r render_glossary_term("numericka-promenna", display = "numerická proměnná")` | rozdíly mezi skupinami a překryv `r render_glossary_term("rozdeleni", display = "rozdělení")` | `r render_glossary_term("boxplot", display = "boxplot")`, případně body ve skupinách |
-| dvě kategoriální proměnné | kolik pozorování spadá do jednotlivých kombinací | tabulka `r render_glossary_term("cetnost", display = "četností")` nebo sloupcový graf |
+- **Dvě numerické proměnné:** hledáme směr vztahu a rozptyl bodů. Dobrou první volbou je bodový graf (anglicky *scatter plot*).
+- **Kategoriální a numerická proměnná:** hledáme rozdíly mezi skupinami a překryv `r render_glossary_term("rozdeleni", display = "rozdělení")`. Dobrou první volbou je `r render_glossary_term("boxplot", display = "krabicový graf")` (anglicky *box plot*), případně body rozdělené do skupin.
+- **Dvě kategoriální proměnné:** sledujeme, kolik pozorování spadá do jednotlivých kombinací. Začít můžeme tabulkou `r render_glossary_term("cetnost", display = "četností")` nebo sloupcovým grafem (anglicky *bar chart*).
 
 Obecné pravidlo tedy nezní jen „je v datech nějaký vztah?“, ale také „jaký graf vůbec dává pro tuto dvojici proměnných smysl?“ V této chvíli ale zůstaneme u první řádky tabulky a budeme dál číst jeden bodový graf dvou numerických proměnných.
 
@@ -533,7 +537,9 @@ pearson_maly_txt <-
   formatC(pearson_maly, format = "f", digits = 2, decimal.mark = ",")
 ```
 
-Abychom rozptyl jedné proměnné vyjádřili přesně číslem, zavedeme jeho přesnou definici a z ní odvozenou `r render_glossary_term("smerodatna-odchylka", display = "směrodatnou odchylku")`. Jako příklad použijeme malý vzorek `r n_maly` tučňáků druhu Adelie (průměr délky ploutve: `r prumer_maly_delka_txt` mm). Tabulka ukazuje délku ploutve každého z nich, odchylku od průměru a čtverec té odchylky:
+Abychom rozptýlení jedné proměnné vyjádřili přesně číslem, zavedeme **výběrový rozptyl** (anglicky *sample variance*; zkráceně také jen **rozptyl**) a z něj odvozenou `r render_glossary_term("smerodatna-odchylka", display = "výběrovou směrodatnou odchylku")` (anglicky *sample standard deviation*, zkratka **SD**; česky se používá také označení standardní odchylka).
+
+Nejdřív jen slovy: **od každé hodnoty odečteme průměr, odchylky umocníme na druhou, sečteme je a součet vydělíme počtem pozorování minus jedna**. Jako příklad použijeme malý vzorek `r n_maly` tučňáků druhu Adelie (průměr délky ploutve: `r prumer_maly_delka_txt` mm). Tabulka ukazuje délku ploutve každého z nich, odchylku od průměru a čtverec té odchylky:
 
 ```{r}
 #| label: tabulka-rozptyl
@@ -555,15 +561,34 @@ knitr::kable(
 )
 ```
 
+Nejprve stejný výpočet zapíšeme pouze názvy veličin:
+
+$$
+\text{výběrový rozptyl délky ploutve}
+=
+\frac{
+  \text{součet čtverců odchylek délek ploutví od průměru}
+}{
+  \text{počet tučňáků} - \text{jedna}
+}.
+$$
+
+Teprve potom dosadíme délky ploutví a jejich průměr z tabulky:
+
 $$\begin{align}
-s^2_x &= \frac{(`r maly_vzorek_delka[1]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[2]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[3]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[4]` - `r prumer_maly_delka_txt`)^2}{`r n_maly` - 1} \\[6pt]
-      &= \frac{`r ctverce_txt[1]` + `r ctverce_txt[2]` + `r ctverce_txt[3]` + `r ctverce_txt[4]`}{`r n_maly - 1`} \\[6pt]
-      &= \frac{`r soucet_ctvercu_txt`}{`r n_maly - 1`} = `r rozptyl_maly_txt`\text{ mm}^2
+\text{výběrový rozptyl délky ploutve}
+  &= \frac{(`r maly_vzorek_delka[1]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[2]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[3]` - `r prumer_maly_delka_txt`)^2 + (`r maly_vzorek_delka[4]` - `r prumer_maly_delka_txt`)^2}{`r n_maly` - 1} \\[6pt]
+  &= \frac{`r ctverce_txt[1]` + `r ctverce_txt[2]` + `r ctverce_txt[3]` + `r ctverce_txt[4]`}{`r n_maly - 1`} \\[6pt]
+  &= \frac{`r soucet_ctvercu_txt`}{`r n_maly - 1`} = `r rozptyl_maly_txt`\text{ mm}^2
 \end{align}$$
 
-Pro libovolný soubor $n$ pozorování platí obecný zápis:
+Teprve nyní výpočet zkrátíme symboly. Délku ploutve označíme $x$, její
+výběrový rozptyl $s_x^2$ a výběrovou směrodatnou odchylku $s_x$. Pro
+libovolný soubor $n$ pozorování platí:
 
 $$s^2_x = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2, \qquad s_x = \sqrt{s^2_x}$$
+
+Ve vzorci $x_i$ označuje délku ploutve jednoho tučňáka, $\bar{x}$ průměrnou délku ploutve, $n$ počet pozorování, $s_x^2$ výběrový rozptyl a $s_x$ směrodatnou odchylku v původních jednotkách.
 
 V celém souboru tučňáků vychází směrodatná odchylka délky ploutve přibližně `r round(sd(data_tucnaci$delka_ploutve_mm), 1)` mm a tělesné hmotnosti přibližně `r round(sd(data_tucnaci$hmotnost_g))` g. Tato čísla říkají, o kolik milimetrů nebo gramů se typický jedinec odchyluje od průměru celého souboru. V dalším kroku tuto myšlenku rozšíříme na dvě proměnné zároveň.
 
@@ -609,11 +634,23 @@ spearman_korelace_txt <- formatC(
   decimal.mark = ","
 )
 
-x_linear <- 1:12
-y_linear <- c(1.2, 2.1, 2.8, 4.2, 5.1, 5.9, 7.0, 8.3, 9.2, 10.1, 10.8, 12.2)
+# Stejný kladný příklad jako v prezentaci: skutečná data tučňáků
+x_linear <- data_tucnaci$delka_ploutve_mm
+y_linear <- data_tucnaci$hmotnost_g
 
-x_curve <- 1:12
-y_curve <- c(1.4, 2.1, 2.5, 2.9, 3.4, 4.0, 4.8, 5.9, 7.1, 8.7, 10.6, 12.8)
+# Stejný zakřivený příklad s odlehlými body jako v prezentaci
+set.seed(900723)
+x_curve_n <- 120
+x_curve <- sort(runif(x_curve_n, min = 1, max = 10))
+signal_curve <- (3 * log(x_curve)) + (0.35 * sqrt(x_curve))
+noise_curve <- rnorm(x_curve_n, mean = 0, sd = 0.5)
+y_curve <- signal_curve + noise_curve
+outlier_idx <-
+  seq(0.3, 0.8, by = 0.05) * x_curve_n |>
+  round() |>
+  unique()
+y_curve[outlier_idx] <-
+  y_curve[outlier_idx] + (y_curve[outlier_idx] * 1.2)
 
 pearson_linear_txt <- formatC(
   cor(x_linear, y_linear, method = "pearson"),
@@ -669,10 +706,10 @@ pearson_from_cov_txt <-
     decimal.mark = ","
   )
 
-# Toy data: no correlation
-x_none <- 1:12
+# Stejný příklad bez zřetelné souvislosti jako v prezentaci
+x_none <- seq(1, 10, length.out = 12)
 y_none <-
-  c(6.1, 3.8, 8.2, 5.5, 2.9, 9.0, 4.4, 7.6, 3.1, 8.8, 5.2, 6.7)
+  c(3.2, 4.8, 2.7, 5.1, 3.9, 4.4, 2.9, 5.0, 3.5, 4.1, 3.8, 4.6)
 
 pearson_none_txt <-
   formatC(
@@ -690,10 +727,21 @@ spearman_none_txt <-
     decimal.mark = ","
   )
 
-# Toy data: strong negative linear
-x_neg <- 1:12
+# Stejný záporný příklad jako v prezentaci: nadmořská výška a teplota
+x_neg <- seq(1, 10, length.out = 12)
 y_neg <-
-  c(12.1, 10.8, 10.2, 8.9, 7.7, 6.5, 5.4, 4.3, 3.1, 2.2, 1.3, 0.5)
+  c(6.0, 5.8, 5.5, 5.2, 4.7, 4.5, 4.2, 3.9, 3.4, 3.2, 2.8, 2.5)
+
+set.seed(900723)
+vec_noise <- rnorm(length(x_neg), mean = 0, sd = 1)
+data_nadmorska <-
+  data.frame(
+    nadmorska_vyska_m = round((x_neg + vec_noise) * 90 + 200),
+    prumerna_teplota_c = round(y_neg * 2.4 + 5.5, 1)
+  )
+
+x_neg <- data_nadmorska$nadmorska_vyska_m
+y_neg <- data_nadmorska$prumerna_teplota_c
 
 pearson_neg_txt <-
   formatC(
@@ -714,7 +762,9 @@ spearman_neg_txt <-
 
 ## `r render_glossary_term("kovariance", display = "Kovariance")`: jak se dvě proměnné pohybují společně
 
-`r render_glossary_term("rozptyl", display = "Rozptyl")` jedné proměnné popisuje, jak moc jsou její hodnoty rozptýleny kolem `r render_glossary_term("prumer", display = "průměru")`. Jakmile ale sledujeme dvě proměnné zároveň, zajímá nás, zda se jejich odchylky od průměru pohybují *společně*. Když jedinci s nadprůměrně dlouhou ploutví mají také nadprůměrnou hmotnost, jejich odchylky od průměru mají stejné znaménko a součin je kladný. Právě to zachycuje kovariance. Pro stejný malý vzorek `r n_maly` tučňáků Adelie tabulka ukazuje odchylky obou proměnných od jejich průměrů a součin každé dvojice odchylek:
+`r render_glossary_term("rozptyl", display = "Rozptyl")` jedné proměnné popisuje, jak moc jsou její hodnoty rozptýleny kolem `r render_glossary_term("prumer", display = "průměru")`. Jakmile ale sledujeme dvě proměnné zároveň, zajímá nás, zda se jejich odchylky od průměru pohybují *společně*. Tento souhrn se nazývá **kovariance** (anglicky *covariance*).
+
+Nejdřív slovy: **u každého tučňáka vynásobíme odchylku délky ploutve od jejího průměru odchylkou hmotnosti od jejího průměru, součiny sečteme a vydělíme počtem pozorování minus jedna**. Když jedinci s nadprůměrně dlouhou ploutví mají také nadprůměrnou hmotnost, obě odchylky mají stejné znaménko a jejich součin je kladný. Pro stejný malý vzorek `r n_maly` tučňáků Adelie tabulka ukazuje všechny potřebné hodnoty:
 
 ```{r}
 #| label: tabulka-kovariance
@@ -736,22 +786,35 @@ knitr::kable(
 )
 ```
 
+Nejprve zapíšeme výpočet pouze názvy obou proměnných:
+
+$$
+\text{výběrová kovariance délky ploutve a hmotnosti}
+=
+\frac{
+  \text{součet součinů odchylek délky ploutve a hmotnosti}
+}{
+  \text{počet tučňáků} - \text{jedna}
+}.
+$$
+
+Teprve potom dosadíme odchylky z tabulky:
+
 $$\begin{align}
-\text{cov}(x, y) &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{`r n_maly` - 1} \\[6pt]
+\text{výběrová kovariance délky ploutve a hmotnosti}
+  &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{`r n_maly` - 1} \\[6pt]
   &= \frac{`r souciny_txt_maly[1]` + `r souciny_txt_maly[2]` + `r souciny_txt_maly[3]` + `r souciny_txt_maly[4]`}{`r n_maly - 1`} \\[6pt]
   &= \frac{`r soucet_soucinu_maly_txt`}{`r n_maly - 1`} = `r kovariance_maly_txt`\text{ mm·g}
 \end{align}$$
 
-Pro $n$ pozorování obecně:
+V obecném zápisu označíme délku ploutve $x$, hmotnost $y$ a jejich
+výběrovou kovarianci $\operatorname{cov}(x,y)$. Pro $n$ pozorování:
 
 $$\text{cov}(x, y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})$$
 
-Intuici si usnadníme grafem. Přidáme do bodového grafu dvě přerušované čáry — vertikální ve výši průměrné délky ploutve (`r round(mean(data_tucnaci$delka_ploutve_mm), 1)` mm) a horizontální ve výši průměrné hmotnosti (`r round(mean(data_tucnaci$hmotnost_g))` g). Vzniknou čtyři kvadranty, z nichž každý přispívá ke kovarianci jinak:
+Zde $x_i$ označuje délku ploutve jednoho tučňáka, $y_i$ jeho hmotnost, $\bar{x}$ a $\bar{y}$ příslušné průměry, $n$ počet tučňáků a $\text{cov}(x,y)$ výběrovou kovarianci obou proměnných.
 
-- **vpravo nahoře** ($x > \bar{x}$, $y > \bar{y}$): obě odchylky kladné — příspěvek kladný
-- **vlevo dole** ($x < \bar{x}$, $y < \bar{y}$): obě odchylky záporné — součin je stále kladný $(-)\cdot(-) = (+)$
-- **vpravo dole** ($x > \bar{x}$, $y < \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
-- **vlevo nahoře** ($x < \bar{x}$, $y > \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
+Intuici si usnadníme grafem. Přidáme do bodového grafu dvě přerušované čáry — vertikální ve výši průměrné délky ploutve (`r round(mean(data_tucnaci$delka_ploutve_mm), 1)` mm) a horizontální ve výši průměrné hmotnosti (`r round(mean(data_tucnaci$hmotnost_g))` g). Vzniknou čtyři kvadranty:
 
 ```{r}
 #| label: kovariance-schema
@@ -857,17 +920,44 @@ knitr::kable(
 )
 ```
 
+Teprve s obrázkem před očima přečteme, jak každý kvadrant přispívá ke kovarianci:
+
+- **vpravo nahoře** ($x > \bar{x}$, $y > \bar{y}$): obě odchylky kladné — příspěvek kladný
+- **vlevo dole** ($x < \bar{x}$, $y < \bar{y}$): obě odchylky záporné — součin je stále kladný $(-)\cdot(-) = (+)$
+- **vpravo dole** ($x > \bar{x}$, $y < \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
+- **vlevo nahoře** ($x < \bar{x}$, $y > \bar{y}$): odchylky s opačnými znaménky — příspěvek záporný
+
+Nejprve zapíšeme normalizaci pouze názvy veličin:
+
+$$
+\text{Pearsonův korelační koeficient}
+=
+\frac{
+  \text{součet součinů odchylek délky ploutve a hmotnosti}
+}{
+  \sqrt{\text{součet čtverců odchylek délky ploutve}}
+  \cdot
+  \sqrt{\text{součet čtverců odchylek hmotnosti}}
+}.
+$$
+
+Teprve potom dosadíme odchylky z tabulky:
+
 $$\begin{align}
-r &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{\sqrt{\left[(`r odchylky_delka_txt[1]`)^2 + (`r odchylky_delka_txt[2]`)^2 + (`r odchylky_delka_txt[3]`)^2 + (`r odchylky_delka_txt[4]`)^2\right] \left[(`r odchylky_hmotnost_txt[1]`)^2 + (`r odchylky_hmotnost_txt[2]`)^2 + (`r odchylky_hmotnost_txt[3]`)^2 + (`r odchylky_hmotnost_txt[4]`)^2\right]}} \\[6pt]
+\text{Pearsonův korelační koeficient}
+  &= \frac{(`r odchylky_delka_txt[1]`) \cdot (`r odchylky_hmotnost_txt[1]`) + (`r odchylky_delka_txt[2]`) \cdot (`r odchylky_hmotnost_txt[2]`) + (`r odchylky_delka_txt[3]`) \cdot (`r odchylky_hmotnost_txt[3]`) + (`r odchylky_delka_txt[4]`) \cdot (`r odchylky_hmotnost_txt[4]`)}{\sqrt{\left[(`r odchylky_delka_txt[1]`)^2 + (`r odchylky_delka_txt[2]`)^2 + (`r odchylky_delka_txt[3]`)^2 + (`r odchylky_delka_txt[4]`)^2\right] \left[(`r odchylky_hmotnost_txt[1]`)^2 + (`r odchylky_hmotnost_txt[2]`)^2 + (`r odchylky_hmotnost_txt[3]`)^2 + (`r odchylky_hmotnost_txt[4]`)^2\right]}} \\[6pt]
   &= \frac{`r souciny_txt_maly[1]` + `r souciny_txt_maly[2]` + `r souciny_txt_maly[3]` + `r souciny_txt_maly[4]`}{\sqrt{(`r ctverce_txt[1]` + `r ctverce_txt[2]` + `r ctverce_txt[3]` + `r ctverce_txt[4]`) \cdot (`r ctverce_hmotnost_txt[1]` + `r ctverce_hmotnost_txt[2]` + `r ctverce_hmotnost_txt[3]` + `r ctverce_hmotnost_txt[4]`)}} \\[6pt]
   &= \frac{`r soucet_soucinu_maly_txt`}{\sqrt{`r soucet_ctvercu_txt` \cdot `r soucet_ctvercu_hmotnost_txt`}} = `r pearson_maly_txt`
 \end{align}$$
 
 Tímto normalizováním dostaneme Pearsonův korelační koeficient, který leží vždy v intervalu $[-1, +1]$. V našich datech vychází přibližně `r pearson_from_cov_txt` — přesně stejný výsledek jako přímý výpočet (`r pearson_korelace_txt`), jen odvozený jinou cestou.
 
-Obecně tedy můžeme Pearsonovu korelaci zapsat i bez jednotek takto:
+Pearsonův korelační koeficient nyní označíme obvyklým symbolem $r$.
+Obecně jej můžeme zapsat bez jednotek takto:
 
 $$r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2} \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}$$
+
+Zde $r$ označuje Pearsonův korelační koeficient, $x_i$ a $y_i$ dvojici hodnot jednoho tučňáka, $\bar{x}$ a $\bar{y}$ průměry obou proměnných a $n$ počet pozorování. Čitatel shrnuje společný pohyb odchylek; jmenovatel jej převede na bezrozměrné měřítko.
 
 ## Korelace jako stručný číselný popis
 
@@ -880,12 +970,14 @@ V R si obě čísla spočítáme přímo nad stejnými dvěma sloupci, které js
 #| echo: true
 #| eval: true
 cor(
+  # Pearsonova korelace shrnuje lineární vztah původních hodnot
   x = data_tucnaci$delka_ploutve_mm,
   y = data_tucnaci$hmotnost_g,
   method = "pearson"
 )
 
 cor(
+  # Spearmanova korelace místo hodnot porovnává jejich pořadí
   x = data_tucnaci$delka_ploutve_mm,
   y = data_tucnaci$hmotnost_g,
   method = "spearman"
@@ -902,13 +994,20 @@ Na schématu níže jsou čtyři typické situace. Všimněte si, jak se tvar bo
 #| message: false
 #| warning: false
 #| fig-cap: "Čtyři typické situace korelace: silná kladná lineární, žádná korelace, silná záporná lineární a monotónní, ale zakřivený vztah. U každého panelu jsou hodnoty Pearsonovy (P) a Spearmanovy (S) korelace."
-make_korelace_panel <- function(x, y, line_layer = NULL, label) {
+make_korelace_panel <- function(
+  x,
+  y,
+  line_layer = NULL,
+  label,
+  x_label = "X",
+  y_label = "Y"
+) {
   df <-
     data.frame(x = x, y = y)
   p <-
     ggplot2::ggplot(df, ggplot2::aes(x = x, y = y)) +
     ggplot2::geom_point(colour = col_data, size = 2, alpha = 0.8) +
-    ggplot2::labs(subtitle = label, x = "X", y = "Y")
+    ggplot2::labs(subtitle = label, x = x_label, y = y_label)
   if (!is.null(line_layer)) {
     p <- p + line_layer
   }
@@ -926,7 +1025,9 @@ p_linear <-
       colour    = col_highlight,
       linewidth = 1.2
     ),
-    label = paste0("Silná kladná lineární\nP ", pearson_linear_txt, " | S ", spearman_linear_txt)
+    label = paste0("Silná kladná lineární\nP ", pearson_linear_txt, " | S ", spearman_linear_txt),
+    x_label = "Délka ploutve (mm)",
+    y_label = "Tělesná hmotnost (g)"
   )
 
 p_none <-
@@ -953,25 +1054,30 @@ p_neg <-
       colour    = col_median_line,
       linewidth = 1.2
     ),
-    label = paste0("Silná záporná lineární\nP ", pearson_neg_txt, " | S ", spearman_neg_txt)
+    label = paste0("Silná záporná lineární\nP ", pearson_neg_txt, " | S ", spearman_neg_txt),
+    x_label = "Nadmořská výška (m)",
+    y_label = "Průměrná teplota (°C)"
   )
 
 p_curve <-
   make_korelace_panel(
     x          = x_curve,
     y          = y_curve,
-    line_layer = ggplot2::geom_line(colour = col_highlight, linewidth = 1.2),
+    line_layer = ggplot2::geom_smooth(
+      method = "lm",
+      formula = y ~ x,
+      se = FALSE,
+      colour = col_highlight,
+      linewidth = 1.2
+    ),
     label      = paste0("Monotónní, ale zakřivený\nP ", pearson_curve_txt, " | S ", spearman_curve_txt)
   )
 
 cowplot::plot_grid(p_linear, p_none, p_neg, p_curve, ncol = 2)
 ```
 
-| Pearson | Spearman |
-| --- | --- |
-| pracuje s původními hodnotami | pracuje s pořadím hodnot |
-| shrnuje hlavně lineární vztah | shrnuje monotónní vztah |
-| bývá citlivější na odlehlé body | bývá vůči odlehlým bodům odolnější |
+- **Pearsonova korelace:** pracuje s původními hodnotami, shrnuje hlavně lineární vztah a bývá citlivější na odlehlé body.
+- **Spearmanova korelace:** pracuje s pořadím hodnot, shrnuje monotónní vztah a bývá vůči odlehlým bodům odolnější.
 
 Pearsonova korelace shrnuje, jak silně spolu souvisejí hodnoty na obou osách v lineárním smyslu. Spearmanova korelace pracuje s pořadím hodnot, takže je vhodná jako neparametrická alternativa tam, kde nás zajímá spíš monotónní vztah než přesně lineární průběh. Bývá také méně citlivá na odlehlé body.
 
@@ -1130,7 +1236,7 @@ Jako rychlá pomůcka pomáhají dvě otázky:
 
 ### Dvě numerické proměnné: délka ploutve a hmotnost
 
-Právě proto jsme v této lekci začali bodovým grafem. Když jsou obě proměnné `r render_glossary_term("numericka-promenna", display = "numerické")`, bývá bodový graf nejlepší první volbou: každý bod nese dvojici hodnot a my můžeme najednou číst směr vztahu, sílu `r render_glossary_term("rozptyl", display = "rozptylu")`, možné shluky i `r render_glossary_term("odlehla-pozorovani", display = "odlehlé body")`.
+Právě proto jsme v této lekci začali bodovým grafem (anglicky *scatter plot*). Když jsou obě proměnné `r render_glossary_term("numericka-promenna", display = "numerické")`, bývá bodový graf nejlepší první volbou: každý bod nese dvojici hodnot a my můžeme najednou číst směr vztahu, sílu `r render_glossary_term("rozptyl", display = "rozptylu")`, možné shluky i `r render_glossary_term("odlehla-pozorovani", display = "odlehlé body")`.
 
 ```{r}
 #| label: dve-numericke-promenne
@@ -1162,7 +1268,7 @@ Když ale chceme ve stejných datech zvýraznit jinou vlastnost vztahu, můžeme
 
 ::: {.panel-tabset}
 
-#### Hladký trend
+#### Hladký trend (*fitted trend line*)
 
 Čára pomáhá rychle přečíst hlavní směr vztahu, ale body pořád zůstávají viditelné.
 
@@ -1197,7 +1303,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Hustota v mřížce
+#### Hustota v mřížce (*2D histogram*)
 
 Když je bodů hodně, můžeme místo jednotlivých bodů ukázat, kde se měření hromadí nejvíce.
 
@@ -1228,7 +1334,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Po druzích
+#### Po druzích v panelech (*small multiples*)
 
 Rozdělení do panelů pomáhá odlišit, co je společný trend a co je rozdíl mezi skupinami.
 
@@ -1314,13 +1420,13 @@ Tučňáci druhu Gentoo leží typicky nejvýš. Adelie a Chinstrap se vzájemn�
 
 Na tomto grafu nečteme směr vztahu jako v bodovém grafu. Místo toho sledujeme, zda se `r render_glossary_term("rozdeleni", display = "rozdělení")` tělesné hmotnosti mezi druhy překrývá, nebo zda některé skupiny leží typicky výš či níž. I to je vztah dvou proměnných: hodnota jedné proměnné se mění podle úrovně druhé.
 
-Na první pohled se zdá, že tučňáci druhu Gentoo leží typicky výš než Adelie a Chinstrap. Zároveň ale skupiny nejsou úplně oddělené a i uvnitř každého druhu zůstává viditelný rozptyl. Pro tuto kombinaci typů proměnných je proto často přirozenější `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do skupin než klasický bodový graf.
+Na první pohled se zdá, že tučňáci druhu Gentoo leží typicky výš než Adelie a Chinstrap. Zároveň ale skupiny nejsou úplně oddělené a i uvnitř každého druhu zůstává viditelný rozptyl. Pro tuto kombinaci typů proměnných je proto často přirozenější `r render_glossary_term("boxplot", display = "krabicový graf")` (anglicky *box plot*) nebo body rozdělené do skupin než klasický bodový graf.
 
 Totéž srovnání ale můžeme nakreslit i jinak podle toho, zda chceme zdůraznit jednotlivé body, šířku skupin nebo jen jejich shrnutí.
 
 ::: {.panel-tabset}
 
-#### Samotné body
+#### Samotné body (*beeswarm plot*)
 
 Nejlépe ukazují jednotlivá měření a překryv skupin, ale hůře shrnují jejich střed.
 
@@ -1352,7 +1458,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Krabice bez bodů
+#### Krabice bez bodů (*box plot*)
 
 Rychle shrnou polohu a překryv skupin, ale skryjí jemnější tvar rozložení uvnitř každého druhu.
 
@@ -1385,7 +1491,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Šířka rozložení
+#### Šířka rozložení (*violin plot*)
 
 Hladký obrys dává lepší představu o tom, kde je v každé skupině více a méně hodnot.
 
@@ -1460,7 +1566,7 @@ ggplot2::ggplot(
   )
 ```
 
-U takového grafu nás zajímá něco jiného než u boxplotu. Neptáme se, jaká je typická hodnota, ale jaké je zastoupení druhů uvnitř jednotlivých kategorií délky ploutve. Proto se zde velmi hodí proporční sloupcový graf: každá skupina má stejnou výšku 100 % a my snadno porovnáváme podíly.
+U takového grafu nás zajímá něco jiného než u boxplotu. Neptáme se, jaká je typická hodnota, ale jaké je zastoupení druhů uvnitř jednotlivých kategorií délky ploutve. Proto se zde velmi hodí proporční skládaný sloupcový graf (anglicky *proportional stacked bar chart*): každá skupina má stejnou výšku 100 % a my snadno porovnáváme podíly.
 
 Než si přečtete vysvětlení, zkuste odhadnout:
 
@@ -1478,7 +1584,7 @@ Stejná dvojice kategoriálních proměnných se ale dá zobrazit i jinými způ
 
 ::: {.panel-tabset}
 
-#### Proporce
+#### Proporce (*proportional stacked bar chart*)
 
 Když mají mít všechny sloupce stejnou výšku, snadno porovnáváme složení kategorií mezi sebou.
 
@@ -1512,7 +1618,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Absolutní počty
+#### Absolutní počty (*grouped bar chart*)
 
 Vedle sebe postavené sloupce se hodí tehdy, když nás zajímá i velikost jednotlivých skupin, nejen jejich složení.
 
@@ -1543,7 +1649,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Tepelná mapa
+#### Tepelná mapa (*heat map*)
 
 Když chceme rychle přečíst celou tabulku kombinací, je praktické převést ji na barevnou mřížku.
 
@@ -1585,7 +1691,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Dlaždicový graf
+#### Dlaždicový graf (*waffle chart*)
 
 Každý čtvereček představuje 1 % dané kategorie. Tento typ grafu se hodí tehdy, když chceme podíly ukázat ještě doslova a po malých dílcích.
 
@@ -1639,7 +1745,7 @@ Ještě jiný případ je seřazená osa proti `r render_glossary_term("numerick
 
 ### Seřazené kategorie délky ploutve a hmotnost
 
-Stejně vytvořené kategorie můžeme použít ještě jinak: jako ordinální proměnnou na ose x a hmotnost jako numerickou proměnnou na ose y. V takové chvíli je užitečný opět `r render_glossary_term("boxplot", display = "boxplot")`, ale tentokrát je zásadní, že pořadí kategorií na ose nese informaci.
+Stejně vytvořené kategorie můžeme použít ještě jinak: jako ordinální proměnnou na ose x a hmotnost jako numerickou proměnnou na ose y. V takové chvíli je užitečný opět `r render_glossary_term("boxplot", display = "krabicový graf")` (anglicky *box plot*), ale tentokrát je zásadní, že pořadí kategorií na ose nese informaci.
 
 ```{r}
 #| label: hmotnost-podle-kategorie-delky-ploutve
@@ -1690,7 +1796,7 @@ I zde ale existuje více rozumných variant. Některé lépe ukazují jednotliv�
 
 ::: {.panel-tabset}
 
-#### Samotné body
+#### Samotné body (*beeswarm plot*)
 
 Když chceme ponechat všechna měření viditelná, stačí je rozložit do stran v jednotlivých kategoriích.
 
@@ -1722,7 +1828,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Spojené středy
+#### Spojené středy (*line plot of group summaries*)
 
 Pokud chceme co nejrychleji číst posun od kratších k delším kategoriím, pomůže jednoduché spojení typických hodnot.
 
@@ -1754,7 +1860,7 @@ ggplot2::ggplot(
   )
 ```
 
-#### Šířka rozložení
+#### Šířka rozložení (*violin plot*)
 
 Hladký obrys pomůže ukázat, kde jsou v každé seřazené skupině data koncentrovaná a kde naopak řídká.
 
@@ -2016,16 +2122,24 @@ knitr::include_graphics(
 - Doplňková `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` může odhalit, že část původního rozptylu souvisí se skutečnou strukturou dat.
 - Typ grafu vybíráme podle dvojice proměnných: pro numerická data často bodový graf, pro kategoriální a numerickou proměnnou často `r render_glossary_term("boxplot", display = "boxplot")` nebo body rozdělené do skupin.
 - V grafu můžeme rozpoznat směr vztahu, ale ještě tím neprokazujeme `r render_glossary_term("efekt", display = "efekt")`.
-- L02 připravuje půdu pro dva další kroky: L03 přidá modelový odhad velikosti
-  vztahu a L04 potom vyjádří `r render_glossary_term("nejistota", display = "nejistotu")`
-  tohoto odhadu pomocí intervalu spolehlivosti.
+- Tato lekce připravuje půdu pro dva další kroky: v následující lekci přidáme modelový odhad velikosti vztahu a potom vyjádříme `r render_glossary_term("nejistota", display = "nejistotu")` tohoto odhadu pomocí intervalu spolehlivosti.
 
 ## Slovníček pojmů {.unnumbered}
 
-Pojmy použité v těchto materiálech a jejich definice:
+Pojmy použité v těchto materiálech a jejich definice. Úplný průběžně aktualizovaný slovníček je dostupný také [online](https://cuni-natur-biostatistics.github.io/slovnik/).
 
 ```{r}
 #| label: slovnicek
 #| echo: false
-glossary::glossary_table()
+#| results: asis
+if (knitr::is_html_output()) {
+  glossary::glossary_table()
+} else {
+  cat(
+    paste0(
+      "Interaktivní slovníček je dostupný online: ",
+      "https://cuni-natur-biostatistics.github.io/slovnik/"
+    )
+  )
+}
 ```
