@@ -61,7 +61,7 @@ project_name <-
   basename(here::here())
 
 display_name <-
-  stringr::str_glue("Biostatistika - {project_name}")
+  "Biostatistika"
 
 github_url <-
   stringr::str_glue(
@@ -140,7 +140,7 @@ barvy_druhu <-
 
 <br>
 
-::: {.text-color-white .text-font-heading .text-size-heading1 .text-bold}
+::: {.text-color-indigo_velvet .text-font-heading .text-size-heading1 .text-bold}
 `r display_name`
 :::
 
@@ -150,24 +150,7 @@ barvy_druhu <-
 
 [Moodle](https://dl2.cuni.cz/course/view.php?id=106)
 
-## Výsledky učení
-
-Po dnešní přednášce budete schopni:
-
-::: {.incremental}
-- přečíst první bodový [graf pro dvě numerické proměnné]{.text-hgl-graphite}
-- vysvětlit, co nám ukáže [rozptyl]{.text-hgl-orange} a co přidá [korelace]{.text-hgl-indigo_velvet}
-- zvolit vhodný první graf podle typu dvojice proměnných
-- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
-:::
-
-::: {.notes}
-Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
-:::
-
-# Naše biologická otázka
-
-##
+## Pomůže nám druhá proměnná?
 
 ::: {.box-question}
 [Naše biologická otázka]{.panel-title}
@@ -184,7 +167,6 @@ Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném �
 #| echo: false
 knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
 ```
-
 :::
 
 ::: {.column width="10%"}
@@ -193,6 +175,49 @@ knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference
 
 ::: {.footer}
 Ilustrace: [Allison Horst](https://allisonhorst.com/)
+:::
+
+## Výsledky učení
+
+Po dnešní přednášce budete schopni:
+
+::: {.incremental}
+- přečíst první bodový [graf pro dvě numerické proměnné]{.text-hgl-graphite}
+- vysvětlit, co nám ukáže [rozptyl]{.text-hgl-orange} a co přidá [korelace]{.text-hgl-indigo_velvet}
+- zvolit vhodný první graf podle typu dvojice proměnných
+- rozlišit mezi viditelným vzorem v datech a silnějším tvrzením o efektu
+:::
+
+::: {.notes}
+Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
+:::
+
+## Co si neseme z minulé lekce?
+
+:::: {.columns .align-top}
+
+::: {.column width="48%"}
+::: {.panel-note}
+[Jedna proměnná]{.panel-title}
+
+Umíme určit její typ, popsat rozdělení a zvolit graf, který nic podstatného
+neskrývá.
+:::
+:::
+
+::: {.column width="48%"}
+::: {.panel-question .fragment}
+[Dnes přidáme druhou]{.panel-title}
+
+Jak poznáme směr, těsnost a biologicky důležitou strukturu vztahu?
+:::
+:::
+
+::::
+
+::: {.notes}
+Callback používá pouze rozhodnutí z minulé lekce: jednotka pozorování, typ proměnné,
+jednorozměrný graf a popis rozdělení. Korelaci ani model zde nepředjímám.
 :::
 
 ## Diskuze se sousedem {.text-center}
@@ -763,7 +788,7 @@ Vzor v grafu ještě není model, efekt ani nejistota.
 :::
 
 ::: {.notes}
-Mluvený závěr: na biologickou otázku už umíme odpovědět opatrně. Ano, v datech je biologicky smysluplný rostoucí vzor. Ne, ještě jsme neodhadli efekt a neřekli nic o nejistotě. Tím připravuji půdu pro korelaci jako souhrn a pro L03 jako modelový krok.
+Mluvený závěr: na biologickou otázku už umíme odpovědět opatrně. Ano, v datech je biologicky smysluplný rostoucí vzor. Ne, ještě jsme neodhadli efekt a neřekli nic o nejistotě. Tím připravuji půdu pro korelaci jako souhrn a pro modelový krok v následující lekci.
 :::
 
 ## 
@@ -894,7 +919,7 @@ include_local_figure("graf_podle_druhu.png")
 Toto je aktivní přechod od grafu k číslu. Neptám se ještě na název "korelace". Ptám se, jaké vlastnosti by dobrý souhrn musel mít: zachytit směr, reagovat na rozptyl a nedávat úplně jiné měřítko jen proto, že délku přepočítáme z milimetrů na centimetry.
 :::
 
-# Kovariace
+# Kovariance
 
 ## Nejprve průmery grafu {.text-center}
 
@@ -1962,7 +1987,7 @@ include_local_figure("korelace_zakrivena.png")
 Pearson: `r pearson_curve_txt` / Spearman: `r spearman_curve_txt` — pořadí sedí, ale linearita ne úplně.
 :::
 
-## Čtyři situace korelace
+## Čtyři situace [korelace]{.text-hgl-indigo_velvet}
 
 
 
@@ -2159,13 +2184,13 @@ Korelace neřekne, odkud vztah pochází
 Tady vracím korelaci k biologické otázce. Obě hodnoty vyšly podobně, takže vztah je monotónní a blízký lineárnímu. To je důvod, proč korelace u těchto dat dává smysl. Hned ale dodám limit: korelace sama neřekne, jestli délka ploutve přímo "způsobuje" vyšší hmotnost, nebo jestli obě proměnné souvisí s velikostí těla a druhem.
 :::
 
-## Korelace není kauzalita
+## [Korelace]{.text-hgl-indigo_velvet} není [kauzalita]{.text-hgl-orange}
 
 ```{r}
 include_local_figure("korelace_neni_kauzalita.png")
 ```
 
-## Korelace ukazuje asociaci, ne příčinu
+## [Korelace]{.text-hgl-indigo_velvet} ukazuje asociaci, ne [příčinu]{.text-hgl-orange}
 
 <br>
 
@@ -2195,7 +2220,105 @@ Příklad s čápy nechávám mluveně, protože jako odlehčená ilustrace zabe
 
 # Jak vybrat první graf?
 
-## Tři dvojice proměnných
+## Tři dvojice, tři různé otázky
+
+:::: {.columns .align-top}
+
+::: {.column width="58%"}
+::: {.strip-olive .strip-compact}
+[Délka ploutve × hmotnost]{.text-bold}
+:::
+
+::: {.strip-indigo .strip-compact}
+[Druh tučňáka × hmotnost]{.text-bold}
+:::
+
+::: {.strip-amethyst .strip-compact}
+[Druh tučňáka × ostrov]{.text-bold}
+:::
+:::
+
+::: {.column width="38%"}
+::: {.panel-question}
+[Skupinka 3–4 · 2 min]{.panel-title}
+
+Ke každé dvojici navrhněte první graf a jednou větou zdůvodněte, co z něj
+chcete přečíst.
+:::
+:::
+
+::::
+
+::: {.notes}
+Studenti nejprve rozhodují bez katalogu možností. Při sdílení se ptám na typ
+obou proměnných a na otázku, kterou má graf zodpovědět.
+:::
+
+## Rozhodovací mapa
+
+| Proměnná A | Proměnná B | První poctivý pohled | Co z něj čteme |
+|---|---|---|---|
+| kvantitativní | kvantitativní | bodový graf | směr, tvar, těsnost, odlehlé body |
+| kvantitativní | kategoriální | body ve skupinách; boxplot + body | rozdíly a překryv rozdělení |
+| kategoriální | kategoriální | tabulka nebo sloupce počtů/podílů | složení kombinací kategorií |
+
+::: {.takeaway-strip .fragment}
+[Typy proměnných]{.text-hgl-indigo_velvet} zúží možnosti.
+[Biologická otázka]{.text-hgl-orange} rozhodne, co má graf zvýraznit.
+:::
+
+::: {.notes}
+Toto je kompaktní mapa, ne testový strom. „První pohled“ není jediný povolený
+graf a jednotlivá pozorování nemáme skrývat bez důvodu.
+:::
+
+## Tři první pohledy
+
+:::: {.columns}
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Dvě hodnoty]{.panel-title}
+
+**Body:** jaký je směr, tvar a rozptyl?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Hodnota a skupina]{.panel-title}
+
+**Body + souhrn:** jak se skupiny liší a překrývají?
+:::
+:::
+
+::: {.column width="33%"}
+::: {.panel-question}
+[Dvě skupiny]{.panel-title}
+
+**Počty nebo podíly:** kterou informaci potřebujeme?
+:::
+:::
+
+::::
+
+::: {.panel-warning .fragment}
+[Co nesmíme skrýt?]{.panel-title}
+
+Boxplot může skrýt tvar a velikost vzorku. Podíly mohou skrýt počty. Hezčí
+graf proto není automaticky poctivější první graf.
+:::
+
+::: {.notes}
+Sekci uzavřu větou: typy proměnných omezují graf, ale finální volbu určuje
+otázka a informace, kterou nesmíme skrýt. Teď stejnou mapu projdeme na
+konkrétních dvojicích proměnných a porovnáme, co jednotlivé grafy odhalují
+nebo skrývají.
+:::
+
+# Jak vybrat první graf?
+
+## [Typy proměnných]{.text-hgl-indigo_velvet} zúží volbu grafu
 
 ```{r}
 #| label: vytvorit-priklady-vizualizaci
@@ -2335,7 +2458,7 @@ include_local_figure("kv_kv_body.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Když mají obě proměnné číselné hodnoty, první volbou je bodový graf.
+Když mají obě proměnné [číselné hodnoty]{.text-hgl-orange}, první volbou je [bodový graf]{.text-hgl-indigo_velvet}.
 :::
 
 ::: {.notes}
@@ -2382,7 +2505,7 @@ include_local_figure("kv_kv_barva.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Barva nepřidala novou osu. Přidala otázku: je vztah stejný ve všech skupinách?
+Barva nepřidala novou osu. Přidala [novou otázku]{.text-hgl-orange}: je vztah stejný ve všech skupinách?
 :::
 
 ::: {.notes}
@@ -2434,7 +2557,7 @@ include_local_figure("kv_kv_hustota.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Hustota odpovídá na jinou otázku: kde je dat nejvíc?
+[Hustota]{.text-hgl-indigo_velvet} odpovídá na jinou otázku: [kde je dat nejvíc?]{.text-hgl-orange}
 :::
 
 ::: {.notes}
@@ -2530,7 +2653,7 @@ include_local_figure("kv_kat_body.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Body ve skupinách jsou často nejlepší první graf, protože nic neskrývají.
+[Body ve skupinách]{.text-hgl-indigo_velvet} jsou často nejlepší první graf, protože [nic neskrývají]{.text-hgl-orange}.
 :::
 
 ::: {.notes}
@@ -2585,7 +2708,7 @@ include_local_figure("kv_kat_boxplot.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Boxplot je rychlý souhrn, ale samotný boxplot může skrýt tvar dat.
+[Boxplot]{.text-hgl-indigo_velvet} je rychlý souhrn, ale samotný boxplot může [skrýt tvar dat]{.text-hgl-orange}.
 :::
 
 ::: {.notes}
@@ -2645,7 +2768,7 @@ include_local_figure("kv_kat_violin.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Violin ukáže tvar rozložení; boxplot uvnitř dá rychlý souhrn.
+[Violin]{.text-hgl-indigo_velvet} ukáže [tvar rozložení]{.text-hgl-orange}; boxplot uvnitř dá rychlý souhrn.
 :::
 
 ::: {.notes}
@@ -2697,7 +2820,7 @@ include_local_figure("kv_kat_histogram.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Histogram ukazuje skutečné počty tučňáků v intervalech hmotnosti.
+[Histogram]{.text-hgl-indigo_velvet} ukazuje [skutečné počty]{.text-hgl-orange} tučňáků v intervalech hmotnosti.
 :::
 
 ::: {.notes}
@@ -2751,14 +2874,14 @@ include_local_figure("kv_kat_skladana_hustota.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Skládaná hustota neukazuje počty. Ukazuje relativní složení druhů podél hmotnosti.
+[Skládaná hustota]{.text-hgl-indigo_velvet} neukazuje počty. Ukazuje [relativní složení]{.text-hgl-orange} druhů podél hmotnosti.
 :::
 
 ::: {.notes}
 Tohle je varianta inspirovaná R Graph Gallery stacked density. Je dobrá na otázku "který druh v dané části osy převažuje", ale hůř se z ní čte rozložení jednotlivého druhu, zejména když není dole.
 :::
 
-## Který graf byste udělali jako první?
+## Který [graf]{.text-hgl-orange} byste udělali jako první?
 
 :::: {.columns}
 
@@ -2869,7 +2992,7 @@ include_local_figure("kat_kat_waffle.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Waffle plot ukáže počty jako jednotky: vidíme složení i velikost skupin.
+[Waffle plot]{.text-hgl-indigo_velvet} ukáže počty jako jednotky: vidíme [složení i velikost skupin]{.text-hgl-orange}.
 :::
 
 ::: {.notes}
@@ -2924,7 +3047,7 @@ include_local_figure("kat_kat_sloupce.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Skupinové sloupce usnadní porovnání absolutních počtů mezi ostrovy.
+[Skupinové sloupce]{.text-hgl-indigo_velvet} usnadní porovnání [absolutních počtů]{.text-hgl-orange} mezi ostrovy.
 :::
 
 ::: {.notes}
@@ -2989,7 +3112,7 @@ include_local_figure("kat_kat_podily.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Podíly odpovídají na otázku složení, ne na otázku velikosti vzorku.
+[Podíly]{.text-hgl-indigo_velvet} odpovídají na otázku [složení]{.text-hgl-orange}, ne na otázku velikosti vzorku.
 :::
 
 ::: {.notes}
@@ -3052,7 +3175,7 @@ include_local_figure("kat_kat_bubliny.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Bubliny jsou efektní, ale přesné porovnávání ploch je pro oko těžší než porovnávání délek.
+Bubliny jsou efektní, ale [porovnávání ploch]{.text-hgl-orange} je pro oko těžší než [porovnávání délek]{.text-hgl-indigo_velvet}.
 :::
 
 ::: {.notes}
@@ -3137,7 +3260,7 @@ Tato tabulka je závěr sekce. Záměrně říkám "možné typy grafu", ne "jed
 
 # Co dál?
 
-## Co přidá model?
+## Co přidá [model]{.text-hgl-indigo_velvet}?
 
 ```{r}
 #| label: vytvorit-s-primkou
@@ -3187,22 +3310,22 @@ include_local_figure("bodovy_graf_s_primkou.png")
 ```
 
 ::: {.blockquote .fragment}
-Přímka přidá [odhad efektu:]{.text-color-indigo_velvet .text-bold} o kolik gramů se typicky mění hmotnost na každý 1 mm délky ploutve? To bude L03.
+Přímka přidá [odhad efektu]{.text-hgl-indigo_velvet}: o kolik gramů se typicky mění hmotnost na každý 1 mm délky ploutve? To bude téma následující lekce.
 :::
 
 ::: {.notes}
-Tady výslovně zavírám L02 a otevírám L03. Graf a korelace nám řekly, že vztah existuje jako vzor a že je relativně těsný. Model přidá odhad efektu a později nejistotu. Nezabíhám do lineárního modelu, jen nastavím otázku.
+Tady výslovně zavírám dnešní lekci a otevírám následující. Graf a korelace nám řekly, že vztah existuje jako vzor a že je relativně těsný. Model přidá odhad efektu a později nejistotu. Nezabíhám do lineárního modelu, jen nastavím otázku.
 :::
 
 ## Shrnutí
 
 ::: {.blockquote}
 ::: {.incremental}
-- Pro dvě numerické proměnné je první volbou bodový graf.
-- Z grafu čteme současně směr vztahu i šířku rozptylu.
-- Korelace vztah shrne číslem, ale nenahradí samotný graf.
-- Viditelný vzor ještě není důkaz efektu.
-- Model přidá velikost efektu a nejistotu.
+- Pro dvě numerické proměnné je první volbou [bodový graf]{.text-hgl-indigo_velvet}.
+- Z grafu čteme současně [směr vztahu]{.text-hgl-indigo_velvet} i [šířku rozptylu]{.text-hgl-orange}.
+- [Korelace]{.text-hgl-indigo_velvet} vztah shrne číslem, ale nenahradí samotný graf.
+- Viditelný vzor ještě není důkaz [efektu]{.text-hgl-orange}.
+- [Model]{.text-hgl-indigo_velvet} přidá velikost efektu a jeho nejistotu.
 :::
 :::
 
@@ -3221,7 +3344,7 @@ Co nám schází k tomu, abychom z viditelného vzoru přešli k přesnějšímu
 
 A) Větší dataset a více bodů v grafu.
 
-B) [Model, který přidá odhad efektu a interval spolehlivosti.]{.rn-circle-orange}
+B) [Model: v následující lekci přidá odhad efektu a potom jeho interval spolehlivosti.]{.rn-circle-orange}
 
 C) Silnější korelaci, aby bylo číslo přesvědčivější.
 :::

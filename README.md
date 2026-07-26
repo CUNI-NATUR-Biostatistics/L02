@@ -1,6 +1,8 @@
-# L02 – Vztahy dvou proměnných, vizualizace, pravděpodobnost
+# L02 – Vztahy dvou proměnných a vizualizace
 
-Týdenní repozitář kurzu **Biostatistika (MB120P163)** pro lekci `L02`. Repozitář vznikl ze šablony `_L-template` a slouží jako pracovní kostra pro přípravu materiálů k tématu vztahů dvou proměnných, vizualizace a pravděpodobnosti.
+Týdenní repozitář kurzu **Biostatistika (MB120P163)** pro lekci `L02`.
+Palmer Penguins zůstávají kotvou pro vztahy dvou proměnných, variabilitu,
+kovarianci, korelaci a volbu grafu.
 
 Repozitář je výchozí kostra pro tři propojené výstupy:
 
@@ -28,7 +30,8 @@ L02 je přechod od popisu jedné proměnné ke zkoumání vztahů mezi dvěma pr
 - Vybrat vhodný graf pro dvojici proměnných podle jejich typu.
 - Popsat, co v grafu vypadá jako vztah, a oddělit to od jistého závěru.
 - Vysvětlit biologický význam variability kolem pozorovaného vzoru.
-- Připravit most k dalším lekcím, kde přijde model a nejistota.
+- Připravit most k L03, kde model přidá odhad efektu, a k L04, kde se k odhadu
+  přidá nejistota a interval spolehlivosti.
 
 ### Co do této lekce vědomě nepatří
 
