@@ -17,9 +17,10 @@
 - Keep the biological question before learning outcomes.
 - Preserve “same data, different axes,” the covariance/correlation core,
   the limits of causal interpretation, and the visible-association boundary.
-- Compress the long graph catalogue into a decision map with a small number of
-  contrasting examples. The strong reasoning task is choosing what a graph
-  must reveal, not memorising every available geometry.
+- Preserve the complete quantitative × quantitative, quantitative ×
+  categorical, and categorical × categorical graph gallery. Use the compact
+  decision map as orientation, not as a replacement. Any later compression
+  must be slide-specific and explicitly approved.
 - Correct the bridge: L03 adds an effect estimate with a model; L04 adds
   estimation uncertainty and confidence intervals.
 - Mark `Exercises/cviceni.R` explicitly deferred.
@@ -30,15 +31,24 @@
   repository wrappers.
 - [x] The presentation wrapper regenerated `docs/index.html`; SHA-256 equality
   is checked again immediately before publication.
-- Check UTF-8, Quarto structure, unique chunk labels, glossary coverage,
+- [x] Checked UTF-8, Quarto structure, unique chunk labels, glossary coverage,
   student-visible base R, hidden-code conventions, links, and image licensing.
 - [x] A fresh R session activated
   `D:/GITHUB/CUNI-NATUR-Biostatistics/L02`; after snapshot,
   `renv::status()` reported no issues.
-- [x] Visually inspected the complete 45-state deck overview and full-size
-  compact decision-map slides. The semantic highlights remain legible and the
-  strong covariance sequence is retained.
-- [ ] Resolve the known exact-slug glossary-helper dependency through the
-  companion `slovnik` change, then rerender without the legacy warning.
-- [ ] Remove the excluded legacy gallery source after human acceptance of the
-  compact replacement.
+- [x] Visually inspected the complete 67-state deck overview, restored graph
+  gallery, compact decision-map slides, semantic highlights, and covariance
+  sequence.
+- [x] Confirmed the rendered written materials and presentation contain no
+  student-facing repository lesson codes.
+- [x] Confirmed the complete formula progression for sample variance,
+  covariance, and Pearson correlation in source and rendered PDF.
+
+## Human review decision
+
+Approved by the human reviewer on 2026-07-25. The complete visualisation
+gallery is part of the accepted lesson and must not be removed by a later
+coherence pass without an explicit new decision.
+
+The companion `slovnik` PR remains a shared release dependency, but the current
+lesson source and rendered artifacts have passed their local validation.
