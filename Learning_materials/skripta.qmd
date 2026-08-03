@@ -2,6 +2,8 @@
 title: "Vztahy dvou proměnných a vizualizace"
 subtitle: "Podkladové čtenářské materiály k přednášce"
 lang: cs
+filters:
+  - ../theme/semantic-boxes.lua
 format:
   html:
     toc: true
@@ -198,8 +200,7 @@ nehledáme už jen tvar jednoho rozdělení, nýbrž vztah mezi dvěma znaky.
 
 U živočichů často čekáme, že větší tělo bude souviset s většími orgány nebo končetinami. U tučňáků si proto můžeme položit jednoduchou otázku: mají jedinci s delší ploutví také větší tělesnou hmotnost? Tato otázka je vhodná pro první krok do světa vztahů dvou proměnných, protože nás nutí přemýšlet nejen o tvaru vzoru, ale i o `r render_glossary_term("variabilita", display = "variabilitě")` dat.
 
-::: {.callout-tip}
-## Otázka před prvním grafem
+::: {.box-question title="Otázka před prvním grafem"}
 
 Co byste čekali ještě před tím, než se podíváme na data?
 
@@ -210,8 +211,7 @@ Co byste čekali ještě před tím, než se podíváme na data?
 Než budete číst dál, zkuste si vybrat, která odpověď vám připadá nejpravděpodobnější, a proč.
 :::
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: očekáváme nedokonalý vztah"}
 
 Biologicky nejpravděpodobnější je **možnost B**: délka ploutve bude s tělesnou hmotností souviset, ale ne dokonale. Tělesné rozměry tučňáků jsou vzájemně provázány, ale každý jedinec je jiný — liší se druhem, pohlavím, věkem i podmínkami prostředí. Dokonalá shoda by v reálných biologických datech byla překvapivá.
 :::
@@ -318,8 +318,7 @@ Před dalším čtením se zkuste zastavit u tří krátkých otázek:
 - Jak velký je `r render_glossary_term("rozptyl", display = "rozptyl")` kolem hlavního směru?
 - Vidíte body, které se od většiny ostatních odlišují?
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: vztah je kladný, ale ne dokonalý"}
 
 Celkový směr vztahu je zřetelně rostoucí: tučňáci s delší ploutví bývají těžší. Kolem tohoto trendu ale zůstává dost široký oblak bodů. Vztah v datech vidíme, ale není natolik jednoduchý, aby se dal popsat jedinou čarou bez dalších otázek.
 :::
@@ -881,14 +880,12 @@ ggplot2::ggplot(
   )
 ```
 
-::: {.callout-tip}
-## Přečtěte si obrázek
+::: {.box-question title="Přečtěte si obrázek"}
 
 Podivejte se na obrázek: ve kterých kvadrantech se shlukuje nejvíce bodů? Co to říká o tom, jakým směrem se délka ploutve a hmotnost pohybují spolu?
 :::
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: body převažují v souhlasných kvadrantech"}
 
 Oranžové kvadranty (vpravo nahoře a vlevo dole) převažují — jedinci s nadprůměrně dlouhou ploutví mají zpravidla i nadprůměrnou hmotnost, a naopak. Kovariance proto bude kladná.
 :::
@@ -1096,16 +1093,14 @@ U tučňáků tedy můžeme bezpečně říct, že delší ploutev bývá spojen
 
 To je důvod, proč po vizualizaci a korelaci obvykle následuje modelování. Až model nám pomáhá oddělit, co je společný vzor v datech, co je `r render_glossary_term("efekt", display = "efekt")` konkrétní proměnné a jak velká je `r render_glossary_term("nejistota", display = "nejistota")` kolem tohoto odhadu.
 
-::: {.callout-important}
-## Co je správná interpretace?
+::: {.box-question title="Co je správná interpretace?"}
 
 - **A:** Kladná korelace znamená, že jsme prokázali příčinný vztah.
 - **B:** Kladná korelace znamená, že proměnné spolu souvisejí, ale příčinu musíme řešit opatrněji.
 - **C:** Korelace je jen technické číslo bez biologického významu.
 :::
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: korelace sama neurčuje příčinu"}
 
 Správně je **B**. Korelace je biologicky užitečný souhrn společného vzoru v datech, ale sama ještě nerozlišuje přímou příčinu od dalších možných vysvětlení.
 :::
@@ -1415,8 +1410,7 @@ Než si přečtete vysvětlení, zkuste si v grafu najít tři věci:
 - Kde se `r render_glossary_term("rozdeleni", display = "rozdělení")` hmotnosti mezi druhy překrývá a kde už méně?
 - Je `r render_glossary_term("rozptyl", display = "rozptyl")` uvnitř jednotlivých druhů malý, nebo i v rámci jednoho druhu zůstává docela velký?
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: druhy se liší, ale uvnitř druhů zůstává variabilita"}
 
 Tučňáci druhu Gentoo leží typicky nejvýš. Adelie a Chinstrap se vzájemně překrývají více. I uvnitř každého druhu je viditelný `r render_glossary_term("rozptyl", display = "rozptyl")` — takže ani znalost druhu sama o sobě nestačí k přesnému odhadu hmotnosti konkrétního jedince.
 :::
@@ -1577,8 +1571,7 @@ Než si přečtete vysvětlení, zkuste odhadnout:
 - Kde naopak převažuje Adelie?
 - Vypadá kategorie středních ploutví druhově smíšeněji než krajní kategorie?
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: složení skupin se mění s délkou ploutve"}
 
 Gentoo má nejvyšší podíl mezi delšími ploutvemi, zatímco Adelie převažuje mezi kratšími ploutvemi. Střední kategorie bývá druhově smíšenější. Právě tuto změnu ve složení skupin proporční sloupcový graf ukazuje velmi přehledně.
 :::
@@ -1904,8 +1897,7 @@ ggplot2::ggplot(
 
 :::
 
-::: {.callout-note collapse="true"}
-## Poznámka k tomuto příkladu
+::: {.box-data collapse="true" title="Doplňující: uměle vytvořené ordinální kategorie"}
 
 Kategorie kratší, střední a delší jsme zde vytvořili uměle z `r render_glossary_term("numericka-promenna", display = "číselné proměnné")` jen proto, abychom si ukázali práci s ordinální proměnnou. Stejný typ grafu bychom ale použili i pro přirozeně seřazené biologické škály, například malý–střední–velký nebo nízký–střední–vysoký.
 :::
@@ -2079,16 +2071,14 @@ Tahle tabulka není seznam všech možných grafů. Je to bezpečný první krok
 
 ## Co zatím ještě nemůžeme tvrdit
 
-::: {.callout-important}
-## Která formulace je v této chvíli správně?
+::: {.box-question title="Která formulace je v této chvíli správně?"}
 
 - **A:** V grafu je vidět vztah, takže jsme prokázali `r render_glossary_term("efekt", display = "efekt")`.
 - **B:** V datech je vidět biologicky smysluplný vzor, který chceme popsat přesněji.
 - **C:** Protože body neleží na jedné přímce, mezi proměnnými žádný vztah není.
 :::
 
-::: {.callout-note collapse="true"}
-## Odpověď
+::: {.box-result collapse="true" title="Odpověď: graf ukazuje vzor, nikoli prokázaný efekt"}
 
 Nejlepší odpověď je **B**. Graf ukazuje vzor, ale nestačí k prokázání efektu — k tomu potřebujeme model, odhad velikosti vztahu a kvantifikaci `r render_glossary_term("nejistota", display = "nejistoty")`.
 :::
