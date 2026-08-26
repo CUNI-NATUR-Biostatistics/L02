@@ -1,0 +1,20 @@
+schema_version: 1
+course: MB120P163
+lesson: L02
+academic_year: "2026-27"
+title: "Vztahy dvou proměnných a vizualizace"
+subtitle: "Podkladové čtenářské materiály k přednášce"
+resources:
+  learning:
+    html: Learning_materials/skripta.html
+    pdf: Learning_materials/skripta.pdf
+    source: Learning_materials/skripta.qmd
+  presentation:
+    html: Presentation/presentation.html
+    pdf: Presentation/presentation.pdf
+    source: Presentation/presentation.qmd
+  exercises:
+    - label: "R skript ke cvičení"
+      path: Exercises/cviceni.R
+  data: []
+  extras: []
