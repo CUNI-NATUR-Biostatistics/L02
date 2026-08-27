@@ -1,321 +1,77 @@
-# L02 – Vztahy dvou proměnných a vizualizace
+# L02 — Vztahy dvou proměnných a vizualizace
 
-Týdenní repozitář kurzu **Biostatistika (MB120P163)** pro lekci `L02`.
-Palmer Penguins zůstávají kotvou pro vztahy dvou proměnných, variabilitu,
-kovarianci, korelaci a volbu grafu.
+**Od bodového grafu ke korelaci**
 
-Repozitář je výchozí kostra pro tři propojené výstupy:
+Tento repozitář obsahuje druhou lekci kurzu [Biostatistika a plánování ekologických pokusů (MB120P163)](https://cuni-natur-biostatistics.github.io/) vyučovaného na Přírodovědecké fakultě Univerzity Karlovy.
 
-- Quarto RevealJS prezentaci v `Presentation/`
-- podkladová skripta v `Learning_materials/`
-- pomocné R skripty pro renderování, téma a sdílené funkce v `R/`
+Úplný přehled kurzu, rozvrh, pravidla hodnocení a materiály ostatních lekcí najdete na [veřejném HUBu kurzu](https://cuni-natur-biostatistics.github.io/).
 
-## Doporučený pracovní prostor
+## O této lekci
 
-Tento repozitář je určený pro práci v multi-root workspace `CUNI-NATUR-Biostatistics`. Sdílený kontext kurzu a kanonické instrukce pro AI asistenty spravuje soukromý repozitář `_internal`; doporučené nastavení je popsané v `_internal/workspace-setup.md`. Při samostatném otevření tohoto repozitáře nemusí mít AI asistent k dispozici úplný kontext kurzu.
+Souvisí délka ploutve tučňáka s jeho tělesnou hmotností? Druhá lekce přechází od popisu jedné proměnné ke zkoumání vztahu mezi dvěma proměnnými.
 
----
+Na datech Palmer Penguins se naučíme zvolit graf podle typů sledovaných proměnných, popsat směr a sílu viditelného vztahu a rozpoznat variabilitu, která kolem něj zůstává. Kovariance a korelace nabídnou číselné shrnutí vztahu, ale zároveň ukážeme, proč jeden koeficient nemůže nahradit graf ani biologické uvažování.
 
-## Rámec lekce
+Lekce také připravuje důležité rozlišení pro další části kurzu: vzor v datech může být zajímavý, ale sám o sobě ještě není důkazem efektu ani příčinného vztahu.
 
-L02 je přechod od popisu jedné proměnné ke zkoumání vztahů mezi dvěma proměnnými. Lekce má studentům ukázat, že graf může naznačit zajímavý vzor, ale sám o sobě ještě nestačí k inferenčnímu závěru.
+## Výsledky učení
 
-### Kanonické výstupy z učení
+Po prostudování této lekce dokážete:
 
-- Navrhnout vhodný graf pro vztah dvou proměnných.
-- Vysvětlit variabilitu dat a proč „vidím vzor“ neznamená „je to efekt“.
+- vybrat vhodný graf pro vztah dvou proměnných podle jejich typu;
+- popsat směr, tvar a sílu vzoru v datech a odlišit pozorování od závěru, který zatím nelze podpořit;
+- vysvětlit, proč jsou biologická data rozptýlená i tehdy, když vykazují zřetelný trend;
+- stručně popsat vztah dvou numerických proměnných pomocí kovariance a korelace;
+- vysvětlit, proč se Pearsonova a Spearmanova korelace mohou lišit;
+- rozpoznat, proč korelace sama o sobě nedokazuje kauzalitu.
 
-### Konkrétní studentské cíle pro přípravu materiálů
+## Materiály pro studenty
 
-- Vybrat vhodný graf pro dvojici proměnných podle jejich typu.
-- Popsat, co v grafu vypadá jako vztah, a oddělit to od jistého závěru.
-- Vysvětlit biologický význam variability kolem pozorovaného vzoru.
-- Připravit most k L03, kde model přidá odhad efektu, a k L04, kde se k odhadu
-  přidá nejistota a interval spolehlivosti.
+Následující odkazy vedou vždy na nejnovější schválené vydání L02. Rozpracovaná verze ve větvi `main` může být novější, ale není určena jako závazná studijní verze.
 
-### Co do této lekce vědomě nepatří
+| Materiál | Online verze | PDF |
+| --- | --- | --- |
+| Skripta | [Číst online](https://cuni-natur-biostatistics.github.io/L02/current/learning/) | [Stáhnout PDF](https://cuni-natur-biostatistics.github.io/L02/current/learning/skripta.pdf) |
+| Prezentace | [Otevřít slidy](https://cuni-natur-biostatistics.github.io/L02/current/presentation/) | [Stáhnout PDF](https://cuni-natur-biostatistics.github.io/L02/current/presentation/presentation.pdf) |
 
-- fitování `lm(y ~ x)` jako hlavní téma lekce
-- formální testování hypotéz
-- p-hodnoty a intervaly spolehlivosti
-- detailní matematický výklad pravděpodobnosti
+Pro navazující praktické cvičení je připraven [R skript ke stažení](https://cuni-natur-biostatistics.github.io/L02/current/code/cviceni.R). Skript obsahuje úlohy a kód, se kterými budete pracovat během praktika.
 
----
+- [HUB kurzu](https://cuni-natur-biostatistics.github.io/) je hlavní vstup ke všem veřejným studijním materiálům.
+- [Moodle kurzu](https://dl2.cuni.cz/course/view.php?id=106) slouží zapsaným studentům pro oznámení, testy, zadání, odevzdávání a individuální výsledky.
 
-## Volba datasetu pro první verzi
+## Pro vyučující a správce
 
-Pro L02 je cílem najít data, na kterých jde ukázat vztah dvou proměnných, ale zároveň i to, že rozptyl kolem viditelného vzoru je biologicky smysluplný a že samotný graf ještě není důkaz efektu.
+### Zdrojové a vyrenderované soubory
 
-### Zvažované kandidáty
+- `Learning_materials/skripta.qmd` je zdroj skript; výsledky jsou `Learning_materials/skripta.html` a `Learning_materials/skripta.pdf`.
+- `Presentation/presentation.qmd` je zdroj slidů; výsledky jsou `Presentation/presentation.html` a `Presentation/presentation.pdf`.
+- `Exercises/cviceni.R` je studentský R skript pro praktické cvičení.
+- `R/` obsahuje podporované renderovací a tematické nástroje.
+- `theme/` obsahuje synchronizovanou lokální kopii společné vizuální identity kurzu.
 
-1. `palmerpenguins::penguins`
-   - Silná stránka: dobře čitelný vztah mezi spojitými proměnnými, zároveň jasná biologická interpretace a možnost rozlišit druhy.
-   - Slabá stránka: v kurzech práce s daty jde o známý dataset, takže je potřeba pohlídat, aby nepůsobil jako mechanická volba.
-2. `datasets::trees`
-   - Silná stránka: extrémně jednoduchý a přehledný dataset pro vztah dvou spojitých proměnných.
-   - Slabá stránka: chybí přirozená kategoriální proměnná a biologický příběh je pro tuto lekci poměrně chudý.
-3. `datasets::ChickWeight`
-   - Silná stránka: biologicky srozumitelný růst a variabilita mezi skupinami.
-   - Slabá stránka: časová struktura a opakovaná měření by zbytečně komplikovaly lekci, která má zatím zůstat u jednoduchého vztahu dvou proměnných.
+### Reprodukovatelné prostředí
 
-### Zvolený dataset
-
-Pro první verzi materiálů volíme `palmerpenguins::penguins`.
-
-- Hlavní otázka: Jak souvisí délka ploutve a tělesná hmotnost u tučňáků a co do tohoto vztahu vnáší rozdíly mezi druhy?
-- Odezva: `body_mass_g`
-- Hlavní prediktor: `flipper_length_mm`
-- Doplňkový prediktor pro vizualizaci: `species`
-
-### Proč je tento dataset pro L02 nejlepší volba
-
-- Umožňuje hned na prvním grafu ukázat vztah dvou spojitých proměnných.
-- Body nejsou naskládané na jedné přímce, takže je přirozeně vidět variabilita dat.
-- Druhy tučňáků dávají smysluplnou biologickou vrstvu navíc bez nutnosti složitého čištění dat.
-- Dataset je dost jednoduchý pro začátečníky a zároveň dobře připravuje půdu pro L03, kde bude možné navázat lineárním modelem.
-
----
-
-## Aktuální workflow tvorby obsahu pro L02
-
-Pro L02 používáme stejnou logiku jako v aktualizovaném `lesson-authoring.instructions.md`: skripta nevznikají jedním skokem, ale ve více průchodech.
-
-### Fázové pojmenování pro tuto lekci
-
-- **Phase 0 - Scope**: zamknutí výstupů z učení, konkrétních studentských cílů a toho, co do L02 ještě nepatří
-- **Phase 1 - Dataset**: volba jednoho hlavního datového příběhu a jeho obhajoba
-- **Phase 2A - Structural draft of Learning materials**: první koherentní kostra `Learning_materials/skripta.qmd`
-- **Phase 2B - Development pass of Learning materials**: doplnění vizuálních kotev, interpretačních promptů, srovnání a vysvětlující prózy tak, aby byla skripta skutečně review-ready
-- **Phase 3 - Human review of Learning materials**: lidská revize review-ready verze skript
-- **Phase 4 - Presentation derived from revised Learning materials**: teprve po revizi skript vzniká `Presentation/presentation.qmd`
-
-### Jak tuto logiku číst v aktuálním stavu repozitáře
-
-- rámec lekce a dataset jsou už zamčené
-- první koherentní kostra skript už existuje
-- současná práce na `Learning_materials/skripta.qmd` odpovídá hlavně **Phase 2B**, nikoli už nové lekci nebo prezentaci
-- další přirozený krok je lidská revize review-ready skript, ne paralelní rozjíždění prezentace
-
----
-
-## Struktura repozitáře
-
-```text
-L02/
-├── theme/                          # Zdroje vizuálního tématu – editujte zde
-│   ├── colors.json                 # Paleta barev a sémantická přiřazení
-│   ├── fonts.json                  # Písma pro HTML, RevealJS, Typst a R grafy
-│   ├── custom_theme.json           # Další vzhledové parametry
-│   ├── _colors.scss                # ← generováno z colors.json
-│   ├── fonts-include.html          # ← generováno z fonts.json
-│   ├── presentation_theme.scss     # ← generováno z JSON konfigurace
-│   └── skripta_theme.scss          # ← generováno z JSON konfigurace
-├── Presentation/                   # Zdroj prezentace v Quarto RevealJS
-│   ├── presentation.qmd            # Hlavní zdrojový soubor prezentace
-│   ├── presentation.html           # HTML výstup prezentace
-│   ├── presentation_raw.pdf        # PDF export přes decktape
-│   ├── presentation.pdf            # Komprimovaný PDF pro distribuci
-│   └── Materials/                  # Obrázky a další podklady ke snímkům
-├── Learning_materials/             # Podkladová čtenářská skripta
-│   ├── skripta.qmd                 # Hlavní zdrojový soubor skript
-│   ├── skripta.html                # HTML výstup
-│   ├── skripta_raw.pdf             # PDF výstup přes Typst
-│   ├── skripta.pdf                 # Komprimovaný PDF pro distribuci
-│   ├── skripta_theme.typ           # ← generováno z JSON konfigurace
-│   └── images/                     # Obrázky použité ve skriptech
-├── Exercises/
-│   └── cviceni.R                   # Starter skript pro praktické cvičení
-├── data/                           # Datové soubory specifické pro tento týden
-├── R/
-│   ├── render_all.R                # Regeneruje téma a renderuje vše
-│   ├── render_presentation.R       # Renderuje prezentaci a exportuje PDF
-│   ├── render_skripta.R            # Renderuje skripta a komprimuje PDF
-│   ├── generate_theme.R            # Generuje všechny theme artefakty z JSON
-│   ├── set_r_theme.R               # ← generováno: ggplot2 paleta a theme_biostat()
-│   └── Functions/
-│       ├── render_glossary_term.R  # Lokální fallback pro tooltipové pojmy
-│       └── Theme_generation/       # Pomocné funkce pro generování tématu
-├── docs/
-│   └── index.html                  # Prezentace pro GitHub Pages
-├── Temp/
-│   └── .gitkeep                    # Místo pro dočasné debug skripty (gitignore)
-├── renv.lock                       # Zámek závislostí (renv)
-├── .Rprofile                       # Aktivuje renv při otevření projektu
-└── README.md
-```
-
-Poznámka: `presentation.qmd` i `skripta.qmd` načítají aktivní theme soubory ze složky `theme/` přes cesty `../theme/...`. Generované soubory proto neupravujte ručně.
-
----
-
-## Jak začít pracovat s tímto repozitářem
-
-1. Otevřete projekt v RStudiu nebo VS Code a obnovte závislosti příkazem `renv::restore()`. Lokální pracovní soubory RStudia, Quarto cache a dočasné debug soubory se necommitují díky `.gitignore`.
-2. Doplňte obsah do `Learning_materials/skripta.qmd`, `Presentation/presentation.qmd` a případně `Exercises/cviceni.R`. Při návrhu nové lekce postupujte podle workflow v `_internal/.ai/authoring/lesson-workflow.md`: nejdřív výstupy z učení a dataset, potom strukturální draft skript, potom development pass skript, teprve pak lidská revize a prezentace.
-3. Přidejte datové soubory do `data/` a obrázky pro skripta výhradně do `Learning_materials/images/`. Krátké reprodukční debug skripty ukládejte do `Temp/` podle `_internal/.ai/core/debugging.md`.
-4. Spusťte renderovací pipeline a commitněte aktualizované výstupy.
-
----
-
-## Systém vizuálního tématu
-
-Barvy, písma a další stylové volby se udržují v jediném místě: v JSON souborech ve složce `theme/`. Kanonický zdroj je veřejný repozitář [`_brand`](https://github.com/CUNI-NATUR-Biostatistics/_brand). Script `R/generate_theme.R` při renderu:
-
-- stáhne aktuální JSON konfiguraci z repozitáře `_brand`,
-- při výpadku internetu ponechá lokální cache,
-- stáhne pomocné R funkce pro generování tématu,
-- znovu vygeneruje všechny theme artefakty pro HTML, RevealJS, Typst a R.
-
-### Zdrojové soubory
-
-| Soubor | Co řídí |
-| --- | --- |
-| `theme/colors.json` | Barvy a jejich sémantické role |
-| `theme/fonts.json` | Písma, velikosti a typografické volby |
-| `theme/custom_theme.json` | Okraje, bloky kódu, tabulky, stíny a další detaily |
-
-### Generované soubory
-
-| Soubor | Účel |
-| --- | --- |
-| `theme/_colors.scss` | Sdílené SCSS proměnné |
-| `theme/fonts-include.html` | Načtení webových písem pro HTML výstupy |
-| `theme/presentation_theme.scss` | RevealJS téma prezentace |
-| `theme/skripta_theme.scss` | HTML téma skript |
-| `Learning_materials/skripta_theme.typ` | Typst styl pro PDF |
-| `R/set_r_theme.R` | ggplot2 paleta a funkce `theme_biostat()` |
-
-Pokud změníte JSON konfiguraci a nechcete spouštět celý render, lze theme artefakty regenerovat samostatně:
+Repozitář používá `renv`. Po klonování otevřete `L02.Rproj` a v čerstvé R relaci spusťte:
 
 ```r
-source("R/generate_theme.R")
+renv::restore()
+renv::status()
 ```
 
-`render_all.R` tento krok provádí automaticky před renderem prezentace i skript.
-
-### Písma v PDF
-
-HTML výstupy mohou používat Google Fonts, ale Typst pracuje jen s lokálně nainstalovanými písmy. Pokud má PDF používat konkrétní písmo, musí být dostupné v systému a správně nastavené v `theme/fonts.json`.
-
----
-
-## Slovníček pojmů ve skriptech
-
-`Learning_materials/skripta.qmd` je připravené pro napojení na centrální slovník v repozitáři [`slovnik`](https://github.com/CUNI-NATUR-Biostatistics/slovnik).
-
-Renderovací setup dělá tři věci:
-
-- stáhne aktuální `pojmy.yaml` z `slovnik` do dočasného lokálního souboru,
-- nastaví `glossary::glossary_path()` na tuto lokální kopii,
-- pokusí se načíst `render_glossary_term.R` z GitHubu a při neúspěchu použije lokální fallback v `R/Functions/render_glossary_term.R`.
-
-V textu skript používejte pro první výskyt pojmu v dané sekci tuto podobu:
-
-```markdown
-`r render_glossary_term("median", display = "medián")`
-```
-
-Tento wrapper vrací v HTML tooltip s definicí a v typst/PDF pouze čistý text. Díky tomu stejné `.qmd` funguje pro oba výstupy bez ručních úprav.
-
-HTML tooltip styly a potlačení klikání na odkazy jsou řešeny v samostatném chunku `nastaveni-slovnik`, aby se CSS a JavaScript vložily jen do HTML výstupu.
-
----
-
-## Workflow renderování
-
-Nejjednodušší je spustit celý pipeline najednou:
+Kompletní lokální render spustíte podporovaným wrapperem:
 
 ```r
 source("R/render_all.R")
 ```
 
-Nebo jednotlivé části samostatně:
+Samostatně lze použít `R/render_skripta.R` nebo `R/render_presentation.R`. Přímé volání `quarto render` obchází synchronizaci sdíleného tématu a nemá se používat pro release render.
 
-```r
-source("R/render_presentation.R")
-source("R/render_skripta.R")
-```
+### Publikování
 
-`render_all.R` provede:
+`website-release.yml` je explicitní seznam souborů povolených ve veřejném balíčku. Větev `main` vytváří veřejný náhled, zatímco stabilní tag `L02-vMAJOR.MINOR.PATCH-YYYYMMDD` vytváří neměnné vydání a aktualizuje cestu `/L02/current/`. Podrobný publikační postup je v [`WEBSITE_RELEASES.md`](WEBSITE_RELEASES.md).
 
-1. regeneraci všech theme souborů z `theme/*.json`,
-2. render prezentace,
-3. render skript.
+Před vydáním je nutné zkontrolovat vyrenderované HTML a PDF, úplnost manifestu, provenanci a podmínky použití dat a médií a nepřítomnost neveřejných informací v celém repozitáři.
 
-`render_presentation.R` provede:
+## Licence
 
-1. Quarto render `Presentation/presentation.qmd` → `Presentation/presentation.html`,
-2. export PDF přes `decktape` → `Presentation/presentation_raw.pdf`,
-3. kompresi PDF → `Presentation/presentation.pdf`.
-
-`render_skripta.R` provede:
-
-1. Quarto render `Learning_materials/skripta.qmd` → `Learning_materials/skripta.html` a `Learning_materials/skripta_raw.pdf`,
-2. kompresi PDF → `Learning_materials/skripta.pdf`.
-
-### Předpoklady
-
-- Quarto musí být nainstalované a dostupné v systému.
-- PDF export prezentace vyžaduje samostatně nainstalovaný [decktape](https://github.com/astefanutti/decktape).
-- Komprese PDF používá balíček `qpdf` v R.
-- Doporučené spuštění je uvnitř projektu s aktivním `renv`.
-
----
-
-## Distribuce materiálů studentům
-
-Studenti k repozitáři přímo nepřistupují. Distribuují se jen vyrenderované výstupy, typicky přes Moodle.
-
-Interní release používá tag bez přípony `-moodle`, například:
-
-```text
-L01-v0.1.0-20260318
-```
-
-Moodle release používá tag s příponou `-moodle`, například:
-
-```text
-L01-v0.1.0-20260318-moodle
-```
-
-Před vydáním by měly být v repozitáři aktuální alespoň tyto soubory:
-
-- `Presentation/presentation.html`
-- `Presentation/presentation.pdf`
-- `Learning_materials/skripta.html`
-- `Learning_materials/skripta.pdf`
-
-Podrobnosti viz `_internal/obecne/nove/strategie_releases.md`.
-
----
-
-## Důležité poznámky
-
-### Standardní zázemí R projektu
-
-Šablona už obsahuje základní součásti běžného R projektu:
-
-- `.Rprofile` pro automatickou aktivaci `renv`
-- `renv.lock` a `renv/` pro reprodukovatelné závislosti
-- `.gitignore` pro lokální R / RStudio / Quarto artefakty
-- `Temp/` pro jednorázové debug skripty, které nemají skončit v git historii
-
-### Typst a cesty k obrázkům
-
-Typst při renderování PDF sandboxuje přístup k souborům. Obrázky používané ve `skripta.qmd` proto musí být uložené uvnitř `Learning_materials/` nebo jeho podsložek. Cesty typu `../Presentation/Materials/...` mohou při renderu selhat.
-
-```r
-# Správně:
-knitr::include_graphics(
-  here::here("Learning_materials", "images", "obrazek.png")
-)
-
-# Špatně – přeruší Typst render:
-knitr::include_graphics(
-  here::here("Presentation", "Materials", "obrazek.png")
-)
-```
-
-### UTF-8 a editace souborů
-
-Při editaci `.qmd` souborů používejte pouze běžné file-edit nástroje (VS Code, RStudio). PowerShell 5.1 může tiše poškodit diakritiku nebo přidat UTF-8 BOM, který znemožní parsování YAML.
+Původní výukový obsah je licencován pod CC BY 4.0 a software pod licencí MIT. Přesné vymezení, doporučená citace a výjimky pro převzatá data, média, fonty, loga a další položky jsou v [`LICENSE.md`](LICENSE.md).
