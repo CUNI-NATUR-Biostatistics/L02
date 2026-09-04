@@ -1,0 +1,67 @@
+name: PollsLive retrieval quiz
+
+on:
+  pull_request:
+    paths:
+      - "pollslive/**"
+      - "Presentation/presentation.qmd"
+  push:
+    paths:
+      - "pollslive/**"
+      - "Presentation/presentation.qmd"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Draft is the normal pre-course operation
+        required: true
+        type: choice
+        default: draft
+        options:
+          - draft
+          - publish-now
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: CUNI-NATUR-Biostatistics/_internal/.github/actions/pollslive-course@main
+        if: hashFiles('pollslive/quiz.json') != ''
+        with:
+          mode: validate
+          definition: pollslive/quiz.json
+
+  sync:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require a lesson quiz definition
+        shell: bash
+        run: test -f pollslive/quiz.json
+      - uses: actions/cache@v4
+        with:
+          path: pollslive/.pollslive-cache
+          key: pollslive-media-${{ github.repository }}-${{ hashFiles('pollslive/quiz.json', 'pollslive/assets/**') }}
+          restore-keys: |
+            pollslive-media-${{ github.repository }}-
+      - uses: CUNI-NATUR-Biostatistics/_internal/.github/actions/pollslive-course@main
+        env:
+          POLLSLIVE_API_KEY: ${{ secrets.POLLSLIVE_API_KEY }}
+        with:
+          mode: ${{ inputs.mode }}
+          definition: pollslive/quiz.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pollslive-public-${{ github.event.repository.name }}
+          path: |
+            pollslive/pollslive-public.json
+            pollslive/pollslive-qr.svg
+            pollslive/generated-quiz.qmd
+            pollslive/.pollslive-output/report.json
+          if-no-files-found: error
+          retention-days: 30
