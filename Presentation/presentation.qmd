@@ -192,32 +192,36 @@ Po dnešní přednášce budete schopni:
 Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
 :::
 
-## Co si neseme z minulé lekce?
+{{< include ../pollslive/generated/active.qmd >}}
+
+## Od jedné proměnné ke dvěma
 
 :::: {.columns .align-top}
 
-::: {.column width="48%"}
+::: {.column width="47%"}
 ::: {.panel-note}
-[Jedna proměnná]{.panel-title}
+[V minulé lekci jsme četli jednu proměnnou]{.panel-title}
 
-Umíme určit její typ, popsat rozdělení a zvolit graf, který nic podstatného
-neskrývá.
+Z tabulky, histogramu nebo číselného souhrnu jsme zjišťovali, jak vypadají
+hodnoty jedné proměnné.
 :::
 :::
 
-::: {.column width="48%"}
+::: {.column width="49%"}
 ::: {.panel-question .fragment}
-[Dnes přidáme druhou]{.panel-title}
+[Dnes musíme zachovat dvojice]{.panel-title}
 
-Jak poznáme směr, těsnost a biologicky důležitou strukturu vztahu?
+Jak zobrazíme délku ploutve a hmotnost tak, aby bylo vidět, které dvě hodnoty
+patří stejnému tučňákovi?
 :::
 :::
 
 ::::
 
 ::: {.notes}
-Callback používá pouze rozhodnutí z minulé lekce: jednotka pozorování, typ proměnné,
-jednorozměrný graf a popis rozdělení. Korelaci ani model zde nepředjímám.
+Přemosťuji opakování k existující diskusi. Zdůrazním, že dva oddělené
+jednorozměrné grafy nestačí: potřebujeme zachovat dvojici měření každého
+jednotlivého tučňáka.
 :::
 
 ## Diskuze se sousedem {.text-center}
