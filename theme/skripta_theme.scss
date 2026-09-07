@@ -87,6 +87,11 @@ div.callout-question.callout-style-default > .callout-header {
 }
 
 // ---------------------------------------------------------------------------
+// Long optional material: retain the HTML collapse affordance.
+div.callout-extra.callout {
+  border-left-color: shift-color($amethyst, $callout-border-scale);
+}
+
 // Code blocks
 // ---------------------------------------------------------------------------
 pre.sourceCode {

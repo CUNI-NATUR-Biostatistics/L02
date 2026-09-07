@@ -1,0 +1,62 @@
+{
+  "$schema": "https://cuni-natur-biostatistics.github.io/schemas/pollslive-quiz-v2.json",
+  "schemaVersion": 2,
+  "academicYear": "2026-27",
+  "lesson": "L02",
+  "retrievesLesson": "L01",
+  "lectureDate": "2026-10-12",
+  "title": "L02 – Opakování předchozí lekce – 2026/27",
+  "questions": [
+    {
+      "id": "tabulka-nejdelsi-spanek",
+      "text": "Který z uvedených druhů spí podle tabulky nejdéle?",
+      "options": [
+        { "id": "cheetah", "label": "Cheetah" },
+        { "id": "owl-monkey", "label": "Owl monkey" },
+        { "id": "mountain-beaver", "label": "Mountain beaver" },
+        { "id": "greater-short-tailed-shrew", "label": "Greater short-tailed shrew" }
+      ],
+      "correctOptionId": "owl-monkey",
+      "explanation": "Porovnáme hodnoty ve sloupci Spánek za den (h). Nejvyšší hodnota je 17.0 h v řádku Owl monkey.",
+      "media": {
+        "path": "assets/l01-table-four-mammals.png",
+        "alt": "Tabulka čtyř druhů savců. Cheetah má 12.1, Owl monkey 17.0, Mountain beaver 14.4 a Greater short-tailed shrew 14.9 hodiny spánku za den.",
+        "provenance": "Věrná reprodukce schváleného slidu L01 „Čtyři druhy, čtyři řádky“; hodnoty ze sloupce sleep_total dat ggplot2::msleep."
+      }
+    },
+    {
+      "id": "histogram-interval",
+      "text": "Ve kterém intervalu délky spánku je podle histogramu nejvíce zastoupených druhů?",
+      "options": [
+        { "id": "10-12-h", "label": "10–12 h" },
+        { "id": "12-14-h", "label": "12–14 h" },
+        { "id": "8-10-h", "label": "8–10 h" },
+        { "id": "16-18-h", "label": "16–18 h" }
+      ],
+      "correctOptionId": "8-10-h",
+      "explanation": "Nejvyšší sloupec stojí nad intervalem 8–10 h. Poloha sloupce na vodorovné ose určuje interval spánku; jeho výška vyjadřuje počet druhů v tomto intervalu.",
+      "media": {
+        "path": "assets/l01-sleep-histogram.png",
+        "alt": "Histogram celkové délky spánku savců. Nejvyšší sloupec leží v intervalu 8 až 10 hodin spánku za den.",
+        "provenance": "Přímé převzetí schváleného histogramu L01, vytvořeného z neprázdných hodnot sleep_total dat ggplot2::msleep ve dvouhodinových intervalech."
+      }
+    },
+    {
+      "id": "prumer-vystup",
+      "text": "Jaká je podle výstupu průměrná délka spánku devíti druhů?",
+      "options": [
+        { "id": "7-611111-h", "label": "7.611111 h" },
+        { "id": "8-4-h", "label": "8.4 h" },
+        { "id": "4-0-h", "label": "4.0 h" },
+        { "id": "9-1-h", "label": "9.1 h" }
+      ],
+      "correctOptionId": "7-611111-h",
+      "explanation": "Průměr vypočítává funkce mean(), která vrací 7.611111 h. Funkce median() vrací 8.4 h; hodnoty 4.0 h a 9.1 h jsou jednotlivá pozorování ve vektoru.",
+      "media": {
+        "path": "assets/l01-console-median.png",
+        "alt": "R kód vytváří vektor devíti hodnot spánku. Funkce mean vrací 7.611111 a funkce median vrací 8.4.",
+        "provenance": "Věrný výřez ze schválené sekvence L01 o průměru a mediánu; zobrazené výsledky jsou vypočítány skriptem z uvedeného vektoru."
+      }
+    }
+  ]
+}
