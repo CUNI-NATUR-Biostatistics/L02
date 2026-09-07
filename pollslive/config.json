@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "clientRepository": "CUNI-NATUR-Biostatistics/_internal",
-  "clientRevision": "e340662d7b8ebe4aa887188ed259c8c186198f47",
+  "clientRevision": "158b902fd6330fe9b1b0ecdc58a8ad74b7e9ae19",
   "definition": "pollslive/quiz.json",
   "documentDirectory": "Presentation",
   "generatedDirectory": "pollslive/generated",
