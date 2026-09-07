@@ -8,7 +8,7 @@ Integration-map status: approved.
 
 Exact-question status: approved.
 
-Human approval: approved by Ondřej Mottl on 2026-09-04, after the document was revised to show the complete L02 lesson context and the information visible to students. No further revisions were requested.
+Human approval: initially approved by Ondřej Mottl on 2026-09-04, after the document was revised to show the complete L02 lesson context and the information visible to students. Ondřej approved the revised questions and combined participation-slide treatment on 2026-09-07.
 
 This document describes a focused change to the existing, approved L02 presentation. It is not a replacement story map for the whole lesson. The Mentimeter and PollsLive prototype questions are not approved production content and are not the source of this proposal.
 
@@ -25,12 +25,11 @@ The retrieval quiz replaces only the existing one-slide L01 callback, `Co si nes
 | Opening | `Vztahy dvou proměnných a vizualizace` | Existing and unchanged | Introduce the lesson topic. | None. |
 | Opening | `Pomůže nám druhá proměnná?` | Existing and unchanged | Establish the penguin question: whether longer flippers accompany greater body mass. | None. |
 | Opening | `Výsledky učení` | Existing and unchanged | State the approved L02 learning contract. | None. |
-| Immediately after learning outcomes | `Co si pamatujete z minulé lekce?` | New; replaces the current one-slide callback | Introduce an anonymous, ungraded three-question retrieval activity using familiar L01 evidence. | Insert the production quiz introduction. |
-| Retrieval block | `Odpovězte na tři otázky` | New | Display the permanent participation QR and link while students answer all questions independently. | Wait approximately 2–3 minutes; do not display aggregate results. |
+| Immediately after learning outcomes | `Co si pamatujete z minulé lekce?` | New; replaces the current one-slide callback | Introduce an anonymous, ungraded three-question retrieval activity and display the permanent participation QR and link. | Centre the heading, instruction, transparent-background QR, and new-window link; wait approximately 2–3 minutes without displaying aggregate results. |
 | Retrieval block | `Jak odpovídala skupina?` | New | Display anonymous aggregate results after all students have committed their answers. | Use the PollsLive results embed, reload control, and external-open fallback. |
-| Retrieval block | `Kolik hodin spí gepard?` | New native review | Re-read a value from the familiar four-row L01 table. | Discuss Question 1 and reveal its explanation. |
+| Retrieval block | `Který druh spí nejdéle?` | New native review | Compare values in the familiar four-row L01 table. | Discuss Question 1 and reveal its explanation. |
 | Retrieval block | `Kde je nejvyšší sloupec?` | New native review | Re-read the modal interval from the approved L01 sleep histogram. | Discuss Question 2 and reveal its explanation. |
-| Retrieval block | `Co vypsala funkce median()?` | New native review | Re-read a numerical result from familiar L01 R console output. | Discuss Question 3 and reveal its explanation. |
+| Retrieval block | `Jaký je průměr?` | New native review | Distinguish the printed mean from the median in familiar L01 R console output. | Discuss Question 3 and reveal its explanation. |
 | End of retrieval block | `Od jedné proměnné ke dvěma` | New bridge | Reconnect the three L01 artifacts to the L02 need to preserve paired measurements. | Replace the bridging function of the old callback slide. |
 | Immediately after retrieval | `Diskuze se sousedem` | Existing and unchanged | Ask students how two measurements belonging to each penguin could be displayed together. | None; the retrieval bridge prepares this discussion. |
 | First data sequence | `Naše data` and the progressive observation build | Existing and unchanged | Move from two observations to the complete penguin dataset. | None. |
@@ -47,7 +46,7 @@ The retrieval quiz replaces only the existing one-slide L01 callback, `Co si nes
 
 All three are ordinary, single-answer multiple-choice questions. The displayed evidence is part of each question in PollsLive and in the native RevealJS fallback. The option order below is intentional: the correct option is not always in the same position.
 
-### Question 1: read a table cell
+### Question 1: compare values in a table
 
 **Displayed artifact**
 
@@ -60,18 +59,18 @@ All three are ordinary, single-answer multiple-choice questions. The displayed e
 
 **Question**
 
-Kolik hodin spánku za den má v tabulce gepard (*Cheetah*)?
+Který z uvedených druhů spí podle tabulky nejdéle?
 
 **Options**
 
-1. 12.1 h — **correct**
-2. 17.0 h
-3. 14.4 h
-4. 14.9 h
+1. Cheetah
+2. Owl monkey — **correct**
+3. Mountain beaver
+4. Greater short-tailed shrew
 
 **Explanation shown in the native discussion**
 
-Najdeme řádek `Cheetah` a přečteme hodnotu ve sloupci `Spánek za den (h)`: **12.1 h**. Ostatní hodnoty patří jiným druhům v tabulce.
+Porovnáme hodnoty ve sloupci `Spánek za den (h)`. Nejvyšší hodnota je **17.0 h** v řádku `Owl monkey`.
 
 **Artifact source and accessibility**
 
@@ -102,7 +101,7 @@ Nejvyšší sloupec stojí nad intervalem **8–10 h**. Poloha sloupce na vodoro
 
 Direct reuse of the approved L01 sleep histogram generated from non-missing `sleep_total` values in `ggplot2::msleep`, with two-hour bins. Alt text: “Histogram celkové délky spánku savců. Nejvyšší sloupec leží v intervalu 8 až 10 hodin spánku za den.”
 
-### Question 3: read R console output
+### Question 3: distinguish mean and median in R output
 
 **Displayed artifact**
 
@@ -126,18 +125,18 @@ median(
 
 **Question**
 
-Jakou hodnotu vrátila funkce `median(x = vec_spanek_deviti)`?
+Jaká je podle výstupu průměrná délka spánku devíti druhů?
 
 **Options**
 
-1. 7.611111
-2. 8.4 — **correct**
-3. 4.0
-4. 9.1
+1. 7.611111 h — **correct**
+2. 8.4 h
+3. 4.0 h
+4. 9.1 h
 
 **Explanation shown in the native discussion**
 
-Výsledek je vytištěn bezprostředně pod voláním `median()`: **8.4**. Hodnota 7.611111 je výsledek `mean()`; hodnoty 4.0 a 9.1 jsou jednotlivá pozorování ve vektoru.
+Průměr vypočítává funkce `mean()`, která vrací **7.611111 h**. Funkce `median()` vrací 8.4 h; hodnoty 4.0 h a 9.1 h jsou jednotlivá pozorování ve vektoru.
 
 **Artifact source and accessibility**
 
@@ -148,9 +147,9 @@ Faithful excerpt from the approved L01 mean-and-median sequence. Alt text: “R 
 | Point in the lesson | Knowledge students may use | New knowledge introduced here | Deliberately withheld until later | Evidence |
 | --- | --- | --- | --- | --- |
 | Before retrieval | L01 rows connect represented species with values; histograms group observations into intervals; R prints function results below calls | None | scatterplots, covariance and correlation | approved L01 table, histogram and console output |
-| Table review | Select the correct row and column before reading a value | None | relationships between variables | four-row mammal table |
+| Table review | Compare values within one column and retain the row label of the maximum | None | relationships between variables | four-row mammal table |
 | Histogram review | Horizontal position identifies an interval and bar height represents its frequency | None | graph choice for pairs of variables | approved sleep histogram |
-| Console review | Associate a printed result with the function call immediately above it | None | model summaries and regression output | familiar mean and median calls |
+| Console review | Distinguish the mean from the median and associate each printed result with its function call | None | model summaries and regression output | familiar mean and median calls |
 | Retrieval bridge | Each species row can contain both sleep duration and body mass | A two-variable display must preserve which two values belong together | formal scatterplot reading, covariance and correlation | transition from one table column to a paired set of columns |
 | Remainder of L02 | Existing approved lesson sequence | All approved L02 content | model effect estimate until L03 | existing L02 presentation |
 
@@ -173,5 +172,5 @@ Approval does not authorize creating or publishing the PollsLive poll, enabling 
 - The table and console images are generated by `R/render_pollslive_assets.R`; the script also verifies that the committed histogram has the approved L01 SHA-256 checksum before every render.
 - Generated includes, public metadata, receipts, QR assets, client caches, and temporary synchronization output remain ignored and outside Git.
 - The lesson workflow validates the definition, configuration, and referenced evidence without credentials; the trusted central workflow independently validates all inputs again before a PollsLive write.
-- The first production synchronization and render remain pending until these authoritative inputs are committed and pushed.
+- The initial production synchronization and render completed successfully on 2026-09-07. The questions and presentation layout were then revised from Ondřej's visual review; resynchronization and final rendering remain pending until the shared generator and brand changes are merged and these revised inputs are pushed.
 - The L02 activation entry remains disabled until synchronization, rendered review, and physical-device acceptance are complete.

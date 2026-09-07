@@ -8,16 +8,16 @@
   "title": "L02 – Opakování předchozí lekce – 2026/27",
   "questions": [
     {
-      "id": "tabulka-gepard",
-      "text": "Kolik hodin spánku za den má v tabulce gepard (Cheetah)?",
+      "id": "tabulka-nejdelsi-spanek",
+      "text": "Který z uvedených druhů spí podle tabulky nejdéle?",
       "options": [
-        { "id": "12-1-h", "label": "12.1 h" },
-        { "id": "17-0-h", "label": "17.0 h" },
-        { "id": "14-4-h", "label": "14.4 h" },
-        { "id": "14-9-h", "label": "14.9 h" }
+        { "id": "cheetah", "label": "Cheetah" },
+        { "id": "owl-monkey", "label": "Owl monkey" },
+        { "id": "mountain-beaver", "label": "Mountain beaver" },
+        { "id": "greater-short-tailed-shrew", "label": "Greater short-tailed shrew" }
       ],
-      "correctOptionId": "12-1-h",
-      "explanation": "Najdeme řádek Cheetah a přečteme hodnotu ve sloupci Spánek za den (h): 12.1 h. Ostatní hodnoty patří jiným druhům v tabulce.",
+      "correctOptionId": "owl-monkey",
+      "explanation": "Porovnáme hodnoty ve sloupci Spánek za den (h). Nejvyšší hodnota je 17.0 h v řádku Owl monkey.",
       "media": {
         "path": "assets/l01-table-four-mammals.png",
         "alt": "Tabulka čtyř druhů savců. Cheetah má 12.1, Owl monkey 17.0, Mountain beaver 14.4 a Greater short-tailed shrew 14.9 hodiny spánku za den.",
@@ -42,16 +42,16 @@
       }
     },
     {
-      "id": "median-vystup",
-      "text": "Jakou hodnotu vrátila funkce median(x = vec_spanek_deviti)?",
+      "id": "prumer-vystup",
+      "text": "Jaká je podle výstupu průměrná délka spánku devíti druhů?",
       "options": [
-        { "id": "7-611111", "label": "7.611111" },
-        { "id": "8-4", "label": "8.4" },
-        { "id": "4-0", "label": "4.0" },
-        { "id": "9-1", "label": "9.1" }
+        { "id": "7-611111-h", "label": "7.611111 h" },
+        { "id": "8-4-h", "label": "8.4 h" },
+        { "id": "4-0-h", "label": "4.0 h" },
+        { "id": "9-1-h", "label": "9.1 h" }
       ],
-      "correctOptionId": "8-4",
-      "explanation": "Výsledek je vytištěn bezprostředně pod voláním median(): 8.4. Hodnota 7.611111 je výsledek mean(); hodnoty 4.0 a 9.1 jsou jednotlivá pozorování ve vektoru.",
+      "correctOptionId": "7-611111-h",
+      "explanation": "Průměr vypočítává funkce mean(), která vrací 7.611111 h. Funkce median() vrací 8.4 h; hodnoty 4.0 h a 9.1 h jsou jednotlivá pozorování ve vektoru.",
       "media": {
         "path": "assets/l01-console-median.png",
         "alt": "R kód vytváří vektor devíti hodnot spánku. Funkce mean vrací 7.611111 a funkce median vrací 8.4.",
