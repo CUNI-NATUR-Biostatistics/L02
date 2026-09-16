@@ -136,19 +136,24 @@ barvy_druhu <-
 ```
 
 
-## Vztahy dvou proměnných a vizualizace
+## Mají tučňáci s delší ploutví také vyšší tělesnou hmotnost? {.course-title .bg-indigo}
 
-<br>
-
-::: {.text-color-indigo_velvet .text-font-heading .text-size-heading1 .text-bold}
-`r display_name`
+::: {.course-title-mark}
+![Logo kurzu Biostatistika](../theme/course-logo-reversed.svg) BIOSTATISTIKA
 :::
 
-<br>
+::: {.course-title-number}
+L02
+:::
 
-[👤](https://ondrejmottl.github.io/) Ondřej Mottl
+::: {.course-title-formal}
+Vztahy dvou proměnných a vizualizace
+:::
 
-[Moodle](https://dl2.cuni.cz/course/view.php?id=106)
+::: {.course-title-link}
+[cuni-natur-biostatistics.github.io/materialy.html](https://cuni-natur-biostatistics.github.io/materialy.html)
+:::
+
 
 ## Pomůže nám druhá proměnná?
 
@@ -222,6 +227,21 @@ patří stejnému tučňákovi?
 Přemosťuji opakování k existující diskusi. Zdůrazním, že dva oddělené
 jednorozměrné grafy nestačí: potřebujeme zachovat dvojici měření každého
 jednotlivého tučňáka.
+:::
+
+## Dvě hodnoty patří jednomu tučňákovi
+
+```{r}
+#| label: zobrazit-parovana-mereni-tucnaka
+#| echo: false
+#| out-width: "82%"
+#| fig-alt: "Terénní pracovnice současně měří délku ploutve tučňáka a jeho tělesnou hmotnost na váze; obě hodnoty patří stejnému jedinci."
+#| fig-cap: "Ilustrační obraz vytvořen AI."
+include_local_figure("penguin_paired_measurements.png")
+```
+
+::: {.takeaway-strip .text-center}
+Dvojice měření musí zůstat spojena se stejným pozorováním.
 :::
 
 ## Diskuze se sousedem {.text-center}
