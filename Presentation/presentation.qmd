@@ -182,6 +182,8 @@ knitr::include_graphics("https://allisonhorst.github.io/palmerpenguins/reference
 Ilustrace: [Allison Horst](https://allisonhorst.com/)
 :::
 
+{{< include ../pollslive/generated/active.qmd >}}
+
 ## Výsledky učení
 
 Po dnešní přednášce budete schopni:
@@ -196,8 +198,6 @@ Po dnešní přednášce budete schopni:
 ::: {.notes}
 Tento slide ponechávám jako explicitní kontrakt se studenty. Při mluveném úvodu zdůrazním, že cílem není jen spočítat korelaci, ale naučit se nejdřív číst graf a formulovat opatrný závěr.
 :::
-
-{{< include ../pollslive/generated/active.qmd >}}
 
 ## Od jedné proměnné ke dvěma
 
