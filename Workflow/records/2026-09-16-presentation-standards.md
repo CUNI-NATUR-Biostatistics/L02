@@ -45,3 +45,9 @@ This focused addendum records the new slide approved in the implementation plan 
 - UTF-8, duplicate chunk-label, R parsing, and focused diff checks: passed.
 - Independent read-only presentation review: passed after the story-map and knowledge-state addendum; no remaining finding.
 - Git publication: follow-up authorization granted on 2026-09-16; review and merge state is tracked in the lesson PR.
+
+## 2026-09-18 author feedback revision
+
+The approved PollsLive retrieval include in `Presentation/presentation.qmd` now appears after the opening question and before `Výsledky učení`. Quiz content and evidence remain unchanged.
+
+Validation: canonical offline render passed; the 72-page PDF has retrieval on page 3 and outcomes on page 7, and `Presentation/presentation.html` matches `docs/index.html`.

@@ -24,14 +24,14 @@ The retrieval quiz replaces only the existing one-slide L01 callback, `Co si nes
 | --- | --- | --- | --- | --- |
 | Opening | `Vztahy dvou proměnných a vizualizace` | Existing and unchanged | Introduce the lesson topic. | None. |
 | Opening | `Pomůže nám druhá proměnná?` | Existing and unchanged | Establish the penguin question: whether longer flippers accompany greater body mass. | None. |
-| Opening | `Výsledky učení` | Existing and unchanged | State the approved L02 learning contract. | None. |
-| Immediately after learning outcomes | `Co si pamatujete z minulé lekce?` | New; replaces the current one-slide callback | Introduce an anonymous, ungraded three-question retrieval activity and display the permanent participation QR and link. | Centre the heading, instruction, transparent-background QR, and new-window link; wait approximately 2–3 minutes without displaying aggregate results. |
+| After the opening biological question | `Co si pamatujete z minulé lekce?` | New; replaces the current one-slide callback | Introduce an anonymous, ungraded three-question retrieval activity and display the permanent participation QR and link. | Centre the heading, instruction, transparent-background QR, and new-window link; wait approximately 2–3 minutes without displaying aggregate results. |
 | Retrieval block | `Jak odpovídala skupina?` | New | Display anonymous aggregate results after all students have committed their answers. | Use the PollsLive results embed, reload control, and external-open fallback. |
 | Retrieval block | `Který druh spí nejdéle?` | New native review | Compare values in the familiar four-row L01 table. | Discuss Question 1 and reveal its explanation. |
 | Retrieval block | `Kde je nejvyšší sloupec?` | New native review | Re-read the modal interval from the approved L01 sleep histogram. | Discuss Question 2 and reveal its explanation. |
 | Retrieval block | `Jaký je průměr?` | New native review | Distinguish the printed mean from the median in familiar L01 R console output. | Discuss Question 3 and reveal its explanation. |
-| End of retrieval block | `Od jedné proměnné ke dvěma` | New bridge | Reconnect the three L01 artifacts to the L02 need to preserve paired measurements. | Replace the bridging function of the old callback slide. |
-| Immediately after retrieval | `Diskuze se sousedem` | Existing and unchanged | Ask students how two measurements belonging to each penguin could be displayed together. | None; the retrieval bridge prepares this discussion. |
+| After retrieval block | `Výsledky učení` | Existing content, reordered | State the approved L02 learning contract after recall. | None. |
+| After learning outcomes | `Od jedné proměnné ke dvěma` | New bridge | Reconnect the three L01 artifacts to the L02 need to preserve paired measurements. | Replace the bridging function of the old callback slide. |
+| After the bridge | `Diskuze se sousedem` | Existing and unchanged | Ask students how two measurements belonging to each penguin could be displayed together. | None; the retrieval bridge prepares this discussion. |
 | First data sequence | `Naše data` and the progressive observation build | Existing and unchanged | Move from two observations to the complete penguin dataset. | None. |
 | First graphical sequence | `Co už v tomto grafu vidíme?`, `Stejná data, jiné osy`, and `Rozptyl čteme ve dvou směrech` | Existing and unchanged | Build the first two-variable graph and read variation along both axes. | None. |
 | Biological interpretation | Return to the penguin question and add species | Existing and unchanged | Expose biological structure that an uncoloured scatterplot can conceal. | None. |
