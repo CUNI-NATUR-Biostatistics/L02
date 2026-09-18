@@ -15,13 +15,17 @@ format:
     embed-resources: true
     theme: [flatly, ../theme/skripta_theme.scss]
     highlight-style: github
-    include-in-header: "../theme/fonts-include.html"
+    include-in-header:
+      - "../theme/fonts-include.html"
+      - "../theme/skripta-favicon.html"
   typst:
     toc: true
     toc-depth: 3
     number-sections: true
     output-file: "skripta_raw.pdf"
-    include-in-header: "skripta_theme.typ"
+    include-in-header:
+      - "skripta_theme.typ"
+      - "skripta-logo.typ"
     date: last-modified
 date: 2026/02/26
 date-format: long
@@ -1084,6 +1088,88 @@ Pearsonova korelace shrnuje, jak silně spolu souvisejí hodnoty na obou osách 
 Když body tvoří přibližně rostoucí oblak bez výrazně zvláštních bodů, bývají obě korelace podobné. Pokud by byl vztah zakřivený nebo by několik bodů silně vyčnívalo, mohl by být rozdíl mezi Pearsonem a Spearmanem už informativní sám o sobě.
 
 V této lekci je důležité hlavně to, že obě čísla mají podpůrnou roli. Nenahrazují graf ani biologickou interpretaci. Pomáhají jen stručně vyjádřit, že delší ploutve bývají spojeny s vyšší hmotností a že tento vztah je v datech zřetelný i po převodu do číselné podoby.
+
+::: {.box-data collapse="true" title="Doplňující: podobná čísla, různé grafy"}
+
+### Stejná čísla, jiné grafy
+
+Čtyři malé soubory známé jako **Anscombův kvartet** mají velmi podobné průměry, rozptyly i Pearsonovu korelaci. Nejdřív se podívejte na body: co byste o vztahu řekli v každém panelu, kdybyste znali jen společné číslo $r$?
+
+```{r}
+#| label: pripravit-anscombuv-kvartet
+#| include: false
+#| message: false
+#| warning: false
+
+data_anscombe <-
+  tibble::tibble(
+    soubor = rep(LETTERS[1:4], each = 11),
+    x = c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4),
+    y = c(anscombe$y1, anscombe$y2, anscombe$y3, anscombe$y4)
+  )
+
+souhrn_anscombe <-
+  data_anscombe |>
+  dplyr::group_by(soubor) |>
+  dplyr::summarise(
+    prumer_x = mean(x),
+    prumer_y = mean(y),
+    rozptyl_x = var(x),
+    rozptyl_y = var(y),
+    korelace = cor(x, y),
+    .groups = "drop"
+  )
+```
+
+```{r}
+#| label: zobrazit-anscombuv-kvartet
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Anscombův kvartet: čtyři bodové grafy se skoro stejnými souhrnnými čísly, ale odlišným tvarem vztahu. Data jsou součástí R."
+#| fig-alt: "Čtyři panely: přibližně lineární oblak, zakřivený vztah, lineární oblak s odlehlým bodem a téměř svislý shluk s jedním vzdáleným bodem."
+#| fig-height: 5
+
+ggplot2::ggplot(
+  data = data_anscombe,
+  mapping = ggplot2::aes(x = x, y = y)
+) +
+  ggplot2::geom_point(
+    color = col_data,
+    size = 2.6
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(soubor),
+    ncol = 2
+  ) +
+  ggplot2::labs(
+    x = "Hodnota x",
+    y = "Hodnota y"
+  ) +
+  theme_biostat(base_size = 12)
+```
+
+```{r}
+#| label: zobrazit-souhrn-anscombova-kvartetu
+#| echo: false
+#| message: false
+#| warning: false
+
+souhrn_anscombe |>
+  dplyr::transmute(
+    Soubor = soubor,
+    `Průměr x` = formatC(prumer_x, digits = 2, format = "f", decimal.mark = ","),
+    `Průměr y` = formatC(prumer_y, digits = 2, format = "f", decimal.mark = ","),
+    `Rozptyl x` = formatC(rozptyl_x, digits = 2, format = "f", decimal.mark = ","),
+    `Rozptyl y` = formatC(rozptyl_y, digits = 2, format = "f", decimal.mark = ","),
+    `Pearsonovo r` = formatC(korelace, digits = 2, format = "f", decimal.mark = ",")
+  ) |>
+  knitr::kable(align = c("l", rep("r", 5)))
+```
+
+Čísla jsou téměř stejná, ale panely nejsou zaměnitelné: v jednom se vztah zakřivuje, jinde jej výrazně ovlivňuje jediný bod. Proto začínáme grafem a teprve pak čteme korelaci nebo další souhrn.
+
+:::
 
 ## Korelace není kauzalita
 
