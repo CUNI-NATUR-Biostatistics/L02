@@ -230,7 +230,7 @@ Biologicky nejpravděpodobnější je **možnost B**: délka ploutve bude s těl
 
 ## Jaká data budeme používat
 
-Budeme pracovat s datasety Palmer Penguins, které shrnují měření tučňáků z oblasti Palmer Station v Antarktidě. Pro tuto lekci jsme ponechali `r nrow(data_tucnaci)` pozorování, u nichž známe délku ploutve, tělesnou hmotnost a druh. V datech se objevují `r length(unique(data_tucnaci$druh_tucnaka))` druhy: `r paste(sort(unique(data_tucnaci$druh_tucnaka)), collapse = ", ")`.
+Budeme pracovat s datasety Palmer Penguins, které shrnují měření tučňáků z oblasti Palmer Station v Antarktidě. Pro tuto lekci jsme ponechali `r nrow(data_tucnaci)` `r render_glossary_term("pozorovani", display = "pozorování")`, u nichž známe délku ploutve, tělesnou hmotnost a druh. V datech se objevují `r length(unique(data_tucnaci$druh_tucnaka))` druhy: `r paste(sort(unique(data_tucnaci$druh_tucnaka)), collapse = ", ")`.
 
 Na tomto datasetu je užitečné to, že biologický příběh dává smysl i bez složité statistiky. Delší ploutev může souviset s větší tělesnou velikostí, ale zároveň víme, že do výsledku vstupují i další zdroje rozdílů mezi jedinci.
 
@@ -251,6 +251,13 @@ knitr::include_graphics(
 Na obrázku výše jsou `r length(unique(data_tucnaci$druh_tucnaka))` druhy, se kterými budeme pracovat. Už z ilustrace je vidět, že se mezi nimi mohou lišit tělesné proporce. To je dobrá připomínka, že část `r render_glossary_term("rozptyl", display = "rozptylu")` v bodovém grafu může souviset i s tím, že nesledujeme jediný homogenní typ jedince.
 
 Jako první krok se ale na data podíváme co nejjednodušším způsobem: bez rozlišování druhů, jen jako na vztah mezi délkou ploutve a tělesnou hmotností.
+
+::: {.box-data collapse="true" title="Doplňující: sto bodů nemusí znamenat sto nezávislých informací"}
+
+V této tabulce představuje každý řádek jiného změřeného tučňáka. V jiných studiích však může několik řádků patřit stejnému jedinci, mláďatům ze stejného hnízda, organismům ze stejné lokality nebo měřením ze stejného dne. Takové body mohou být navzájem podobnější než body z různých jedinců či lokalit.
+
+Počet teček v grafu proto nemusí být totožný s počtem nezávislých informačních jednotek. Graf vztah stále užitečně ukáže, ale `r render_glossary_term("nejistota", display = "nejistotu")` nelze bezpečně počítat, jako by každý řádek přinášel zcela novou informaci. `r render_glossary_term("hierarchicka-data", display = "Hierarchická data")`, `r render_glossary_term("opakovana-mereni", display = "opakovaná měření")` a pseudoreplikaci budeme podrobně řešit v pozdější lekci. <!-- TODO: add slug pseudoreplikace to pojmy.yaml -->
+:::
 
 
 ## První graf: délka ploutve a tělesná hmotnost
@@ -1222,6 +1229,13 @@ ggplot2::ggplot(
 ```
 
 Jakmile jsou druhy vidět, je snazší pochopit, proč byl původní rozptyl tak široký. Část `r render_glossary_term("variabilita", display = "variability")` vzniká uvnitř druhů, ale část je dána i tím, že v jednom obrázku mícháme více biologicky odlišných skupin. To je přesně okamžik, kdy nám doplňková `r render_glossary_term("kategoricka-promenna", display = "kategoriální proměnná")` pomůže lépe číst vztah dvou `r render_glossary_term("numericka-promenna", display = "číselných proměnných")`.
+
+::: {.box-data collapse="true" title="Doplňující: souhrnný vztah se může lišit od vztahů uvnitř skupin"}
+
+Šedý graf odpovídal na otázku, jak spolu délka ploutve a hmotnost souvisejí **napříč všemi tučňáky dohromady**. Barevný graf navíc dovoluje položit jinou otázku: jak spolu souvisejí **uvnitř každého druhu**. Tyto odpovědi nemusejí být stejné, protože celkový vzor kombinuje rozdíly mezi jedinci uvnitř druhů s rozdíly mezi typickými hodnotami jednotlivých druhů.
+
+V pozdější lekci se k tomuto mísení vrátíme při tématu `r render_glossary_term("konfundovani", display = "konfundování")`. Zde stačí bezpečné pravidlo: kdykoli barvy odhalí skupiny v jiných částech grafu, popište zvlášť celkový vzor a vzory uvnitř skupin. Zatím nepotřebujeme model ani nový výpočet; důležité je rozlišit dvě otázky, které lze položit nad stejnými body.
+:::
 
 ```{r}
 #| label: pripravit-kategorie-pro-vyber-grafu
