@@ -13,13 +13,21 @@
 # Příprava -----
 #----------------------------------------------------------#
 
-# Skript stáhněte z veřejné stránky lekce L02 na HUBu kurzu:
-# https://cuni-natur-biostatistics.github.io/L02/current/code/cviceni.R
-# Uložte jej mezi své studijní soubory. V RStudiu zvolte File > Open File,
-# vyberte stažený cviceni.R a otevřete jej v panelu se skriptem.
-# Odpovědi a vlastní příkazy zapisujte přímo do své kopie souboru;
-# průběžně ji ukládejte pomocí Ctrl + S. Není potřeba vytvářet projekt
-# ani měnit pracovní složku.
+# Z veřejné stránky lekce stáhněte dva soubory:
+# - skript cviceni.R:
+#   https://cuni-natur-biostatistics.github.io/L02/current/code/cviceni.R
+# - data palmer_penguins.csv:
+#   https://cuni-natur-biostatistics.github.io/L02/current/data/palmer_penguins.csv
+#
+# V počítači vytvořte složku L02_praktikum a v ní podsložku data.
+# Soubor cviceni.R uložte do L02_praktikum a palmer_penguins.csv do data.
+# RStudio Project používá L02_praktikum jako hlavní složku práce. Soubor
+# s koncovkou .Rproj pomáhá RStudio tuto složku znovu otevřít; skript
+# a data přitom zůstávají samostatnými soubory uvnitř složky.
+# V RStudio zvolte File > New Project > Existing Directory, vyberte
+# L02_praktikum a potvrďte Create Project. Potom otevřete cviceni.R.
+# Odpovědi a vlastní příkazy zapisujte přímo do své kopie souboru
+# a průběžně ji ukládejte pomocí Ctrl + S.
 #
 # Při společném praktiku dokončete Hlavní úlohy L02-U01 až L02-U08.
 # Úlohy navíc jsou dobrovolné a můžete se k nim vrátit při samostudiu.
@@ -55,20 +63,21 @@
 ## Technická kontrola -----
 #--------------------------------------------------#
 
-# Data jsou v balíčku {palmerpenguins}. Kontrola nic neinstaluje.
+# Cesta začíná v hlavní složce otevřeného projektu.
+# Kontrola nic nestahuje ani nemění ve vašem počítači.
+soubor_tucnaci <- "data/palmer_penguins.csv"
+
 if (
-  !requireNamespace(
-    package = "palmerpenguins",
-    quietly = TRUE
-  )) {
+  !file.exists(soubor_tucnaci)) {
   stop(
-    "Chybí balíček {palmerpenguins}. Nainstalujte jej podle pokynů kurzu a spusťte skript znovu.",
+    paste0(
+      "Soubor data/palmer_penguins.csv nebyl nalezen. ",
+      "Otevřete projekt L02_praktikum a zkontrolujte název ",
+      "i umístění CSV ve složce data."
+    ),
     call. = FALSE
   )
 }
-
-# Pokud balíček ve vašem R chybí, můžete jednou spustit v Console:
-# install.packages(pkgs = "palmerpenguins")
 
 
 #----------------------------------------------------------#
@@ -82,7 +91,11 @@ if (
 # Dataset Palmer Penguins obsahuje měření dospělých tučňáků tří druhů
 # z oblasti Palmerova souostroví. Jde o pozorované jedince z této studie,
 # nikoli o náhodný vzorek všech tučňáků na světě.
-data_tucnaci_raw <- palmerpenguins::penguins
+data_tucnaci_raw <-
+  read.csv(
+    file = soubor_tucnaci,
+    na.strings = ""
+  )
 
 # Původní tabulka má anglické názvy sloupců. Pro další práci
 # vytvoříme české názvy objektů; původní sloupce nepřejmenováváme.
