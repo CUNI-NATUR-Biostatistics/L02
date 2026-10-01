@@ -35,7 +35,7 @@ Následující odkazy vedou vždy na nejnovější schválené vydání L02. Roz
 | Prezentace | [Otevřít slidy](https://cuni-natur-biostatistics.github.io/L02/current/presentation/) | [Stáhnout PDF](https://cuni-natur-biostatistics.github.io/L02/current/presentation/presentation.pdf) |
 
 
-Pro navazující praktické cvičení je připraven [R skript ke stažení](https://cuni-natur-biostatistics.github.io/L02/current/code/cviceni.R). Skript obsahuje společné úlohy pro praktikum a dobrovolné úlohy navíc.
+Pro navazující praktické cvičení si stáhněte [R skript](https://cuni-natur-biostatistics.github.io/L02/current/code/cviceni.R) a [data Palmer Penguins](https://cuni-natur-biostatistics.github.io/L02/current/data/palmer_penguins.csv). Skript obsahuje společné úlohy pro praktikum a dobrovolné úlohy navíc.
 
 - [HUB kurzu](https://cuni-natur-biostatistics.github.io/) je hlavní vstup ke všem veřejným studijním materiálům.
 - [Moodle kurzu](https://dl2.cuni.cz/course/view.php?id=106) slouží zapsaným studentům pro oznámení, testy, zadání, odevzdávání a individuální výsledky.
@@ -47,6 +47,7 @@ Pro navazující praktické cvičení je připraven [R skript ke stažení](http
 - `Learning_materials/skripta.qmd` je zdroj skript; výsledky jsou `Learning_materials/skripta.html` a `Learning_materials/skripta.pdf`.
 - `Presentation/presentation.qmd` je zdroj slidů; výsledky jsou `Presentation/presentation.html` a `Presentation/presentation.pdf`.
 - `Exercises/cviceni.R` je studentský R skript pro praktické cvičení.
+- `data/palmer_penguins.csv` je připravená stabilní kopie dat pro praktikum; původ a přípravu popisuje `data/README.md`.
 - `R/` obsahuje podporované renderovací a tematické nástroje.
 - `theme/` obsahuje synchronizovanou lokální kopii společné vizuální identity kurzu.
 
