@@ -6,7 +6,7 @@
   "documentDirectory": "Presentation",
   "generatedDirectory": "pollslive/generated",
   "assetPreparation": {
-    "command": ["Rscript", "R/render_pollslive_assets.R"]
+    "command": ["Rscript", "R/verify_pollslive_assets.R"]
   },
   "synchronization": {
     "repository": "CUNI-NATUR-Biostatistics/_pollslive",
