@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "clientRepository": "CUNI-NATUR-Biostatistics/_internal",
-  "clientRevision": "158b902fd6330fe9b1b0ecdc58a8ad74b7e9ae19",
+  "clientRepository": "CUNI-NATUR-Biostatistics/_pollslive",
+  "clientRevision": "17a62daf970278f2cf5ce134d1b68ec01819be15",
   "definition": "pollslive/quiz.json",
   "documentDirectory": "Presentation",
   "generatedDirectory": "pollslive/generated",
@@ -9,7 +9,7 @@
     "command": ["Rscript", "R/render_pollslive_assets.R"]
   },
   "synchronization": {
-    "repository": "CUNI-NATUR-Biostatistics/_internal",
+    "repository": "CUNI-NATUR-Biostatistics/_pollslive",
     "workflow": "pollslive-sync.yml",
     "ref": "main"
   }
