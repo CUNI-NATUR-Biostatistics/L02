@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { lstat, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -7,6 +8,11 @@ const definitionPath = path.join(pollsliveRoot, "quiz.json");
 const configPath = path.join(pollsliveRoot, "config.json");
 const definition = JSON.parse(await readFile(definitionPath, "utf8"));
 const config = JSON.parse(await readFile(configPath, "utf8"));
+const approvedMediaChecksums = new Map([
+  ["assets/l01-table-four-mammals.png", "65d1854c9aadad63cda0f4c0fcb36424d60bac0568c4951ef69322abfc793071"],
+  ["assets/l01-sleep-histogram.png", "212ca9c94c5fb7e78b3e53c9b9a794021cd3f6f1f6beca34b78f5f75426f4181"],
+  ["assets/l01-console-median.png", "bfc5290aec2014926692bc08cffc3adbd18ce817651e119b42740e2c725ad290"],
+]);
 
 assert(definition.schemaVersion === 2, "quiz.json schemaVersion must be 2.");
 assert(definition.academicYear === "2026-27", "quiz.json academicYear must be 2026-27.");
@@ -43,6 +49,10 @@ for (const question of definition.questions) {
   assert(new Set([".png", ".jpg", ".jpeg", ".webp"]).has(path.extname(mediaPath).toLowerCase()), `${question.id} uses an unsupported media type.`);
   const mediaStatus = await lstat(mediaPath);
   assert(mediaStatus.isFile() && !mediaStatus.isSymbolicLink(), `${question.id} media must be a regular file, not a symlink.`);
+  const expectedMediaChecksum = approvedMediaChecksums.get(question.media.path);
+  assert(expectedMediaChecksum, `${question.id} media is not an approved byte-stable asset.`);
+  const actualMediaChecksum = createHash("sha256").update(await readFile(mediaPath)).digest("hex");
+  assert(actualMediaChecksum === expectedMediaChecksum, `${question.id} media checksum differs from the approved asset.`);
 }
 
 assert(config.schemaVersion === 1, "config.json schemaVersion must be 1.");
@@ -51,7 +61,7 @@ assert(/^[a-f0-9]{40}$/.test(config.clientRevision ?? ""), "config.json must pin
 assert(config.definition === "pollslive/quiz.json", "config.json definition path is invalid.");
 assert(config.documentDirectory === "Presentation", "config.json documentDirectory is invalid.");
 assert(config.generatedDirectory === "pollslive/generated", "config.json generatedDirectory is invalid.");
-assert(JSON.stringify(config.assetPreparation?.command) === JSON.stringify(["Rscript", "R/render_pollslive_assets.R"]), "config.json asset preparation command is invalid.");
+assert(JSON.stringify(config.assetPreparation?.command) === JSON.stringify(["Rscript", "R/verify_pollslive_assets.R"]), "config.json asset preparation command is invalid.");
 assert(config.synchronization?.repository === "CUNI-NATUR-Biostatistics/_pollslive", "config.json synchronization repository is invalid.");
 assert(config.synchronization?.workflow === "pollslive-sync.yml", "config.json synchronization workflow is invalid.");
 assert(config.synchronization?.ref === "main", "config.json synchronization ref must be main.");
