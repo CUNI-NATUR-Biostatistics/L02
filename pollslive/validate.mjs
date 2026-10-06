@@ -9,7 +9,7 @@ const configPath = path.join(pollsliveRoot, "config.json");
 const definition = JSON.parse(await readFile(definitionPath, "utf8"));
 const config = JSON.parse(await readFile(configPath, "utf8"));
 const approvedMediaChecksums = new Map([
-  ["assets/l01-table-four-mammals.png", "65d1854c9aadad63cda0f4c0fcb36424d60bac0568c4951ef69322abfc793071"],
+  ["assets/l01-table-four-mammals.png", "043172ede7e25ce55643491bce2534102659270a04fdef1f24372fcf3f34d5d7"],
   ["assets/l01-sleep-histogram.png", "212ca9c94c5fb7e78b3e53c9b9a794021cd3f6f1f6beca34b78f5f75426f4181"],
   ["assets/l01-console-median.png", "bfc5290aec2014926692bc08cffc3adbd18ce817651e119b42740e2c725ad290"],
 ]);
