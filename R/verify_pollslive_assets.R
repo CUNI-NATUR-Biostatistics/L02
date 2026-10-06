@@ -13,7 +13,7 @@ here::i_am("R/verify_pollslive_assets.R")
 approved_assets <-
   c(
     "l01-table-four-mammals.png" =
-      "65d1854c9aadad63cda0f4c0fcb36424d60bac0568c4951ef69322abfc793071",
+      "043172ede7e25ce55643491bce2534102659270a04fdef1f24372fcf3f34d5d7",
     "l01-sleep-histogram.png" =
       "212ca9c94c5fb7e78b3e53c9b9a794021cd3f6f1f6beca34b78f5f75426f4181",
     "l01-console-median.png" =

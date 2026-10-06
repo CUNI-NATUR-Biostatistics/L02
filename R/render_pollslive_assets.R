@@ -98,7 +98,7 @@ draw_text(
   gp = gpar(col = colours[["parchment"]], fontsize = 30, fontface = "bold")
 )
 draw_text(
-  "Spánek za den (h)", 0.96, header_y,
+  "Sp\u00e1nek za den (h)", 0.96, header_y,
   just = "right",
   gp = gpar(col = colours[["parchment"]], fontsize = 30, fontface = "bold")
 )
