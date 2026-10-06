@@ -40,14 +40,15 @@
 
 
 #--------------------------------------------------#
-## Výsledky učení a návaznost na L01 -----
+## Výsledky učení a návaznost na minulou lekci -----
 #--------------------------------------------------#
 
 # Po společné trase dokážete vybrat graf pro dvojici proměnných,
 # popsat směr a variabilitu vztahu, vypočítat a opatrně číst
 # kovarianci a korelaci a odlišit zjištěný vztah od tvrzení o příčině.
 #
-# V L01 jste rozlišovali typy proměnných a zobrazovali jednu proměnnou.
+# V minulé lekci jste rozlišovali typy proměnných a zobrazovali jednu
+# proměnnou.
 # Jeden řádek zde představuje jednoho měřeného tučňáka; délka ploutve
 # a hmotnost na stejném řádku tedy patří témuž jedinci. Počítáme
 # a zobrazujeme odpovídající dvojice, nikoli dvě nezávislé řady čísel.
@@ -109,7 +110,7 @@ data_mereni_par <-
 
 head(x = data_mereni_par)
 
-# is.na() znáte z L01; TRUE označuje chybějící hodnotu.
+# is.na() znáte z minulé lekce; TRUE označuje chybějící hodnotu.
 # complete.cases() naopak označí TRUE u řádků, kde nic nechybí
 # v právě sledovaných sloupcích.
 
@@ -159,7 +160,7 @@ length(x = vec_hmotnost)
 #--------------------------------------------------#
 
 # Dvě číselné proměnné zobrazíme bodovým grafem. Jeden bod nese
-# dvě měření jednoho tučňáka. plot() znáte z L01; popisky os
+# dvě měření jednoho tučňáka. plot() znáte z minulé lekce; popisky os
 # zde doplní jednotky obou měření.
 
 
@@ -305,7 +306,7 @@ mean(x = data_ctyri_tucnaci$hmotnost_g)
 
 # Zadání: Pro stejné jedince z data_tucnaci zobrazte pomocí
 # boxplot() hmotnost v g podle vec_druh. Použijte vec_hmotnost
-# a česky označte obě osy. Porovnejte typickou hmotnost a rozptyl
+# a česky označte obě osy. Porovnejte typickou hmotnost a rozptýlení
 # v jednotlivých druzích. Proč by zde bodový graf se dvěma
 # číselnými osami nebyl první volbou?
 #
@@ -519,10 +520,10 @@ plot(
 # Graf skládáme z datové tabulky, přiřazení proměnných k osám či barvám
 # a vrstvy, která určí, zda uvidíme body, krabice nebo sloupce.
 # Další vrstvy mohou měnit popisky a vzhled bez změny původních dat.
-# V L02 jsme volili první graf podle typů proměnných; stejné otázky
+# V této lekci jsme volili první graf podle typů proměnných; stejné otázky
 # si zde vyzkoušíte vyjádřit tímto vrstvovým zápisem.
 #
-# Kurzová skripta L02, část „Jak typ proměnných určuje výběr grafu“:
+# Skripta této lekce, část „Jak typ proměnných určuje výběr grafu“:
 # https://cuni-natur-biostatistics.github.io/L02/current/learning/
 # Stručný úvod do syntaxe a vrstev (anglicky) v dokumentaci ggplot2:
 # https://ggplot2.tidyverse.org/articles/ggplot2.html
@@ -553,7 +554,7 @@ if (
 # nesčítá naměřené hodnoty. Funkce se jménem geom_* vytvářejí vrstvy
 # grafu; ggplot2::labs() doplní názvy os.
 #
-# Příklad navazuje na sloupcové grafy četností z L01. Zde jeden
+# Příklad navazuje na sloupcové grafy četností z minulé lekce. Zde jeden
 # řádek představuje jednoho tučňáka, takže ggplot2::geom_bar()
 # spočítá jedince každého druhu do sloupců.
 # Příkaz print() zobrazí hotový graf i při spuštění celého skriptu.
