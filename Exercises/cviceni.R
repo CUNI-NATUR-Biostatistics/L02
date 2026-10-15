@@ -43,7 +43,7 @@
 ## Výsledky učení a návaznost na minulou lekci -----
 #--------------------------------------------------#
 
-# Po společné trase dokážete vybrat graf pro dvojici proměnných,
+# Po hlavních úlohách dokážete vybrat graf pro dvojici proměnných,
 # popsat směr a variabilitu vztahu, vypočítat a opatrně číst
 # kovarianci a korelaci a odlišit zjištěný vztah od tvrzení o příčině.
 #
@@ -119,23 +119,29 @@ head(x = data_mereni_par)
 ### Úloha | L02-U01 -----
 #----------------------------------------#
 
-# Zadání: V data_tucnaci_raw spočítejte zvlášť chybějící hodnoty
-# ve sloupcích flipper_length_mm a body_mass_g. Pomocí data_mereni_par
-# zjistěte počet řádků, kde jsou obě měření známá. Leží zde chybějící
-# hodnoty v obou sloupcích na stejných řádcích? Proč může oddělené
-# mazání hodnot v jiné tabulce poškodit dvojice?
-#
+# Zadání:
+# V data_tucnaci_raw spočítejte zvlášť chybějící hodnoty ve sloupcích
+# flipper_length_mm a body_mass_g. Pomocí data_mereni_par zjistěte počet
+# řádků, kde jsou obě měření známá. Leží zde chybějící hodnoty v obou
+# sloupcích na stejných řádcích? Proč může oddělené mazání hodnot v jiné
+# tabulce poškodit dvojice?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Porovnejte počet chybějících hodnot v každém sloupci s počtem řádků, kde
+# chybí alespoň jedno z obou měření.
 #
+# Nápověda 2:
+# Pro sloupec použijte sum(is.na(...)); úplné dvojice získáte sečtením
+# hodnot TRUE z complete.cases(data_mereni_par).
 #
-# Nápověda 1: Porovnejte počet chybějících hodnot v každém sloupci
-# s počtem řádků, kde chybí alespoň jedno z obou měření.
-# Nápověda 2: Pro sloupec použijte sum(is.na(...)); úplné dvojice
-# získáte sečtením hodnot TRUE z complete.cases(data_mereni_par).
-# Očekávaný výsledek: Tabulka má 344 řádků, v každém sloupci
-# chybějí 2 hodnoty a úplných dvojic je 342. Chybějí tedy stejné
-# dva řádky; oddělené mazání by zde dvojice náhodou zachovalo,
-# ale při různých chybějících řádcích by je mohlo nesprávně spojit.
+# Očekávaný výsledek:
+# Tabulka má 344 řádků, v každém sloupci chybějí 2 hodnoty a úplných dvojic
+# je 342. Chybějí tedy stejné dva řádky; oddělené mazání by zde dvojice
+# náhodou zachovalo, ale při různých chybějících řádcích by je mohlo
+# nesprávně spojit.
 
 
 # complete.cases() vrátí pro každý řádek TRUE, pokud ve vybraných
@@ -168,21 +174,27 @@ length(x = vec_hmotnost)
 ### Úloha | L02-U02 -----
 #----------------------------------------#
 
-# Zadání: Z vec_delka_ploutve a vec_hmotnost vytvořte bodový graf
-# pomocí plot(). Délku ploutve v mm dejte na vodorovnou osu,
-# hmotnost v g na svislou; obě osy česky popište včetně jednotek.
-# Před spuštěním odhadněte směr vztahu. Potom popište jeho směr,
-# přibližný tvar a rozptýlení bodů při podobné délce ploutve.
-#
+# Zadání:
+# Z vec_delka_ploutve a vec_hmotnost vytvořte bodový graf pomocí plot().
+# Délku ploutve v mm dejte na vodorovnou osu, hmotnost v g na svislou; obě
+# osy česky popište včetně jednotek. Před spuštěním odhadněte směr vztahu.
+# Potom popište jeho směr, přibližný tvar a rozptýlení bodů při podobné
+# délce ploutve.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Každý bod potřebuje dvě hodnoty ze stejného řádku; pro graf máte
+# připravené odpovídající vektory x a y.
 #
+# Nápověda 2:
+# V plot() nastavte x, y, xlab a ylab. Pro dobře viditelné body můžete
+# nastavit pch = 16.
 #
-# Nápověda 1: Každý bod potřebuje dvě hodnoty ze stejného řádku;
-# pro graf máte připravené odpovídající vektory x a y.
-# Nápověda 2: V plot() nastavte x, y, xlab a ylab. Pro dobře
-# viditelné body můžete nastavit pch = 16.
-# Očekávaný výsledek: Rostoucí, přibližně přímkový, ale ne dokonale
-# těsný oblak 342 bodů. Při podobné délce ploutve se hmotnosti liší.
+# Očekávaný výsledek:
+# Rostoucí, přibližně přímkový, ale ne dokonale těsný oblak 342 bodů. Při
+# podobné délce ploutve se hmotnosti liší.
 
 
 #--------------------------------------------------#
@@ -206,23 +218,28 @@ head(x = barvy_druhu[as.character(x = vec_druh)])
 ### Úloha | L02-U03 -----
 #----------------------------------------#
 
-# Zadání: Nakreslete znovu délku ploutve proti hmotnosti pro všech
-# 342 jedinců z data_tucnaci. Přiřaďte bodům barvu podle vec_druh
-# a barvy_druhu a přidejte legendu Adelie, Chinstrap a Gentoo.
-# Porovnejte rozptýlení uvnitř druhů s rozdíly mezi druhy.
-# Změnila barva měření, nebo jen to, co v grafu rozpoznáte?
-#
+# Zadání:
+# Nakreslete znovu délku ploutve proti hmotnosti pro všech 342 jedinců z
+# data_tucnaci. Přiřaďte bodům barvu podle vec_druh a barvy_druhu a přidejte
+# legendu Adelie, Chinstrap a Gentoo. Porovnejte rozptýlení uvnitř druhů s
+# rozdíly mezi druhy. Změnila barva měření, nebo jen to, co v grafu
+# rozpoznáte?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Použijte stejné x a y jako v U02; druh rozhoduje jen o vzhledu bodu.
 #
+# Nápověda 2:
+# V plot() doplňte col = barvy_druhu[as.character(vec_druh)]. Legendu
+# vytvoří legend() s legend = names(barvy_druhu), col = barvy_druhu
+# a pch = 16.
 #
-# Nápověda 1: Použijte stejné x a y jako v U02; druh rozhoduje
-# jen o vzhledu bodu.
-# Nápověda 2: V plot() doplňte col = barvy_druhu[as.character(vec_druh)].
-# Legendu vytvoří legend() s legend = names(barvy_druhu),
-# col = barvy_druhu a pch = 16.
-# Očekávaný výsledek: Tři rozlišitelné skupiny; Gentoo leží
-# převážně u delších ploutví a vyšších hmotností. Body se
-# rozptylují i uvnitř každého druhu. Barva nepřidala nové měření.
+# Očekávaný výsledek:
+# Tři rozlišitelné skupiny; Gentoo leží převážně u delších ploutví a vyšších
+# hmotností. Body se rozptylují i uvnitř každého druhu. Barva nepřidala nové
+# měření.
 
 
 #--------------------------------------------------#
@@ -249,20 +266,26 @@ mean(x = data_ctyri_tucnaci$hmotnost_g)
 ### Úloha | L02-U04 -----
 #----------------------------------------#
 
-# Zadání: U prvního a čtvrtého řádku data_ctyri_tucnaci určete,
-# zda je každá hodnota pod svým průměrem nebo nad ním. Předpovězte
-# znaménko součinu obou odchylek pro tyto řádky. Pak pomocí cov()
-# spočítejte kovarianci všech čtyř dvojic. Co říká její znaménko?
-#
+# Zadání:
+# U prvního a čtvrtého řádku data_ctyri_tucnaci určete, zda je každá hodnota
+# pod svým průměrem nebo nad ním. Předpovězte znaménko součinu obou odchylek
+# pro tyto řádky. Pak pomocí cov() spočítejte kovarianci všech čtyř dvojic.
+# Co říká její znaménko?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Dvě odchylky se stejným znaménkem mají kladný součin.
 #
+# Nápověda 2:
+# Funkci cov() předejte pomocí x a y dva sloupce data_ctyri_tucnaci ve
+# stejném pořadí řádků.
 #
-# Nápověda 1: Dvě odchylky se stejným znaménkem mají kladný součin.
-# Nápověda 2: Funkci cov() předejte pomocí x a y dva sloupce
-# data_ctyri_tucnaci ve stejném pořadí řádků.
-# Očekávaný výsledek: V prvním řádku jsou obě hodnoty pod průměrem,
-# ve čtvrtém nad průměrem; oba součiny jsou kladné. Kovariance
-# je 2430 mm·g a shrnuje společný rostoucí směr v tomto příkladu.
+# Očekávaný výsledek:
+# V prvním řádku jsou obě hodnoty pod průměrem, ve čtvrtém nad průměrem; oba
+# součiny jsou kladné. Kovariance je 2430 mm·g a shrnuje společný rostoucí
+# směr v tomto příkladu.
 
 
 # Kovariance závisí na jednotkách. Korelace převede společný pohyb
@@ -275,21 +298,27 @@ mean(x = data_ctyri_tucnaci$hmotnost_g)
 ### Úloha | L02-U05 -----
 #----------------------------------------#
 
-# Zadání: Pro vec_delka_ploutve a vec_hmotnost spočítejte zvlášť
-# Pearsonovu a Spearmanovu korelaci funkcí cor(). Před výpočtem
-# odhadněte jejich znaménko podle grafu U02. Porovnejte výsledky
-# a jednou větou vyložte, co vypovídají o měřených tučňácích.
-#
+# Zadání:
+# Pro vec_delka_ploutve a vec_hmotnost spočítejte zvlášť Pearsonovu a
+# Spearmanovu korelaci funkcí cor(). Před výpočtem odhadněte jejich znaménko
+# podle grafu U02. Porovnejte výsledky a jednou větou vyložte, co vypovídají
+# o měřených tučňácích.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Znaménko souvisí se směrem bodového mraku; metody pracují s původními
+# hodnotami a s jejich pořadím.
 #
+# Nápověda 2:
+# Ve dvou voláních cor() použijte stejná x a y; měňte jen method = "pearson"
+# a method = "spearman".
 #
-# Nápověda 1: Znaménko souvisí se směrem bodového mraku;
-# metody pracují s původními hodnotami a s jejich pořadím.
-# Nápověda 2: Ve dvou voláních cor() použijte stejná x a y;
-# měňte jen method = "pearson" a method = "spearman".
-# Očekávaný výsledek: Pearson přibližně 0,871 a Spearman přibližně
-# 0,840; obě korelace jsou kladné a podobné, ale ne dokonalé.
-# Nevypovídají samy o sobě o příčině vztahu.
+# Očekávaný výsledek:
+# Pearson přibližně 0,871 a Spearman přibližně 0,840; obě korelace jsou
+# kladné a podobné, ale ne dokonalé. Nevypovídají samy o sobě o příčině
+# vztahu.
 
 
 #--------------------------------------------------#
@@ -304,22 +333,27 @@ mean(x = data_ctyri_tucnaci$hmotnost_g)
 ### Úloha | L02-U06 -----
 #----------------------------------------#
 
-# Zadání: Pro stejné jedince z data_tucnaci zobrazte pomocí
-# boxplot() hmotnost v g podle vec_druh. Použijte vec_hmotnost
-# a česky označte obě osy. Porovnejte typickou hmotnost a rozptýlení
-# v jednotlivých druzích. Proč by zde bodový graf se dvěma
-# číselnými osami nebyl první volbou?
-#
+# Zadání:
+# Pro stejné jedince z data_tucnaci zobrazte pomocí boxplot() hmotnost v g
+# podle vec_druh. Použijte vec_hmotnost a česky označte obě osy. Porovnejte
+# typickou hmotnost a rozptýlení v jednotlivých druzích. Proč by zde bodový
+# graf se dvěma číselnými osami nebyl první volbou?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Jedna proměnná určuje skupiny, druhá v nich má číselné hodnoty; porovnejte
+# jejich rozdělení po skupinách.
 #
+# Nápověda 2:
+# V boxplot() použijte vzorec vec_hmotnost ~ vec_druh a nastavte xlab a
+# ylab.
 #
-# Nápověda 1: Jedna proměnná určuje skupiny, druhá v nich má
-# číselné hodnoty; porovnejte jejich rozdělení po skupinách.
-# Nápověda 2: V boxplot() použijte vzorec vec_hmotnost ~ vec_druh
-# a nastavte xlab a ylab.
-# Očekávaný výsledek: Tři krabice, jedna pro každý druh;
-# Gentoo mají ve vzorku vyšší typickou hmotnost. Skupiny nejsou
-# bez variability a graf sám nedokazuje rozdíly v celé populaci.
+# Očekávaný výsledek:
+# Tři krabice, jedna pro každý druh; Gentoo mají ve vzorku vyšší typickou
+# hmotnost. Skupiny nejsou bez variability a graf sám nedokazuje rozdíly v
+# celé populaci.
 
 
 # Druh i ostrov jsou kategoriální proměnné. table() spočítá
@@ -345,25 +379,30 @@ podily_druh_ostrov <-
 ### Úloha | L02-U07 -----
 #----------------------------------------#
 
-# Zadání: Z podily_druh_ostrov vytvořte pomocí barplot() skládané
-# sloupce pro ostrovy. Použijte barvy_druhu, přidejte legendu druhů
-# a označte svislou osu „Podíl“. Porovnejte sloupce s počty v
-# tabulka_druh_ostrov: na kterém ostrově ve vzorku najdete všechny
-# tři druhy? Co vyjadřuje celková výška každého sloupce?
-#
+# Zadání:
+# Z podily_druh_ostrov vytvořte pomocí barplot() skládané sloupce pro
+# ostrovy. Použijte barvy_druhu, přidejte legendu druhů a označte svislou
+# osu „Podíl“. Porovnejte sloupce s počty v tabulka_druh_ostrov: na kterém
+# ostrově ve vzorku najdete všechny tři druhy? Co vyjadřuje celková výška
+# každého sloupce?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Sloupce ostrovů již mají podíly připravené; barplot() zobrazí druhy uvnitř
+# každého ostrova.
 #
+# Nápověda 2:
+# V barplot() nastavte height = podily_druh_ostrov, col = barvy_druhu,
+# legend.text = TRUE a args.legend = list( x = "top", horiz = TRUE,
+# bty = "n"). Pro legendu nad sloupci zvětšete horní mez grafu pomocí
+# ylim = c(0, 1.17).
 #
-# Nápověda 1: Sloupce ostrovů již mají podíly připravené;
-# barplot() zobrazí druhy uvnitř každého ostrova.
-# Nápověda 2: V barplot() nastavte height = podily_druh_ostrov,
-# col = barvy_druhu, legend.text = TRUE a args.legend = list(
-# x = "top", horiz = TRUE, bty = "n"). Pro legendu nad sloupci
-# zvětšete horní mez grafu pomocí ylim = c(0, 1.17).
-# Očekávaný výsledek: Každý ostrovní sloupec má celkovou výšku 1.
-# Ve vzorku není ostrov se všemi třemi druhy; na Biscoe chybí
-# Chinstrap, na Dream Gentoo a na Torgersen jsou jen Adelie.
-# Tabulka počtů a graf podílů odpovídají na odlišné otázky.
+# Očekávaný výsledek:
+# Každý ostrovní sloupec má celkovou výšku 1. Ve vzorku není ostrov se všemi
+# třemi druhy; na Biscoe chybí Chinstrap, na Dream Gentoo a na Torgersen
+# jsou jen Adelie. Tabulka počtů a graf podílů odpovídají na odlišné otázky.
 
 
 #--------------------------------------------------#
@@ -378,45 +417,35 @@ podily_druh_ostrov <-
 ### Úloha | L02-U08 -----
 #----------------------------------------#
 
-# Zadání: V data_tucnaci_raw vyberte jen řádky se známou
-# bill_length_mm a body_mass_g. Zjistěte počet úplných dvojic,
-# z těchto stejných řádků vytvořte dva české vektory a nakreslete
-# bodový graf délky zobáku (mm) proti hmotnosti (g). Spočítejte
-# Pearsonovu korelaci. Napište dvě věty: co vidíte v grafu a co
-# z tohoto pozorovaného vztahu zatím nemůžete tvrdit?
-#
+# Zadání:
+# V data_tucnaci_raw vyberte jen řádky se známou bill_length_mm a
+# body_mass_g. Zjistěte počet úplných dvojic, z těchto stejných řádků
+# vytvořte dva české vektory a nakreslete bodový graf délky zobáku (mm)
+# proti hmotnosti (g). Spočítejte Pearsonovu korelaci. Napište dvě věty: co
+# vidíte v grafu a co z tohoto pozorovaného vztahu zatím nemůžete tvrdit?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Zopakujte cestu od kontroly dvojice k grafu a číselnému souhrnu; obě
+# proměnné filtrujte společně.
 #
+# Nápověda 2:
+# V complete.cases() vyberte bill_length_mm a body_mass_g; podle výsledných
+# řádků vytvořte oba vektory, které pak předáte plot() a cor().
 #
-# Nápověda 1: Zopakujte cestu od kontroly dvojice k grafu
-# a číselnému souhrnu; obě proměnné filtrujte společně.
-# Nápověda 2: V complete.cases() vyberte bill_length_mm a
-# body_mass_g; podle výsledných řádků vytvořte oba vektory,
-# které pak předáte plot() a cor().
-# Očekávaný výsledek: 342 úplných dvojic, kladný, ale rozptýlený
-# vztah; Pearson přibližně 0,595. Korelace sama neprokazuje,
-# že změna délky zobáku způsobuje změnu hmotnosti.
-
-
-#----------------------------------------------------------#
-# Shrnutí a sebekontrola -----
-#----------------------------------------------------------#
-
-# Společnou trasu jste dokončili, pokud umíte vlastními slovy říct:
-# 1. Proč délka ploutve a hmotnost jednoho tučňáka musí zůstat párem?
-# 2. Co ukázal bodový graf, co z něj nevyčtete jedinou korelací?
-# 3. Co přidalo rozlišení druhů v původním bodovém grafu?
-# 4. Proč pro dvě čísla, druh × hmotnost a druh × ostrov volíme
-#    různé první grafy?
-# 5. Co znamená kladná korelace a proč to ještě není důkaz příčiny?
-# Pokud si nejste jistí, vraťte se k příslušné úloze a nápovědám.
+# Očekávaný výsledek:
+# 342 úplných dvojic, kladný, ale rozptýlený vztah; Pearson přibližně 0,595.
+# Korelace sama neprokazuje, že změna délky zobáku způsobuje změnu
+# hmotnosti.
 
 
 #----------------------------------------------------------#
 # Úlohy navíc -----
 #----------------------------------------------------------#
 
-# Tyto úlohy jsou dobrovolné. Společná trasa skončila u sebekontroly.
+# Tyto úlohy jsou dobrovolné.
 
 
 #--------------------------------------------------#
@@ -441,21 +470,27 @@ plot(
 ### Úloha navíc | L02-N01 -----
 #----------------------------------------#
 
-# Zadání: Z data_anscombe zobrazte zvlášť dvojice x2/y2,
-# x3/y3 a x4/y4 pomocí plot(). Pro každou ze čtyř dvojic
-# spočítejte Pearsonovu korelaci. Porovnejte tvar všech čtyř
-# grafů a vysvětlete, proč podobná čísla nestačí k popisu vztahu.
-#
+# Zadání:
+# Z data_anscombe zobrazte zvlášť dvojice x2/y2, x3/y3 a x4/y4 pomocí
+# plot(). Pro každou ze čtyř dvojic spočítejte Pearsonovu korelaci.
+# Porovnejte tvar všech čtyř grafů a vysvětlete, proč podobná čísla nestačí
+# k popisu vztahu.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Každá dvojice má stejné číslo v názvu obou sloupců; grafy sledujte po
+# jednom, ne jako dvě nezávislé řady.
 #
+# Nápověda 2:
+# Opakujte zobrazený plot() a v názvech sloupců měňte číslo; stejné dvojice
+# předejte cor() s method = "pearson".
 #
-# Nápověda 1: Každá dvojice má stejné číslo v názvu obou sloupců;
-# grafy sledujte po jednom, ne jako dvě nezávislé řady.
-# Nápověda 2: Opakujte zobrazený plot() a v názvech sloupců měňte
-# číslo; stejné dvojice předejte cor() s method = "pearson".
-# Očekávaný výsledek: Všechny čtyři korelace jsou přibližně 0,816,
-# ale obrázky ukazují přibližně přímkový vztah, zakřivení a případy
-# s výrazně odlehlými body. Graf ukazuje, co jedno číslo skrývá.
+# Očekávaný výsledek:
+# Všechny čtyři korelace jsou přibližně 0,816, ale obrázky ukazují přibližně
+# přímkový vztah, zakřivení a případy s výrazně odlehlými body. Graf
+# ukazuje, co jedno číslo skrývá.
 
 
 #--------------------------------------------------#
@@ -467,22 +502,27 @@ plot(
 ### Úloha navíc | L02-N02 -----
 #----------------------------------------#
 
-# Zadání: V data_tucnaci_raw použijte bill_depth_mm (hloubka zobáku
-# v mm) a body_mass_g (hmotnost v g). Zkontrolujte počet úplných
-# dvojic, zachovejte jejich společné řádky, nakreslete bodový graf
-# a spočítejte Pearsonovu korelaci. Jak se směr liší od U08?
-#
+# Zadání:
+# V data_tucnaci_raw použijte bill_depth_mm (hloubka zobáku v mm) a
+# body_mass_g (hmotnost v g). Zkontrolujte počet úplných dvojic, zachovejte
+# jejich společné řádky, nakreslete bodový graf a spočítejte Pearsonovu
+# korelaci. Jak se směr liší od U08?
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Stejně jako v U08 začněte kontrolou obou proměnných ve stejných řádcích,
+# pak porovnejte graf a korelaci.
 #
+# Nápověda 2:
+# Pro complete.cases() vyberte bill_depth_mm a body_mass_g; z vybraných
+# řádků vezměte oba sloupce pro plot() a cor(method = "pearson").
 #
-# Nápověda 1: Stejně jako v U08 začněte kontrolou obou proměnných
-# ve stejných řádcích, pak porovnejte graf a korelaci.
-# Nápověda 2: Pro complete.cases() vyberte bill_depth_mm a
-# body_mass_g; z vybraných řádků vezměte oba sloupce pro plot()
-# a cor(method = "pearson").
-# Očekávaný výsledek: 342 úplných dvojic; celkový vztah je
-# záporný a Pearsonova korelace přibližně -0,472. Jde o popis
-# těchto měřených jedinců, který je vhodné číst i po druzích.
+# Očekávaný výsledek:
+# 342 úplných dvojic; celkový vztah je záporný a Pearsonova korelace
+# přibližně -0,472. Jde o popis těchto měřených jedinců, který je vhodné
+# číst i po druzích.
 
 
 #--------------------------------------------------#
@@ -494,22 +534,28 @@ plot(
 ### Úloha navíc | L02-N03 -----
 #----------------------------------------#
 
-# Zadání: Vraťte se ke vztahu délky ploutve a hmotnosti v U02–U05.
-# Napište jednu větu, kterou data podporují, a jednu příliš silnou
-# příčinnou větu, kterou samotná korelace nepodporuje. Uveďte dva
-# možné zdroje společného vzoru, například druh a celkovou velikost
-# těla. Žádný z nich neoznačujte za prokázanou příčinu.
+# Zadání:
+# Vraťte se ke vztahu délky ploutve a hmotnosti v U02–U05. Napište jednu
+# větu, kterou data podporují, a jednu příliš silnou příčinnou větu, kterou
+# samotná korelace nepodporuje. Uveďte dva možné zdroje společného vzoru,
+# například druh a celkovou velikost těla. Žádný z nich neoznačujte za
+# prokázanou příčinu.
+
+# Vaše řešení:
+
+
+# Nápověda 1:
+# Rozlišujte společný výskyt dvou hodnot od zásahu, který by jednu hodnotu
+# změnil a ukázal účinek na druhou.
 #
-# Vaše odpověď:
+# Nápověda 2:
+# Porovnejte graf U02 s rozlišením druhů v U03; formulujte „souvisí“ místo
+# „způsobuje“.
 #
-#
-# Nápověda 1: Rozlišujte společný výskyt dvou hodnot od zásahu,
-# který by jednu hodnotu změnil a ukázal účinek na druhou.
-# Nápověda 2: Porovnejte graf U02 s rozlišením druhů v U03;
-# formulujte „souvisí“ místo „způsobuje“.
-# Očekávaný výsledek: Bezpečný závěr popisuje souvislost v měřených
-# datech; silnější tvrzení o přímém účinku délky ploutve z grafu
-# a korelace neplyne. Možná vysvětlení jsou hypotézy k prověření.
+# Očekávaný výsledek:
+# Bezpečný závěr popisuje souvislost v měřených datech; silnější tvrzení o
+# přímém účinku délky ploutve z grafu a korelace neplyne. Možná vysvětlení
+# jsou hypotézy k prověření.
 
 
 #--------------------------------------------------#
@@ -585,64 +631,94 @@ if (
 ### Úloha navíc | L02-N04 -----
 #----------------------------------------#
 
-# Zadání: Z data_tucnaci vytvořte pomocí ggplot2 bodový graf
-# flipper_length_mm proti body_mass_g. Vycházejte z U02, ponechte
-# stejné osy a jejich české popisky s mm a g. Porovnejte, co se
-# oproti plot() zapisuje jako data, přiřazení os a vrstva bodů.
-# Úlohu řešte pouze tehdy, když je_ggplot2 má hodnotu TRUE.
-#
+# Zadání:
+# Z data_tucnaci vytvořte pomocí ggplot2 bodový graf flipper_length_mm proti
+# body_mass_g. Vycházejte z U02, ponechte stejné osy a jejich české popisky
+# s mm a g. Porovnejte, co se oproti plot() zapisuje jako data, přiřazení os
+# a vrstva bodů. Úlohu řešte pouze tehdy, když je_ggplot2 má hodnotu TRUE.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# V ggplot2 oddělíte zdrojovou tabulku a osy od vrstvy, která vykreslí
+# jednotlivé body.
 #
+# Nápověda 2:
+# Použijte ggplot2::ggplot() s data = data_tucnaci, ggplot2::aes() pro obě
+# osy, ggplot2::geom_point() a ggplot2::labs().
 #
-# Nápověda 1: V ggplot2 oddělíte zdrojovou tabulku a osy od vrstvy,
-# která vykreslí jednotlivé body.
-# Nápověda 2: Použijte ggplot2::ggplot() s data = data_tucnaci,
-# ggplot2::aes() pro obě osy, ggplot2::geom_point() a ggplot2::labs().
-# Očekávaný výsledek: Stejný rostoucí oblak 342 bodů a stejné
-# jednotky jako v U02; mění se způsob sestavení grafu, ne data.
+# Očekávaný výsledek:
+# Stejný rostoucí oblak 342 bodů a stejné jednotky jako v U02; mění se
+# způsob sestavení grafu, ne data.
 
 
 #----------------------------------------#
 ### Úloha navíc | L02-N05 -----
 #----------------------------------------#
 
-# Zadání: Z týchž jedinců v data_tucnaci znovu zobrazte hmotnost
-# body_mass_g podle species pomocí ggplot2. Zachovejte otázku
-# a české popisky s jednotkou g z U06. Porovnejte s boxplot(),
-# kde se v kódu určuje skupina a způsob vykreslení krabic.
-# Úlohu řešte pouze tehdy, když je_ggplot2 má hodnotu TRUE.
-#
+# Zadání:
+# Z týchž jedinců v data_tucnaci znovu zobrazte hmotnost body_mass_g podle
+# species pomocí ggplot2. Zachovejte otázku a české popisky s jednotkou g z
+# U06. Porovnejte s boxplot(), kde se v kódu určuje skupina a způsob
+# vykreslení krabic. Úlohu řešte pouze tehdy, když je_ggplot2 má hodnotu
+# TRUE.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Druh určuje skupinu na vodorovné ose, hmotnost číselnou hodnotu na svislé
+# ose.
 #
+# Nápověda 2:
+# V ggplot2::aes() přiřaďte x = species a y = body_mass_g; přidejte
+# ggplot2::geom_boxplot() a ggplot2::labs().
 #
-# Nápověda 1: Druh určuje skupinu na vodorovné ose, hmotnost
-# číselnou hodnotu na svislé ose.
-# Nápověda 2: V ggplot2::aes() přiřaďte x = species a
-# y = body_mass_g; přidejte ggplot2::geom_boxplot() a ggplot2::labs().
-# Očekávaný výsledek: Tři krabice nad stejnými 342 jedinci
-# a stejná interpretace skupin jako v U06.
+# Očekávaný výsledek:
+# Tři krabice nad stejnými 342 jedinci a stejná interpretace skupin jako v
+# U06.
 
 
 #----------------------------------------#
 ### Úloha navíc | L02-N06 -----
 #----------------------------------------#
 
-# Zadání: Z data_tucnaci znovu zobrazte složení druhů podle
-# ostrovů jako skládané podílové sloupce pomocí ggplot2. Ponechte
-# stejné 342 jedince, barvy z barvy_druhu a svislou osu pro podíl.
-# Porovnejte s barplot(), jak se nastavuje ostrov, barva druhu
-# a převod sloupců na podíly. Úlohu řešte pouze tehdy,
-# když je_ggplot2 má hodnotu TRUE.
-#
+# Zadání:
+# Z data_tucnaci znovu zobrazte složení druhů podle ostrovů jako skládané
+# podílové sloupce pomocí ggplot2. Ponechte stejné 342 jedince, barvy z
+# barvy_druhu a svislou osu pro podíl. Porovnejte s barplot(), jak se
+# nastavuje ostrov, barva druhu a převod sloupců na podíly. Úlohu řešte
+# pouze tehdy, když je_ggplot2 má hodnotu TRUE.
+
 # Vaše řešení:
+
+
+# Nápověda 1:
+# Ostrov určuje sloupec a druh jeho barevné části; graf musí ukázat podíly
+# uvnitř každého ostrova.
 #
+# Nápověda 2:
+# V ggplot2::aes() použijte x = island a fill = species, poté
+# ggplot2::geom_bar(position = ggplot2::position_fill(reverse = TRUE)), aby
+# pořadí barevných částí odpovídalo U07. Barvy nastavte pomocí
+# ggplot2::scale_fill_manual( values = barvy_druhu) a popisky pomocí
+# ggplot2::labs().
 #
-# Nápověda 1: Ostrov určuje sloupec a druh jeho barevné části;
-# graf musí ukázat podíly uvnitř každého ostrova.
-# Nápověda 2: V ggplot2::aes() použijte x = island a
-# fill = species, poté ggplot2::geom_bar(position =
-# ggplot2::position_fill(reverse = TRUE)), aby pořadí barevných částí
-# odpovídalo U07. Barvy nastavte pomocí ggplot2::scale_fill_manual(
-# values = barvy_druhu) a popisky pomocí ggplot2::labs().
-# Očekávaný výsledek: Každý ostrovní sloupec má výšku 1
-# a složení odpovídá U07. Žádný další jedinec nepřibyl.
+# Očekávaný výsledek:
+# Každý ostrovní sloupec má výšku 1 a složení odpovídá U07. Žádný další
+# jedinec nepřibyl.
+
+
+#----------------------------------------------------------#
+# Ohlédnutí a vlastní kontrola -----
+#----------------------------------------------------------#
+
+# Hlavní úlohy jste zvládli, pokud umíte vlastními slovy říct:
+# 1. Proč délka ploutve a hmotnost jednoho tučňáka musí zůstat párem?
+# 2. Co ukázal bodový graf, co z něj nevyčtete jedinou korelací?
+# 3. Co přidalo rozlišení druhů v původním bodovém grafu?
+# 4. Proč pro dvě čísla, druh × hmotnost a druh × ostrov volíme
+#    různé první grafy?
+# 5. Co znamená kladná korelace a proč to ještě není důkaz příčiny?
+# Pokud si nejste jistí, vraťte se k příslušné úloze a nápovědám.
